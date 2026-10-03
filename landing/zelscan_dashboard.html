@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="ru" data-zs-auth="pending"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta charset="UTF-8"><script>/* zs-boot-skeleton */(function(){var d=document.documentElement;d.dataset.zskBootAt=Date.now();d.classList.add('zs-boot');setTimeout(function(){d.classList.add('zs-boot-done')},6000)})();</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>/* zs-dashboard-sidebar-fix: скрыть переключатель вариантов меню и убрать FOUC-прыжок */
+#sidebarLab .sb-variant-switcher{display:none!important}
+.sidebar:not(#sidebarLab):not(.zs-sb-skeleton){visibility:hidden!important}
+#sidebarLab.sidebar{visibility:visible!important}
+.sidebar.zs-sb-skeleton{visibility:visible!important}
+html:not(.zs-auth-ok) body>.frame{display:none!important}
+.zs-auth-shell{position:fixed;z-index:2147483000;inset:0;display:grid;place-items:center;padding:24px;background:#090a0c;color:#f5f5f7;font-family:Inter,system-ui,sans-serif}
+.zs-auth-card{width:min(360px,100%);text-align:center}
+.zs-auth-title{margin:0 0 8px;font-size:18px}.zs-auth-copy{margin:0 0 18px;color:#92959d;font-size:13px;line-height:1.5}
+.zs-auth-action{height:44px;padding:0 20px;border:0;border-radius:12px;background:#f5f5f7;color:#090a0c;font:700 14px Inter,sans-serif;cursor:pointer}.zs-auth-action:hover{background:#fff}
+.zs-auth-spinner{width:26px;height:26px;margin:auto;border:3px solid rgba(255,255,255,.14);border-top-color:#b8bbc2;border-radius:50%;animation:zs-auth-spin .8s linear infinite}@keyframes zs-auth-spin{to{transform:rotate(360deg)}}
+html[data-zs-auth="pending"] .zs-auth-title,html[data-zs-auth="pending"] .zs-auth-copy,html[data-zs-auth="pending"] .zs-auth-login,html[data-zs-auth="pending"] .zs-auth-retry{display:none}html[data-zs-auth="guest"] .zs-auth-spinner,html[data-zs-auth="guest"] .zs-auth-retry{display:none}html[data-zs-auth="error"] .zs-auth-spinner,html[data-zs-auth="error"] .zs-auth-login{display:none}html.zs-auth-ok .zs-auth-shell{display:none!important}</style>
+<title>zelscan · Дашборд</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/dashboard2/css/zelscan_dashboard.dashboard2.css">
+<link rel="stylesheet" href="assets/dashboard2/css/account-ui.dashboard2.css?v=2">
+<link rel="stylesheet" href="assets/css/notifications-center.css">
+  <link rel="stylesheet" href="assets/dashboard2/css/responsive.dashboard2.css">
+  <link rel="stylesheet" href="assets/dashboard2/css/order-modals.dashboard2.css?v=20260321promo2">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/dashboard2/css/menu-v8.dashboard2.css"><link rel="stylesheet" href="assets/dashboard2/css/sidebar-lab.dashboard2.css"><link rel="stylesheet" href="assets/dashboard2/css/zs-notice.dashboard2.css">
+<link rel="stylesheet" href="assets/dashboard2/css/header-logo.dashboard2.css">
+<link rel="stylesheet" href="assets/dashboard2/css/page-inline.dashboard2.css?v=2">
+<link rel="stylesheet" href="assets/css/loading.css?v=4"></head>
+<body><section class="zs-auth-shell" id="zsAuthShell" aria-live="polite"><div class="zs-auth-card"><div class="zs-auth-spinner" aria-hidden="true"></div><h1 class="zs-auth-title" id="zsAuthTitle">Проверяем сессию</h1><p class="zs-auth-copy" id="zsAuthCopy">Подождите несколько секунд.</p><button class="zs-auth-action zs-auth-login" type="button" data-action="open-oauth">Войти через Lolzteam</button><button class="zs-auth-action zs-auth-retry" type="button" data-zs-auth-retry>Повторить</button></div></section><div class="zsk-boot" id="zskBoot" aria-hidden="true"><div class="zsk-b-frame"><header class="zsk-b-header"><div class="zsk-b-hleft"><span class="zsk zsk-b-logo"></span><span class="zsk zsk-b-search"></span></div><div class="zsk-b-hright"><span class="zsk zsk-b-bal"></span><span class="zsk zsk-b-acc"></span></div></header><div class="zsk-b-content"><aside class="zsk-b-side" aria-hidden="true"><div class="zsk-b-side-brand"><span class="zsk zsk-b-side-mark"></span><span class="zsk zsk-b-side-word"></span></div><div class="zsk-b-side-label"></div><div class="zsk-b-nav"><span class="zsk zsk-b-nav-icon"></span><span class="zsk zsk-b-nav-line"></span></div><div class="zsk-b-nav"><span class="zsk zsk-b-nav-icon"></span><span class="zsk zsk-b-nav-line is-wide"></span></div><div class="zsk-b-nav"><span class="zsk zsk-b-nav-icon"></span><span class="zsk zsk-b-nav-line is-mid"></span></div><div class="zsk-b-nav"><span class="zsk zsk-b-nav-icon"></span><span class="zsk zsk-b-nav-line is-wide"></span></div><div class="zsk-b-side-sep"></div><div class="zsk-b-nav"><span class="zsk zsk-b-nav-icon"></span><span class="zsk zsk-b-nav-line is-short"></span></div><div class="zsk-b-user"><span class="zsk zsk-b-user-av"></span><span class="zsk-b-user-copy"><span class="zsk zsk-b-user-name"></span><span class="zsk zsk-b-user-sub"></span></span></div></aside><main class="zsk-b-main"><div class="zsk-core"><i></i><i></i><i></i></div></main></div></div></div><div class="frame">
+
+<header class="header">
+  <div class="h-left">
+    <a class="brand-logo" href="/app" aria-label="Zelscan — дашборд"><svg class="brand-firma" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="brand-petal" d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z" fill="white"/><path class="brand-petal" d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z" fill="white"/><path class="brand-petal" d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z" fill="white"/><path class="brand-petal" d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z" fill="white"/></svg><img class="brand-text" src="/text.svg" alt="Zelscan"></a>
+    <div class="search" role="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+      <input class="search-input" type="text" inputmode="search" enterkeyhint="search" placeholder="Поиск по нику или ссылке.." aria-label="Поиск по нику или ссылке">
+      <ul class="search-drop" role="listbox" hidden></ul>
+    </div>
+  </div>
+  <div class="h-right">
+        <button class="bal-pill" id="balPill" type="button" style="display:none">
+      <svg viewBox="0 0 24 24" fill="currentColor"><g transform="translate(1.7,0)"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 6h12.5a2 2 0 0 1 2 2v.8H16a3.2 3.2 0 0 0 0 6.4h2.5V16a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm12 4.6a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8Z"/></g></svg>
+      <span class="amt">0</span><span class="cur">₽</span>
+    </button>
+    <!-- залогинен -->
+    <div class="acc-pill" id="accPill" style="display:none">
+      <span class="av" id="accAv"></span>
+      <span class="nm" id="accNm"></span>
+    </div>
+    <!-- не залогинен -->
+    <button class="btn-login" id="btnLogin" data-action="open-oauth">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      <span>Войти через Lolzteam</span>
+    </button>
+  </div>
+</header>
+
+<div class="content">
+  <aside class="sidebar">
+    <nav class="sb-nav">
+      <a class="sb-item active" href="/app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Дашборд</span></a>
+      <a class="sb-item" href="/dossiers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg><span>Мои досье</span></a>
+      <a class="sb-item" href="/explore"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg><span>Публичные досье</span></a>
+      <a class="sb-item" href="/billing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg><span>История транзакций</span></a>
+      <div class="sb-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><path d="M12 17h.01"/></svg><span>Поддержка</span></div>
+    </nav>
+    <div class="sb-user" id="sbUser">
+      <div id="sbSk" style="display:none;align-items:center;gap:12px;flex:1;">
+        <div class="sk-sb-av sk"></div>
+        <div class="sk-sb-lines">
+          <div class="sk-sb-line sk" style="width:72px"></div>
+          <div class="sk-sb-line sk" style="width:50px;margin-top:7px"></div>
+        </div>
+      </div>
+      <span class="av" id="sbAv" style="overflow:hidden;border-radius:14px;"></span>
+      <div class="who"><div class="n" id="sbName">—</div><div class="c" id="sbSub">не авторизован</div></div>
+      <span class="menu" id="sbMenu" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="19" cy="5" r="1.6"/><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/><circle cx="5" cy="19" r="1.6"/><circle cx="12" cy="19" r="1.6"/><circle cx="19" cy="19" r="1.6"/></svg></span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="dash">
+      <canvas class="dash-squares-canvas" id="dashSquares" aria-hidden="true"></canvas>
+
+      <div class="dash-hero">
+        <div class="dash-hero-top">
+          <div class="dash-logo-wrap">
+            <div class="dash-logo" aria-hidden="true">
+              <div class="pos la-bl"><img class="la" src="assets/dashboard2/logo-anim/base-left.png" alt=""></div>
+              <div class="pos la-br"><img class="la" src="assets/dashboard2/logo-anim/base-right.png" alt=""></div>
+              <div class="pos la-tl">
+                <img class="la la-s1" src="assets/dashboard2/logo-anim/s1-left.png" alt="">
+                <img class="la la-s2" src="assets/dashboard2/logo-anim/s2-left.png" alt="">
+                <img class="la la-s3" src="assets/dashboard2/logo-anim/s3-left.png" alt="">
+                <img class="la la-s4" src="assets/dashboard2/logo-anim/s4-left.png" alt="">
+              </div>
+              <div class="pos la-tr">
+                <img class="la la-s1" src="assets/dashboard2/logo-anim/s1-right.png" alt="">
+                <img class="la la-s2" src="assets/dashboard2/logo-anim/s2-right.png" alt="">
+                <img class="la la-s3" src="assets/dashboard2/logo-anim/s3-right.png" alt="">
+                <img class="la la-s4" src="assets/dashboard2/logo-anim/s4-right.png" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="dash-title">Проверь любого<br>юзера форума</div>
+        </div>
+        <div class="dash-sub-wrap">
+          <div class="dash-sub"><span class="dash-sub-tags"><span>Психология</span>, <span>поведение</span> и <span>активность</span></span><br><span class="dash-sub-line">Тысячи сообщений, один отчёт.</span></div>
+        </div>
+
+        <!-- ── вся зона поиска ── -->
+        <div id="searchZone" style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+
+          <!-- chip выбранного юзера -->
+          <div class="sel-chip" id="selChip">
+            <div class="sel-av" id="selAv"></div>
+            <div style="flex:1;min-width:0">
+              <div class="sel-name" id="selName"></div>
+              <div class="sel-uid"  id="selUid"></div>
+            </div>
+            <button class="sel-x" data-action="clear-selection" aria-label="Очистить выбранного пользователя">✕</button>
+          </div>
+
+<!-- тариф → теперь в модалке ZSModals.openOrder() -->
+
+          <div class="dash-search" id="searchWrap">
+              <div data-beam="bb-2" style="--beam-strength: 0.35;" data-active="">
+                <div class="w-full h-full"></div>
+                <div data-beam-bloom=""></div>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#424242" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+              <span id="sInput" contenteditable="plaintext-only" role="textbox" aria-autocomplete="list" aria-controls="dd" aria-expanded="false" data-placeholder="Пробить по нику.." class="dash-search-input"></span>
+            </div>
+            <ul class="dash-dd" id="dd"></ul>
+
+          <!-- прогресс -->
+          <div class="dash-prog" id="dashProg">
+            <div class="p-spin"></div>
+            <div class="p-title" id="pTitle">Анализируем...</div>
+            <div class="p-sub"   id="pSub"></div>
+            <div class="p-stages" id="pStages"></div>
+            <div class="p-bar"><div class="p-fill" id="pFill"></div></div>
+          </div>
+
+          <!-- ошибка -->
+          <div class="dash-err" id="dashErr">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+            <span id="errTxt"></span>
+          </div>
+
+        </div>
+
+        <div class="dash-report-line">
+          <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+          <div>Работаем исключительно с публичной информацией</div>
+        </div>
+      </div>
+
+      <div class="dash-recent dr3" id="rcRecent">
+        <div class="dr3-head">
+          <span class="dr3-title">Недавние досье</span>
+          <div class="dr3-seg" role="tablist" aria-label="Фильтр недавних досье">
+            <button type="button" role="tab" aria-selected="true" class="active" data-mode="all">Все</button>
+            <button type="button" role="tab" aria-selected="false" data-mode="mine">Мои</button>
+          </div>
+        </div>
+        <div class="dr3-rail"><div class="dr3-track"></div></div>
+      </div>
+
+      <!-- green glow -->
+      <div class="glow-canvas">
+        <div class="glow c1"></div>
+        <div class="glow c2"></div>
+        <div class="glow c3"></div>
+        <div class="glow c4"></div>
+        <div class="glow c5"></div>
+        <div class="glow c6"></div>
+        <div class="glow c7"></div>
+        <div class="glow c8"></div>
+        <div class="glow c9"></div>
+        <div class="glow c10"></div>
+        <div class="glow c11"></div>
+        <div class="glow c12"></div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- modal: ввод токена -->
+<div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+  <div class="modal">
+    <div class="modal-title" id="loginModalTitle">Войти через Lolzteam</div>
+    <div class="modal-sub">
+      Вставь свой API-токен из раздела
+      <a href="https://lolz.live/account/api" target="_blank" rel="noopener noreferrer">lolz.live/account/api</a>.
+      Токен передаётся только на наш локальный сервер.
+    </div>
+    <textarea class="modal-inp" id="modalInp" placeholder="eyJhbGciOi...  или числовой токен"></textarea>
+    <div class="modal-err" id="modalErr"></div>
+    <div class="modal-row">
+      <button class="modal-btn cancel" data-action="close-login">Отмена</button>
+      <button class="modal-btn confirm" id="modalConfirm" data-action="submit-token">Войти</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/zs-nickname.js"></script>
+<script src="assets/dashboard2/js/oauth-open.dashboard2.js"></script>
+<script src="assets/dashboard2/js/auth-guard.dashboard2.js"></script>
+<script src="assets/dashboard2/js/bootstrap.dashboard2.js"></script>
+<script src="assets/dashboard2/js/zs-notice.dashboard2.js"></script>
+<script src="assets/dashboard2/js/zelscan_dashboard.dashboard2.js?v=3"></script>
+<script src="assets/dashboard2/js/recent-rail.dashboard2.js?v=3"></script>
+<script src="assets/dashboard2/js/order-modals.dashboard2.js?v=20260321promo3"></script>
+<script src="assets/dashboard2/js/account-ui.dashboard2.js?v=20260321promo2"></script>
+<script src="assets/js/zs-notifications.js"></script>
+<script src="assets/dashboard2/js/responsive-ui.dashboard2.js?v=2"></script>
+<script src="assets/dashboard2/js/header-logo.dashboard2.js" defer></script>
+<script src="assets/dashboard2/js/sidebar-lab.dashboard2.js"></script>
+<script src="assets/js/zs-skeleton.js?v=1"></script>
+</body></html>
+

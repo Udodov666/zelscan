@@ -1,0 +1,3485 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>zelscan · Мои досье · UX Lab</title>
+
+  <style>
+    :root {
+      --bg: #090a0c;
+      --bg-soft: #0d0e11;
+      --surface: #131417;
+      --surface-2: #18191d;
+      --surface-3: #202126;
+      --surface-4: #27282e;
+
+      --text: #f4f4f5;
+      --text-soft: #d4d4d8;
+      --muted: #85868d;
+      --muted-2: #5f6067;
+
+      --line: rgba(255, 255, 255, .07);
+      --line-soft: rgba(255, 255, 255, .045);
+
+      --green: #3bd38b;
+      --green-rgb: 59, 211, 139;
+      --amber: #f4ad44;
+      --amber-rgb: 244, 173, 68;
+      --red: #ff646e;
+      --red-rgb: 255, 100, 110;
+      --blue: #6385ff;
+      --blue-rgb: 99, 133, 255;
+
+      --header-height: 68px;
+      --sidebar-width: 216px;
+      --page-width: 1120px;
+
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 74% -20%, rgba(85, 104, 179, .08), transparent 35%),
+        var(--bg);
+      font-family:
+        Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button,
+    input {
+      color: inherit;
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      border: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    svg {
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    :focus-visible {
+      outline: 2px solid rgba(var(--blue-rgb), .9);
+      outline-offset: 3px;
+    }
+
+    /* ─────────────────────────────────────────────
+       ОСНОВНОЙ SHELL
+    ───────────────────────────────────────────── */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      height: var(--header-height);
+      padding: 0 24px;
+
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(9, 10, 12, .84);
+      backdrop-filter: blur(22px) saturate(130%);
+      -webkit-backdrop-filter: blur(22px) saturate(130%);
+    }
+
+    .header-left,
+    .header-right {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      flex: 0 0 auto;
+
+      color: #fff;
+      font-size: 21px;
+      font-weight: 750;
+      letter-spacing: -.045em;
+    }
+
+    .brand-mark {
+      position: relative;
+      display: grid;
+      width: 25px;
+      height: 25px;
+      place-items: center;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      position: absolute;
+      content: "";
+      transform: rotate(60deg) skewX(-5deg);
+    }
+
+    .brand-mark::before {
+      width: 19px;
+      height: 19px;
+      border: 2px solid #fff;
+      border-radius: 3px;
+    }
+
+    .brand-mark::after {
+      width: 8px;
+      height: 8px;
+      border: 2px solid #fff;
+      border-radius: 2px;
+    }
+
+    .global-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      width: min(390px, 34vw);
+      height: 40px;
+      padding: 0 14px;
+      gap: 10px;
+
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .045);
+
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease,
+        box-shadow 160ms ease;
+    }
+
+    .global-search:focus-within {
+      border-color: rgba(var(--blue-rgb), .28);
+      background: rgba(255, 255, 255, .065);
+      box-shadow: 0 0 0 4px rgba(var(--blue-rgb), .07);
+    }
+
+    .global-search svg {
+      width: 17px;
+      height: 17px;
+      color: #777981;
+    }
+
+    .global-search input {
+      min-width: 0;
+      width: 100%;
+      padding: 0;
+
+      border: 0;
+      outline: 0;
+      color: #e8e8ea;
+      background: transparent;
+
+      font-size: 13px;
+    }
+
+    .global-search input::placeholder {
+      color: #6b6c73;
+    }
+
+    .balance-pill,
+    .profile-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 39px;
+
+      border: 1px solid var(--line-soft);
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .balance-pill {
+      padding: 0 13px;
+      gap: 7px;
+      border-radius: 12px;
+      color: #e8e8ea;
+      font-weight: 650;
+    }
+
+    .balance-pill svg {
+      width: 16px;
+      height: 16px;
+      color: #8f9198;
+    }
+
+    .profile-pill {
+      padding: 4px 11px 4px 4px;
+      gap: 8px;
+      border-radius: 999px;
+    }
+
+    .profile-avatar {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(145deg, #58d0ff, #287edb 65%, #16456e);
+
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .profile-name {
+      max-width: 110px;
+      overflow: hidden;
+      color: #d8d8db;
+      font-size: 12px;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+      min-height: calc(100vh - var(--header-height));
+    }
+
+    /* ─────────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────────── */
+
+    .sidebar {
+      position: sticky;
+      top: var(--header-height);
+
+      display: flex;
+      flex-direction: column;
+      align-self: start;
+
+      height: calc(100vh - var(--header-height));
+      padding: 22px 14px 18px 18px;
+
+      border-right: 1px solid var(--line-soft);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+
+      min-height: 42px;
+      padding: 0 12px;
+      gap: 11px;
+
+      border-radius: 12px;
+      color: #696b72;
+
+      font-size: 13px;
+      font-weight: 600;
+
+      transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        transform 150ms ease;
+    }
+
+    .nav-item:hover {
+      color: #b8b9bd;
+      background: rgba(255, 255, 255, .03);
+    }
+
+    .nav-item:active {
+      transform: scale(.988);
+    }
+
+    .nav-item.is-active {
+      color: #f2f2f3;
+      background: rgba(255, 255, 255, .075);
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .025),
+        0 8px 24px rgba(0, 0, 0, .08);
+    }
+
+    .nav-icon {
+      display: grid;
+      width: 19px;
+      height: 19px;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .nav-icon svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-count {
+      display: grid;
+      min-width: 22px;
+      height: 21px;
+      margin-left: auto;
+      padding: 0 6px;
+      place-items: center;
+
+      border-radius: 7px;
+      color: #85878e;
+      background: rgba(255, 255, 255, .04);
+
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      margin: 13px 10px;
+      background: var(--line-soft);
+    }
+
+    .sidebar-foot {
+      margin-top: auto;
+      padding: 12px;
+      border-radius: 15px;
+      color: #696b71;
+      background: rgba(255, 255, 255, .025);
+
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .sidebar-foot strong {
+      display: block;
+      margin-bottom: 2px;
+      color: #989aa1;
+      font-size: 11px;
+    }
+
+    /* ─────────────────────────────────────────────
+       MAIN + ПЕРЕКЛЮЧАТЕЛЬ
+    ───────────────────────────────────────────── */
+
+    .main {
+      min-width: 0;
+      padding-bottom: 80px;
+    }
+
+    .lab-toolbar {
+      position: sticky;
+      top: var(--header-height);
+      z-index: 900;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 72px;
+      padding: 10px clamp(20px, 3vw, 38px);
+      gap: 20px;
+
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(11, 12, 14, .9);
+      backdrop-filter: blur(22px) saturate(125%);
+      -webkit-backdrop-filter: blur(22px) saturate(125%);
+    }
+
+    .lab-current {
+      display: grid;
+      min-width: 190px;
+      gap: 2px;
+    }
+
+    .lab-kicker {
+      color: #676971;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .lab-name {
+      color: #f0f0f1;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .lab-note {
+      color: #767880;
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .variant-switcher {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 8px;
+    }
+
+    .switch-arrow {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      place-items: center;
+
+      border-radius: 11px;
+      color: #85878e;
+      background: rgba(255, 255, 255, .035);
+      cursor: pointer;
+
+      transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        transform 150ms ease;
+    }
+
+    .switch-arrow:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .075);
+    }
+
+    .switch-arrow:active {
+      transform: scale(.94);
+    }
+
+    .switch-arrow svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .variant-groups {
+      display: flex;
+      align-items: stretch;
+      min-width: 0;
+      gap: 6px;
+    }
+
+    .variant-group {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      gap: 3px;
+
+      border: 1px solid var(--line-soft);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .variant-group-label {
+      padding: 0 7px;
+      color: #5f6168;
+      font-size: 8px;
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .variant-button {
+      position: relative;
+
+      display: grid;
+      width: 32px;
+      height: 30px;
+      place-items: center;
+
+      border-radius: 9px;
+      color: #74767e;
+      background: transparent;
+      cursor: pointer;
+
+      font-size: 10px;
+      font-weight: 750;
+
+      transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease,
+        transform 150ms ease;
+    }
+
+    .variant-button:hover {
+      color: #d5d5d8;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .variant-button.is-active {
+      color: #fff;
+      background: rgba(var(--blue-rgb), .18);
+      box-shadow: inset 0 0 0 1px rgba(var(--blue-rgb), .26);
+    }
+
+    .variant-button.is-recommended::after {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(var(--green-rgb), .65);
+
+      content: "";
+    }
+
+    .page-wrap {
+      width: min(100%, calc(var(--page-width) + 76px));
+      margin: 0 auto;
+      padding: 40px 38px 0;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      gap: 24px;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-title {
+      margin: 0;
+      color: #f6f6f7;
+      font-size: clamp(28px, 3vw, 36px);
+      font-weight: 720;
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    .page-count {
+      display: grid;
+      min-width: 26px;
+      height: 25px;
+      padding: 0 8px;
+      place-items: center;
+
+      border-radius: 8px;
+      color: #8b8d94;
+      background: rgba(255, 255, 255, .05);
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .page-subtitle {
+      max-width: 590px;
+      margin: 10px 0 0;
+      color: #777981;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .primary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 44px;
+      padding: 0 17px;
+      gap: 9px;
+      flex: 0 0 auto;
+
+      border-radius: 13px;
+      color: #090a0c;
+      background: #f1f1f2;
+      box-shadow: 0 8px 30px rgba(255, 255, 255, .06);
+
+      font-size: 12px;
+      font-weight: 750;
+
+      transition:
+        background-color 150ms ease,
+        transform 150ms ease,
+        box-shadow 150ms ease;
+    }
+
+    .primary-action:hover {
+      background: #fff;
+      box-shadow: 0 11px 34px rgba(255, 255, 255, .1);
+      transform: translateY(-1px);
+    }
+
+    .primary-action:active {
+      transform: translateY(0) scale(.98);
+    }
+
+    .primary-action svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+    }
+
+    /* ─────────────────────────────────────────────
+       ПОИСК И ФИЛЬТРЫ
+    ───────────────────────────────────────────── */
+
+    .filterbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      gap: 14px;
+    }
+
+    .list-search {
+      display: flex;
+      align-items: center;
+      width: min(360px, 100%);
+      height: 42px;
+      padding: 0 13px;
+      gap: 9px;
+
+      border: 1px solid var(--line-soft);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .028);
+
+      transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease;
+    }
+
+    .list-search:focus-within {
+      border-color: rgba(var(--blue-rgb), .25);
+      background: rgba(255, 255, 255, .045);
+      box-shadow: 0 0 0 4px rgba(var(--blue-rgb), .055);
+    }
+
+    .list-search svg {
+      width: 16px;
+      height: 16px;
+      color: #686a72;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+    }
+
+    .list-search input {
+      width: 100%;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      color: #dedee1;
+      background: transparent;
+      font-size: 12px;
+    }
+
+    .list-search input::placeholder {
+      color: #62646b;
+    }
+
+    .filter-tabs {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px;
+      gap: 3px;
+
+      border: 1px solid var(--line-soft);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .filter-button {
+      height: 32px;
+      padding: 0 11px;
+      border-radius: 9px;
+      color: #70727a;
+      background: transparent;
+      cursor: pointer;
+
+      font-size: 10px;
+      font-weight: 700;
+
+      transition:
+        color 140ms ease,
+        background-color 140ms ease;
+    }
+
+    .filter-button:hover {
+      color: #c3c4c8;
+    }
+
+    .filter-button.is-active {
+      color: #ededee;
+      background: rgba(255, 255, 255, .075);
+    }
+
+    body[data-variant="5"] .filterbar {
+      display: none;
+    }
+
+    /* ─────────────────────────────────────────────
+       ОБЩИЕ КОМПОНЕНТЫ ДАННЫХ
+    ───────────────────────────────────────────── */
+
+    #variantStage {
+      min-height: 300px;
+    }
+
+    .report-link {
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .avatar {
+      --avatar-hue: 205;
+
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+
+      border-radius: 50%;
+      color: rgba(255, 255, 255, .96);
+      background:
+        linear-gradient(
+          145deg,
+          hsl(var(--avatar-hue) 86% 70%),
+          hsl(var(--avatar-hue) 71% 47%) 58%,
+          hsl(var(--avatar-hue) 64% 25%)
+        );
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, .12),
+        0 6px 18px rgba(0, 0, 0, .16);
+
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      padding: 0 9px;
+      gap: 6px;
+
+      border-radius: 999px;
+      white-space: nowrap;
+
+      font-size: 10px;
+      font-weight: 720;
+    }
+
+    .status-pill i {
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 3px currentColor;
+      opacity: .85;
+    }
+
+    .status-pill.done {
+      color: var(--green);
+      background: rgba(var(--green-rgb), .105);
+    }
+
+    .status-pill.work {
+      color: var(--amber);
+      background: rgba(var(--amber-rgb), .11);
+    }
+
+    .status-pill.queue {
+      color: #8b9fff;
+      background: rgba(var(--blue-rgb), .11);
+    }
+
+    .status-pill.error {
+      color: var(--red);
+      background: rgba(var(--red-rgb), .105);
+    }
+
+    .report-type {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+
+      border: 1px solid var(--line-soft);
+      border-radius: 8px;
+      color: #898b92;
+      background: rgba(255, 255, 255, .025);
+
+      font-size: 9px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .chevron {
+      width: 17px;
+      height: 17px;
+      color: #5e6067;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      transition:
+        color 150ms ease,
+        transform 220ms var(--ease);
+    }
+
+    .empty-state {
+      display: grid;
+      min-height: 280px;
+      place-items: center;
+      padding: 30px;
+
+      border: 1px dashed rgba(255, 255, 255, .09);
+      border-radius: 24px;
+      text-align: center;
+    }
+
+    .empty-state-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 14px;
+      place-items: center;
+
+      border-radius: 15px;
+      color: #7b7d85;
+      background: rgba(255, 255, 255, .045);
+    }
+
+    .empty-state-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+    }
+
+    .empty-state h2 {
+      margin: 0 0 6px;
+      color: #d9d9dc;
+      font-size: 15px;
+    }
+
+    .empty-state p {
+      margin: 0;
+      color: #6d6f76;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    /* ═════════════════════════════════════════════
+       01 — DEEP PANELS
+       Референс 01: большая общая панель + вложенные модули
+    ═════════════════════════════════════════════ */
+
+    .v1-shell {
+      padding: 21px;
+
+      border: 1px solid rgba(255, 255, 255, .035);
+      border-radius: 29px;
+      background: #121316;
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, .16),
+        inset 0 1px 0 rgba(255, 255, 255, .018);
+    }
+
+    .v1-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1px 1px 18px;
+      gap: 20px;
+    }
+
+    .v1-head h2 {
+      margin: 0;
+      color: #e9e9eb;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+
+    .v1-head p {
+      margin: 6px 0 0;
+      color: #74767d;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .v1-total {
+      display: grid;
+      min-width: 32px;
+      height: 29px;
+      padding: 0 8px;
+      place-items: center;
+
+      border-radius: 10px;
+      color: #9b9da4;
+      background: rgba(255, 255, 255, .045);
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .v1-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .v1-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 76px;
+      padding: 13px 15px 13px 14px;
+      gap: 20px;
+
+      border: 1px solid transparent;
+      border-radius: 19px;
+      background: #202125;
+
+      transition:
+        border-color 170ms ease,
+        background-color 170ms ease,
+        box-shadow 220ms var(--ease),
+        transform 220ms var(--ease);
+    }
+
+    .v1-row:hover {
+      border-color: rgba(255, 255, 255, .06);
+      background: #242529;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, .16);
+      transform: translateY(-2px);
+    }
+
+    .v1-row:active {
+      transform: translateY(0) scale(.995);
+    }
+
+    .v1-person {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+    }
+
+    .v1-person .avatar {
+      width: 45px;
+      height: 45px;
+    }
+
+    .v1-copy {
+      display: grid;
+      min-width: 0;
+      gap: 5px;
+    }
+
+    .v1-name {
+      overflow: hidden;
+      color: #f0f0f1;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -.015em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v1-meta {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 7px;
+      color: #83858c;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .v1-meta .dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #55575e;
+    }
+
+    .v1-end {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 11px;
+    }
+
+    .v1-open {
+      color: #bfc0c4;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .v1-row:hover .chevron {
+      color: #dddde0;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       02 — MODULAR CARDS
+       Референс 01: крупные самостоятельные модули
+    ═════════════════════════════════════════════ */
+
+    .v2-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .v2-card {
+      position: relative;
+      display: flex;
+      min-height: 166px;
+      flex-direction: column;
+      padding: 18px;
+
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .045);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 100% 0, rgba(255, 255, 255, .035), transparent 38%),
+        #17181b;
+
+      transition:
+        border-color 180ms ease,
+        box-shadow 220ms var(--ease),
+        transform 220ms var(--ease);
+    }
+
+    .v2-card::after {
+      position: absolute;
+      right: -35px;
+      bottom: -60px;
+
+      width: 130px;
+      height: 130px;
+
+      border-radius: 50%;
+      background: hsl(var(--card-hue) 78% 54% / .07);
+      filter: blur(8px);
+
+      content: "";
+      pointer-events: none;
+    }
+
+    .v2-card:hover {
+      border-color: rgba(255, 255, 255, .09);
+      box-shadow: 0 20px 52px rgba(0, 0, 0, .22);
+      transform: translateY(-3px);
+    }
+
+    .v2-card-top,
+    .v2-card-bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .v2-card .avatar {
+      width: 42px;
+      height: 42px;
+    }
+
+    .v2-card-copy {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      margin-top: 17px;
+      gap: 6px;
+    }
+
+    .v2-card-copy strong {
+      overflow: hidden;
+      color: #f1f1f2;
+      font-size: 17px;
+      font-weight: 720;
+      letter-spacing: -.03em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v2-card-copy span {
+      color: #73757c;
+      font-size: 10px;
+    }
+
+    .v2-card-bottom {
+      margin-top: auto;
+      padding-top: 16px;
+    }
+
+    .v2-date {
+      color: #96989f;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .v2-card:hover .chevron {
+      color: #e6e6e8;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       03 — CALM STACK
+       Референс 01: единый контейнер, меньше визуального шума
+    ═════════════════════════════════════════════ */
+
+    .v3-shell {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .05);
+      border-radius: 24px;
+      background: #151619;
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .13);
+    }
+
+    .v3-row {
+      display: grid;
+      grid-template-columns: minmax(210px, 1.4fr) minmax(100px, .55fr) auto auto;
+      align-items: center;
+
+      min-height: 72px;
+      padding: 12px 17px;
+      gap: 18px;
+
+      border-bottom: 1px solid rgba(255, 255, 255, .045);
+
+      transition:
+        background-color 150ms ease,
+        padding 210ms var(--ease);
+    }
+
+    .v3-row:last-child {
+      border-bottom: 0;
+    }
+
+    .v3-row:hover {
+      padding-right: 14px;
+      padding-left: 20px;
+      background: rgba(255, 255, 255, .035);
+    }
+
+    .v3-user {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 11px;
+    }
+
+    .v3-user .avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    .v3-user-copy {
+      min-width: 0;
+    }
+
+    .v3-name {
+      overflow: hidden;
+      color: #ececee;
+      font-size: 13px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v3-id {
+      margin-top: 4px;
+      overflow: hidden;
+      color: #65676e;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 9px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v3-date {
+      color: #8b8d94;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .v3-action {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .v3-row:hover .chevron {
+      color: #d6d6da;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       04 — PILL ROWS
+       Референсы 02–03: вытянутые минимальные капсулы
+    ═════════════════════════════════════════════ */
+
+    .v4-stack {
+      display: grid;
+      max-width: 940px;
+      gap: 9px;
+    }
+
+    .v4-pill {
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) auto auto auto;
+      align-items: center;
+
+      min-height: 64px;
+      padding: 8px 13px 8px 9px;
+      gap: 16px;
+
+      border: 1px solid rgba(255, 255, 255, .035);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(73, 40, 43, .11), transparent 35%),
+        #171719;
+
+      transition:
+        border-color 170ms ease,
+        background-color 170ms ease,
+        box-shadow 220ms var(--ease),
+        transform 220ms var(--ease);
+    }
+
+    .v4-pill:hover {
+      border-color: rgba(255, 255, 255, .08);
+      background-color: #1d1d20;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .17);
+      transform: translateX(4px);
+    }
+
+    .v4-person {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 11px;
+    }
+
+    .v4-person .avatar {
+      width: 46px;
+      height: 46px;
+    }
+
+    .v4-copy {
+      min-width: 0;
+    }
+
+    .v4-name {
+      overflow: hidden;
+      color: #e7e7e9;
+      font-size: 13px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v4-type {
+      margin-top: 4px;
+      color: #74767d;
+      font-size: 9px;
+    }
+
+    .v4-date {
+      color: #7f8188;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .v4-pill:hover .chevron {
+      color: #e0e0e2;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       05 — SCAN FIRST
+       Референс 03: поиск становится главным действием
+    ═════════════════════════════════════════════ */
+
+    .v5-shell {
+      max-width: 900px;
+    }
+
+    .v5-search {
+      display: flex;
+      align-items: center;
+
+      height: 58px;
+      padding: 0 11px 0 20px;
+      gap: 12px;
+
+      border: 1px solid rgba(255, 255, 255, .045);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(56, 31, 34, .13), transparent 50%),
+        #151517;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .018),
+        0 16px 45px rgba(0, 0, 0, .13);
+    }
+
+    .v5-search:focus-within {
+      border-color: rgba(var(--blue-rgb), .25);
+      box-shadow:
+        0 0 0 4px rgba(var(--blue-rgb), .055),
+        0 16px 45px rgba(0, 0, 0, .16);
+    }
+
+    .v5-search input {
+      min-width: 0;
+      width: 100%;
+      padding: 0;
+
+      border: 0;
+      outline: 0;
+      color: #e8e8ea;
+      background: transparent;
+
+      font-size: 13px;
+      font-weight: 570;
+    }
+
+    .v5-search input::placeholder {
+      color: #595b62;
+    }
+
+    .v5-scan-button {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      flex: 0 0 auto;
+      place-items: center;
+
+      border-radius: 50%;
+      color: #e3e3e5;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .v5-scan-button svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .v5-filter-row {
+      display: flex;
+      align-items: center;
+      margin: 13px 0 18px;
+      padding: 0 7px;
+      gap: 7px;
+    }
+
+    .v5-filter {
+      height: 29px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: #696b72;
+      background: transparent;
+      cursor: pointer;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .v5-filter:hover {
+      color: #aaaab0;
+    }
+
+    .v5-filter.is-active {
+      color: #e4e4e7;
+      background: rgba(255, 255, 255, .065);
+    }
+
+    .v5-results {
+      display: grid;
+      gap: 8px;
+    }
+
+    .v5-result {
+      display: flex;
+      align-items: center;
+      min-height: 58px;
+      padding: 8px 13px 8px 9px;
+      gap: 11px;
+
+      border: 1px solid transparent;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .026);
+
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease,
+        transform 200ms var(--ease);
+    }
+
+    .v5-result:hover {
+      border-color: rgba(255, 255, 255, .055);
+      background: rgba(255, 255, 255, .05);
+      transform: translateX(3px);
+    }
+
+    .v5-result .avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    .v5-result-copy {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+    }
+
+    .v5-result-name {
+      overflow: hidden;
+      color: #e9e9eb;
+      font-size: 12px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v5-result-meta {
+      color: #696b72;
+      font-size: 9px;
+    }
+
+    .v5-result-side {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: 11px;
+    }
+
+    .v5-result:hover .chevron {
+      color: #e2e2e4;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       06 — SIGNAL FLOW
+       Референс 02: компактный поток + визуальный прогресс
+    ═════════════════════════════════════════════ */
+
+    .v6-shell {
+      display: grid;
+      max-width: 980px;
+      gap: 9px;
+    }
+
+    .v6-row {
+      display: grid;
+      grid-template-columns: minmax(190px, 1fr) minmax(110px, .7fr) auto auto;
+      align-items: center;
+
+      min-height: 62px;
+      padding: 9px 14px 9px 10px;
+      gap: 18px;
+
+      border: 1px solid rgba(255, 255, 255, .035);
+      border-radius: 17px;
+      background: #151518;
+
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease,
+        box-shadow 210ms var(--ease),
+        transform 210ms var(--ease);
+    }
+
+    .v6-row:hover {
+      border-color: rgba(255, 255, 255, .075);
+      background: #1a1a1e;
+      box-shadow: 0 13px 34px rgba(0, 0, 0, .15);
+      transform: translateY(-2px);
+    }
+
+    .v6-user {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 10px;
+    }
+
+    .v6-user .avatar {
+      width: 42px;
+      height: 42px;
+    }
+
+    .v6-copy {
+      min-width: 0;
+    }
+
+    .v6-name {
+      overflow: hidden;
+      color: #e9e9eb;
+      font-size: 12px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v6-type {
+      margin-top: 4px;
+      color: #65676e;
+      font-size: 9px;
+    }
+
+    .v6-signal {
+      display: grid;
+      gap: 6px;
+    }
+
+    .v6-signal-copy {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #74767d;
+      font-size: 8px;
+      font-weight: 650;
+    }
+
+    .v6-track {
+      position: relative;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .v6-track i {
+      display: block;
+      width: var(--progress);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--track-color);
+      box-shadow: 0 0 12px var(--track-glow);
+    }
+
+    .v6-date {
+      color: #777980;
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .v6-row:hover .chevron {
+      color: #dadaDE;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       07 — FOCUS LIST
+       Гибрид, рекомендованный для продакшена
+    ═════════════════════════════════════════════ */
+
+    .v7-shell {
+      max-width: 1020px;
+    }
+
+    .v7-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 78px;
+      margin-bottom: 12px;
+      padding: 13px 15px;
+      gap: 20px;
+
+      border: 1px solid rgba(var(--green-rgb), .095);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 0 50%, rgba(var(--green-rgb), .075), transparent 32%),
+        #141618;
+    }
+
+    .v7-summary-main {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+    }
+
+    .v7-summary-icon {
+      display: grid;
+      width: 45px;
+      height: 45px;
+      flex: 0 0 auto;
+      place-items: center;
+
+      border-radius: 14px;
+      color: var(--green);
+      background: rgba(var(--green-rgb), .1);
+    }
+
+    .v7-summary-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .v7-summary-copy {
+      min-width: 0;
+    }
+
+    .v7-summary-copy strong {
+      display: block;
+      color: #eaeaec;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .v7-summary-copy span {
+      display: block;
+      margin-top: 4px;
+      color: #73757c;
+      font-size: 9px;
+      line-height: 1.4;
+    }
+
+    .v7-latest {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 11px;
+      gap: 6px;
+      flex: 0 0 auto;
+
+      border-radius: 10px;
+      color: #cfd0d3;
+      background: rgba(255, 255, 255, .055);
+
+      font-size: 9px;
+      font-weight: 700;
+
+      transition:
+        color 150ms ease,
+        background-color 150ms ease;
+    }
+
+    .v7-latest:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .09);
+    }
+
+    .v7-list {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .05);
+      border-radius: 21px;
+      background: #141518;
+    }
+
+    .v7-row {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.35fr) minmax(90px, .5fr) auto auto;
+      align-items: center;
+
+      min-height: 72px;
+      padding: 11px 16px 11px 12px;
+      gap: 18px;
+
+      border-bottom: 1px solid rgba(255, 255, 255, .045);
+
+      transition:
+        background-color 150ms ease,
+        box-shadow 190ms ease;
+    }
+
+    .v7-row:last-child {
+      border-bottom: 0;
+    }
+
+    .v7-row:hover {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, .04);
+      box-shadow: inset 3px 0 0 rgba(var(--blue-rgb), .8);
+    }
+
+    .v7-user {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 11px;
+    }
+
+    .v7-user .avatar {
+      width: 43px;
+      height: 43px;
+    }
+
+    .v7-copy {
+      min-width: 0;
+    }
+
+    .v7-name {
+      overflow: hidden;
+      color: #eeeeef;
+      font-size: 13px;
+      font-weight: 710;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v7-meta {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      margin-top: 5px;
+      gap: 7px;
+      color: #6f7178;
+      font-size: 9px;
+    }
+
+    .v7-order {
+      overflow: hidden;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v7-date {
+      color: #8a8c93;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .v7-end {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .v7-row:hover .chevron {
+      color: #e8e8ea;
+      transform: translateX(3px);
+    }
+
+    /* ═════════════════════════════════════════════
+       08 — COMMAND VIEW
+       Гибрид: быстрый обзор состояния + карточки
+    ═════════════════════════════════════════════ */
+
+    .v8-shell {
+      max-width: 1030px;
+    }
+
+    .v8-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-bottom: 13px;
+      gap: 9px;
+    }
+
+    .v8-stat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 64px;
+      padding: 13px 15px;
+
+      border: 1px solid rgba(255, 255, 255, .04);
+      border-radius: 17px;
+      color: inherit;
+      background: #141518;
+      cursor: pointer;
+      text-align: left;
+
+      transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        transform 190ms var(--ease);
+    }
+
+    .v8-stat:hover,
+    .v8-stat.is-active {
+      border-color: rgba(255, 255, 255, .09);
+      background: #191a1e;
+      transform: translateY(-2px);
+    }
+
+    .v8-stat-copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .v8-stat-copy span {
+      color: #777980;
+      font-size: 9px;
+      font-weight: 650;
+    }
+
+    .v8-stat-copy strong {
+      color: #eaeaEC;
+      font-size: 18px;
+      font-weight: 720;
+      letter-spacing: -.03em;
+    }
+
+    .v8-stat-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--stat-color);
+      box-shadow: 0 0 0 5px var(--stat-bg);
+    }
+
+    .v8-board {
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, .045);
+      border-radius: 23px;
+      background: #121316;
+    }
+
+    .v8-board-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 4px 13px;
+      gap: 20px;
+    }
+
+    .v8-board-head strong {
+      color: #dfe0e2;
+      font-size: 12px;
+    }
+
+    .v8-board-head span {
+      color: #696b72;
+      font-size: 9px;
+    }
+
+    .v8-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .v8-card {
+      display: flex;
+      align-items: center;
+      min-height: 77px;
+      padding: 11px;
+      gap: 11px;
+
+      border: 1px solid transparent;
+      border-radius: 17px;
+      background: #1d1e22;
+
+      transition:
+        border-color 160ms ease,
+        background-color 160ms ease,
+        box-shadow 210ms var(--ease),
+        transform 210ms var(--ease);
+    }
+
+    .v8-card:hover {
+      border-color: rgba(255, 255, 255, .075);
+      background: #222328;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .15);
+      transform: translateY(-2px);
+    }
+
+    .v8-card .avatar {
+      width: 45px;
+      height: 45px;
+    }
+
+    .v8-card-copy {
+      min-width: 0;
+    }
+
+    .v8-card-name {
+      overflow: hidden;
+      color: #eeeeef;
+      font-size: 13px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .v8-card-meta {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+      gap: 6px;
+      color: #73757c;
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .v8-card-side {
+      display: grid;
+      justify-items: end;
+      margin-left: auto;
+      gap: 8px;
+    }
+
+    .v8-card:hover .chevron {
+      color: #e4e4e6;
+      transform: translateX(3px);
+    }
+
+    /* ─────────────────────────────────────────────
+       LIVE REGION + TOAST
+    ───────────────────────────────────────────── */
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 2000;
+
+      display: flex;
+      align-items: center;
+      max-width: min(380px, calc(100vw - 40px));
+      min-height: 46px;
+      padding: 0 15px;
+      gap: 9px;
+
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 14px;
+      color: #dcdcdf;
+      background: rgba(25, 26, 30, .94);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+
+      font-size: 11px;
+      font-weight: 600;
+
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition:
+        opacity 170ms ease,
+        transform 230ms var(--ease);
+      backdrop-filter: blur(18px);
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(var(--green-rgb), .1);
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+
+    @media (max-width: 1080px) {
+      :root {
+        --sidebar-width: 194px;
+      }
+
+      .page-wrap {
+        padding-right: 26px;
+        padding-left: 26px;
+      }
+
+      .lab-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      .variant-switcher {
+        width: 100%;
+      }
+
+      .variant-groups {
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .variant-groups::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .global-search {
+        width: min(310px, 42vw);
+      }
+
+      .app-layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .lab-toolbar {
+        top: var(--header-height);
+      }
+
+      .v3-row,
+      .v7-row {
+        grid-template-columns: minmax(200px, 1fr) auto auto;
+      }
+
+      .v3-row .report-type,
+      .v7-row .report-type {
+        display: none;
+      }
+
+      .v6-row {
+        grid-template-columns: minmax(180px, 1fr) minmax(100px, .7fr) auto;
+      }
+
+      .v6-date {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      :root {
+        --header-height: 62px;
+      }
+
+      .site-header {
+        padding: 0 14px;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-mark {
+        transform: scale(.88);
+      }
+
+      .global-search,
+      .balance-pill,
+      .profile-name {
+        display: none;
+      }
+
+      .profile-pill {
+        padding-right: 4px;
+      }
+
+      .lab-toolbar {
+        min-height: 66px;
+        padding: 9px 14px;
+      }
+
+      .lab-current {
+        display: flex;
+        align-items: baseline;
+        min-width: 0;
+        gap: 7px;
+      }
+
+      .lab-kicker,
+      .lab-note {
+        display: none;
+      }
+
+      .lab-name {
+        overflow: hidden;
+        max-width: 100%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .variant-switcher {
+        gap: 5px;
+      }
+
+      .switch-arrow {
+        width: 33px;
+        height: 33px;
+      }
+
+      .variant-group-label {
+        display: none;
+      }
+
+      .variant-button {
+        width: 31px;
+        height: 29px;
+      }
+
+      .page-wrap {
+        padding: 28px 14px 0;
+      }
+
+      .page-head {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 22px;
+        gap: 16px;
+      }
+
+      .page-title {
+        font-size: 29px;
+      }
+
+      .page-subtitle {
+        font-size: 12px;
+      }
+
+      .primary-action {
+        width: 100%;
+      }
+
+      .filterbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .list-search {
+        width: 100%;
+      }
+
+      .filter-tabs {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .filter-button {
+        flex: 1 0 auto;
+      }
+
+      .v1-shell {
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .v1-head {
+        padding: 2px 2px 14px;
+      }
+
+      .v1-row {
+        min-height: 70px;
+        padding: 11px;
+      }
+
+      .v1-open,
+      .v1-end .status-pill {
+        display: none;
+      }
+
+      .v1-person .avatar {
+        width: 42px;
+        height: 42px;
+      }
+
+      .v2-grid,
+      .v8-grid,
+      .v8-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .v2-card {
+        min-height: 150px;
+      }
+
+      .v3-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        min-height: 68px;
+        padding: 10px 12px;
+        gap: 10px;
+      }
+
+      .v3-row .v3-date,
+      .v3-row .report-type {
+        display: none;
+      }
+
+      .v4-pill {
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding-right: 13px;
+      }
+
+      .v4-pill .v4-date,
+      .v4-pill .status-pill {
+        display: none;
+      }
+
+      .v5-search {
+        height: 54px;
+      }
+
+      .v5-result-side time {
+        display: none;
+      }
+
+      .v6-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .v6-signal,
+      .v6-date {
+        display: none;
+      }
+
+      .v7-summary {
+        align-items: flex-start;
+      }
+
+      .v7-latest {
+        display: none;
+      }
+
+      .v7-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding-right: 12px;
+        gap: 10px;
+      }
+
+      .v7-row .v7-date,
+      .v7-row .report-type {
+        display: none;
+      }
+
+      .v7-order {
+        max-width: 130px;
+      }
+
+      .v8-stat {
+        min-height: 56px;
+      }
+
+      .v8-board {
+        padding: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body data-variant="1">
+  <header class="site-header">
+    <div class="header-left">
+      <a class="brand" href="zelscan_dashboard.html" aria-label="zelscan">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>zelscan</span>
+      </a>
+
+      <label class="global-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-4-4"></path>
+        </svg>
+        <input
+          id="globalProbe"
+          type="search"
+          placeholder="Пробить ник или ссылку…"
+          aria-label="Пробить ник или ссылку"
+        >
+      </label>
+    </div>
+
+    <div class="header-right">
+      <div class="balance-pill" title="Баланс">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M4 6h14a2 2 0 0 1 2 2v1h-3.5a3.5 3.5 0 0 0 0 7H20v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm12.5 5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"></path>
+        </svg>
+        <span>466 ₽</span>
+      </div>
+
+      <div class="profile-pill">
+        <span class="profile-avatar">U</span>
+        <span class="profile-name">Udodov</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <aside class="sidebar" aria-label="Основная навигация">
+      <nav class="sidebar-nav">
+        <a class="nav-item" href="zelscan_dashboard.html">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="m3.5 11.5 8.5-7 8.5 7"></path>
+              <path d="M5.5 10v10h13V10"></path>
+              <path d="M9.5 20v-6h5v6"></path>
+            </svg>
+          </span>
+          <span>Дашборд</span>
+        </a>
+
+        <a class="nav-item is-active" href="my_dossiers.html" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <ellipse cx="12" cy="5.5" rx="7.5" ry="3"></ellipse>
+              <path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+              <path d="M4.5 11.5v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"></path>
+            </svg>
+          </span>
+          <span>Мои досье</span>
+          <span class="nav-count" id="sidebarCount">6</span>
+        </a>
+
+        <a class="nav-item" href="public_dossiers.html">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8.5"></circle>
+              <path d="M3.5 12h17"></path>
+              <path d="M12 3.5c3 3.2 3 13.8 0 17"></path>
+              <path d="M12 3.5c-3 3.2-3 13.8 0 17"></path>
+            </svg>
+          </span>
+          <span>Общие досье</span>
+          <span class="nav-count">38</span>
+        </a>
+
+        <a class="nav-item" href="transactions.html">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2Z"></path>
+              <path d="M9 8h6M9 12h6M9 16h3"></path>
+            </svg>
+          </span>
+          <span>Транзакции</span>
+          <span class="nav-count">4</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+
+      <a
+        class="nav-item"
+        href="https://t.me/udodov228"
+        target="_blank"
+        rel="noopener"
+      >
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8.5"></circle>
+            <circle cx="12" cy="12" r="3.5"></circle>
+            <path d="m6 6 3.5 3.5M14.5 14.5 18 18M18 6l-3.5 3.5M9.5 14.5 6 18"></path>
+          </svg>
+        </span>
+        <span>Поддержка</span>
+      </a>
+
+      <div class="sidebar-foot">
+        <strong>UX preview</strong>
+        Все восемь вариантов находятся в одном HTML-файле.
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="lab-toolbar" aria-label="Переключение вариантов дизайна">
+        <div class="lab-current">
+          <span class="lab-kicker" id="variantGroup">Референс 01</span>
+          <strong class="lab-name" id="variantName">01 · Deep panels</strong>
+          <span class="lab-note" id="variantNote">Общая панель с крупными вложенными строками</span>
+        </div>
+
+        <div class="variant-switcher">
+          <button
+            class="switch-arrow"
+            id="previousVariant"
+            type="button"
+            aria-label="Предыдущий вариант"
+            title="Предыдущий вариант · Alt + ←"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+
+          <div class="variant-groups">
+            <div class="variant-group">
+              <span class="variant-group-label">Ref 01</span>
+              <button class="variant-button is-active" type="button" data-set-variant="1" title="01 · Deep panels">01</button>
+              <button class="variant-button" type="button" data-set-variant="2" title="02 · Modular cards">02</button>
+              <button class="variant-button" type="button" data-set-variant="3" title="03 · Calm stack">03</button>
+            </div>
+
+            <div class="variant-group">
+              <span class="variant-group-label">Ref 02–03</span>
+              <button class="variant-button" type="button" data-set-variant="4" title="04 · Pill rows">04</button>
+              <button class="variant-button" type="button" data-set-variant="5" title="05 · Scan first">05</button>
+              <button class="variant-button" type="button" data-set-variant="6" title="06 · Signal flow">06</button>
+            </div>
+
+            <div class="variant-group">
+              <span class="variant-group-label">Flow</span>
+              <button class="variant-button is-recommended" type="button" data-set-variant="7" title="07 · Focus list · Рекомендованный">07</button>
+              <button class="variant-button" type="button" data-set-variant="8" title="08 · Command view">08</button>
+            </div>
+          </div>
+
+          <button
+            class="switch-arrow"
+            id="nextVariant"
+            type="button"
+            aria-label="Следующий вариант"
+            title="Следующий вариант · Alt + →"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <div class="page-wrap">
+        <header class="page-head">
+          <div>
+            <div class="page-title-row">
+              <h1 class="page-title">Мои досье</h1>
+              <span class="page-count" id="visibleCount">6</span>
+            </div>
+
+            <p class="page-subtitle">
+              История созданных отчётов. Нажмите на пользователя, чтобы открыть досье
+              или посмотреть текущее состояние анализа.
+            </p>
+          </div>
+
+          <a class="primary-action" href="zelscan_dashboard.html">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+            <span>Новое досье</span>
+          </a>
+        </header>
+
+        <div class="filterbar">
+          <label class="list-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-4-4"></path>
+            </svg>
+            <input
+              class="js-dossier-search"
+              id="dossierSearch"
+              type="search"
+              placeholder="Ник, ID или тип отчёта"
+              aria-label="Поиск по досье"
+            >
+          </label>
+
+          <div class="filter-tabs" aria-label="Фильтр по статусу">
+            <button class="filter-button is-active" type="button" data-filter="all">Все</button>
+            <button class="filter-button" type="button" data-filter="done">Готово</button>
+            <button class="filter-button" type="button" data-filter="active">В процессе</button>
+            <button class="filter-button" type="button" data-filter="error">Ошибка</button>
+          </div>
+        </div>
+
+        <section id="variantStage" aria-live="polite"></section>
+      </div>
+    </main>
+  </div>
+
+  <div class="sr-only" id="variantLive" aria-live="polite"></div>
+  <div class="toast" id="toast"><i></i><span id="toastText"></span></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const dossiers = [
+        {
+          name: "MangoFox",
+          userId: "49281",
+          order: "zs_abc123",
+          type: "Полный AI",
+          date: "8 авг.",
+          dateFull: "8 августа 2026",
+          iso: "2026-08-08",
+          status: "done",
+          progress: 100,
+          hue: 205
+        },
+        {
+          name: "RavenNight",
+          userId: "38512",
+          order: "zs_def456",
+          type: "Базовый",
+          date: "7 авг.",
+          dateFull: "7 августа 2026",
+          iso: "2026-08-07",
+          status: "work",
+          progress: 64,
+          hue: 272
+        },
+        {
+          name: "ShadowByte",
+          userId: "12874",
+          order: "zs_ghi789",
+          type: "Полный AI",
+          date: "6 авг.",
+          dateFull: "6 августа 2026",
+          iso: "2026-08-06",
+          status: "error",
+          progress: 82,
+          hue: 347
+        },
+        {
+          name: "KryptoKid",
+          userId: "87621",
+          order: "zs_jkl012",
+          type: "Базовый",
+          date: "5 авг.",
+          dateFull: "5 августа 2026",
+          iso: "2026-08-05",
+          status: "done",
+          progress: 100,
+          hue: 145
+        },
+        {
+          name: "FrostWing",
+          userId: "65409",
+          order: "zs_mno345",
+          type: "Полный AI",
+          date: "4 авг.",
+          dateFull: "4 августа 2026",
+          iso: "2026-08-04",
+          status: "queue",
+          progress: 18,
+          hue: 191
+        },
+        {
+          name: "NeonWolf",
+          userId: "23109",
+          order: "zs_pqr678",
+          type: "Базовый",
+          date: "3 авг.",
+          dateFull: "3 августа 2026",
+          iso: "2026-08-03",
+          status: "done",
+          progress: 100,
+          hue: 46
+        }
+      ];
+
+      const variants = {
+        1: {
+          group: "Референс 01",
+          name: "01 · Deep panels",
+          note: "Общая панель с крупными вложенными строками"
+        },
+        2: {
+          group: "Референс 01",
+          name: "02 · Modular cards",
+          note: "Крупные самостоятельные карточки без табличных заголовков"
+        },
+        3: {
+          group: "Референс 01",
+          name: "03 · Calm stack",
+          note: "Спокойный единый список с минимальным количеством рамок"
+        },
+        4: {
+          group: "Референсы 02–03",
+          name: "04 · Pill rows",
+          note: "Вытянутые капсулы с сильной визуальной иерархией"
+        },
+        5: {
+          group: "Референсы 02–03",
+          name: "05 · Scan first",
+          note: "Поиск становится главным пользовательским сценарием"
+        },
+        6: {
+          group: "Референсы 02–03",
+          name: "06 · Signal flow",
+          note: "Компактный поток отчётов с понятным прогрессом"
+        },
+        7: {
+          group: "Гибрид · рекомендованный",
+          name: "07 · Focus list",
+          note: "Лучший баланс скорости просмотра, статусов и переходов"
+        },
+        8: {
+          group: "Гибрид",
+          name: "08 · Command view",
+          note: "Быстрый обзор состояния и компактная карточная выдача"
+        }
+      };
+
+      const statusMap = {
+        done: {
+          label: "Готово",
+          className: "done",
+          progressLabel: "Отчёт готов",
+          color: "#3bd38b",
+          glow: "rgba(59,211,139,.35)"
+        },
+        work: {
+          label: "В работе",
+          className: "work",
+          progressLabel: "Анализируется",
+          color: "#f4ad44",
+          glow: "rgba(244,173,68,.35)"
+        },
+        queue: {
+          label: "В очереди",
+          className: "queue",
+          progressLabel: "Ожидает запуска",
+          color: "#6385ff",
+          glow: "rgba(99,133,255,.35)"
+        },
+        error: {
+          label: "Ошибка",
+          className: "error",
+          progressLabel: "Нужна проверка",
+          color: "#ff646e",
+          glow: "rgba(255,100,110,.35)"
+        }
+      };
+
+      const state = {
+        variant: 1,
+        query: "",
+        filter: "all"
+      };
+
+      const chevron = `
+        <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m9 6 6 6-6 6"></path>
+        </svg>
+      `;
+
+      const stage = document.getElementById("variantStage");
+      const visibleCount = document.getElementById("visibleCount");
+      const sidebarCount = document.getElementById("sidebarCount");
+      const variantGroup = document.getElementById("variantGroup");
+      const variantName = document.getElementById("variantName");
+      const variantNote = document.getElementById("variantNote");
+      const variantLive = document.getElementById("variantLive");
+      const dossierSearch = document.getElementById("dossierSearch");
+
+      let toastTimer = null;
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function reportHref(dossier) {
+        return `zelscan.html?order=${encodeURIComponent(dossier.order)}`;
+      }
+
+      function avatar(dossier) {
+        return `
+          <span
+            class="avatar"
+            style="--avatar-hue:${dossier.hue}"
+            aria-hidden="true"
+          >
+            ${escapeHtml(dossier.name.charAt(0))}
+          </span>
+        `;
+      }
+
+      function dateMarkup(dossier, className = "") {
+        return `
+          <time
+            class="${className}"
+            datetime="${dossier.iso}"
+            title="${escapeHtml(dossier.dateFull)}"
+          >
+            ${escapeHtml(dossier.date)}
+          </time>
+        `;
+      }
+
+      function statusPill(dossier) {
+        const status = statusMap[dossier.status];
+
+        return `
+          <span class="status-pill ${status.className}">
+            <i aria-hidden="true"></i>
+            ${status.label}
+          </span>
+        `;
+      }
+
+      function typePill(dossier) {
+        return `<span class="report-type">${escapeHtml(dossier.type)}</span>`;
+      }
+
+      function reportLabel(dossier) {
+        return `Открыть досье ${dossier.name}, ${statusMap[dossier.status].label}`;
+      }
+
+      function getVisibleDossiers() {
+        const query = state.query.trim().toLocaleLowerCase("ru");
+
+        return dossiers.filter((dossier) => {
+          const haystack = [
+            dossier.name,
+            dossier.userId,
+            dossier.order,
+            dossier.type,
+            statusMap[dossier.status].label
+          ].join(" ").toLocaleLowerCase("ru");
+
+          const matchesQuery = !query || haystack.includes(query);
+
+          let matchesFilter = true;
+
+          if (state.filter === "done") {
+            matchesFilter = dossier.status === "done";
+          }
+
+          if (state.filter === "active") {
+            matchesFilter =
+              dossier.status === "work" ||
+              dossier.status === "queue";
+          }
+
+          if (state.filter === "error") {
+            matchesFilter = dossier.status === "error";
+          }
+
+          return matchesQuery && matchesFilter;
+        });
+      }
+
+      function emptyMarkup() {
+        return `
+          <div class="empty-state">
+            <div>
+              <span class="empty-state-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <path d="m20 20-4-4"></path>
+                </svg>
+              </span>
+              <h2>Досье не найдены</h2>
+              <p>Попробуйте другой ник, ID или измените фильтр статуса.</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderVariant1(items) {
+        return `
+          <div class="v1-shell">
+            <div class="v1-head">
+              <div>
+                <h2>Последние отчёты</h2>
+                <p>Нажмите на строку, чтобы перейти к досье.</p>
+              </div>
+              <span class="v1-total">${items.length}</span>
+            </div>
+
+            <div class="v1-list">
+              ${items.map((dossier) => `
+                <a
+                  class="v1-row report-link"
+                  href="${reportHref(dossier)}"
+                  aria-label="${escapeHtml(reportLabel(dossier))}"
+                >
+                  <span class="v1-person">
+                    ${avatar(dossier)}
+                    <span class="v1-copy">
+                      <strong class="v1-name">${escapeHtml(dossier.name)}</strong>
+                      <span class="v1-meta">
+                        <span>${escapeHtml(dossier.type)}</span>
+                        <span class="dot"></span>
+                        ${dateMarkup(dossier)}
+                      </span>
+                    </span>
+                  </span>
+
+                  <span class="v1-end">
+                    ${statusPill(dossier)}
+                    <span class="v1-open">
+                      ${dossier.status === "done" ? "Открыть" : "Подробнее"}
+                    </span>
+                    ${chevron}
+                  </span>
+                </a>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderVariant2(items) {
+        return `
+          <div class="v2-grid">
+            ${items.map((dossier) => `
+              <a
+                class="v2-card report-link"
+                href="${reportHref(dossier)}"
+                style="--card-hue:${dossier.hue}"
+                aria-label="${escapeHtml(reportLabel(dossier))}"
+              >
+                <span class="v2-card-top">
+                  ${avatar(dossier)}
+                  ${statusPill(dossier)}
+                </span>
+
+                <span class="v2-card-copy">
+                  <strong>${escapeHtml(dossier.name)}</strong>
+                  <span>${escapeHtml(dossier.type)} · ${escapeHtml(dossier.order)}</span>
+                </span>
+
+                <span class="v2-card-bottom">
+                  ${dateMarkup(dossier, "v2-date")}
+                  ${chevron}
+                </span>
+              </a>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderVariant3(items) {
+        return `
+          <div class="v3-shell">
+            ${items.map((dossier) => `
+              <a
+                class="v3-row report-link"
+                href="${reportHref(dossier)}"
+                aria-label="${escapeHtml(reportLabel(dossier))}"
+              >
+                <span class="v3-user">
+                  ${avatar(dossier)}
+                  <span class="v3-user-copy">
+                    <strong class="v3-name">${escapeHtml(dossier.name)}</strong>
+                    <span class="v3-id">${escapeHtml(dossier.order)}</span>
+                  </span>
+                </span>
+
+                ${typePill(dossier)}
+                ${dateMarkup(dossier, "v3-date")}
+
+                <span class="v3-action">
+                  ${statusPill(dossier)}
+                  ${chevron}
+                </span>
+              </a>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderVariant4(items) {
+        return `
+          <div class="v4-stack">
+            ${items.map((dossier) => `
+              <a
+                class="v4-pill report-link"
+                href="${reportHref(dossier)}"
+                aria-label="${escapeHtml(reportLabel(dossier))}"
+              >
+                <span class="v4-person">
+                  ${avatar(dossier)}
+                  <span class="v4-copy">
+                    <strong class="v4-name">${escapeHtml(dossier.name)}</strong>
+                    <span class="v4-type">${escapeHtml(dossier.type)}</span>
+                  </span>
+                </span>
+
+                ${dateMarkup(dossier, "v4-date")}
+                ${statusPill(dossier)}
+                ${chevron}
+              </a>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderVariant5(items) {
+        return `
+          <div class="v5-shell">
+            <label class="v5-search">
+              <input
+                class="js-dossier-search js-variant-search"
+                type="search"
+                value="${escapeHtml(state.query)}"
+                placeholder="Ник пользователя, ID или номер заказа"
+                aria-label="Поиск по досье"
+              >
+
+              <span class="v5-scan-button" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 9V6a2 2 0 0 1 2-2h3"></path>
+                  <path d="M15 4h3a2 2 0 0 1 2 2v3"></path>
+                  <path d="M20 15v3a2 2 0 0 1-2 2h-3"></path>
+                  <path d="M9 20H6a2 2 0 0 1-2-2v-3"></path>
+                  <path d="M7 12h10"></path>
+                </svg>
+              </span>
+            </label>
+
+            <div class="v5-filter-row">
+              <button class="v5-filter" type="button" data-filter="all">Все</button>
+              <button class="v5-filter" type="button" data-filter="done">Готово</button>
+              <button class="v5-filter" type="button" data-filter="active">В процессе</button>
+              <button class="v5-filter" type="button" data-filter="error">Ошибка</button>
+            </div>
+
+            <div class="v5-results">
+              ${items.map((dossier) => `
+                <a
+                  class="v5-result report-link"
+                  href="${reportHref(dossier)}"
+                  aria-label="${escapeHtml(reportLabel(dossier))}"
+                >
+                  ${avatar(dossier)}
+
+                  <span class="v5-result-copy">
+                    <strong class="v5-result-name">${escapeHtml(dossier.name)}</strong>
+                    <span class="v5-result-meta">
+                      ${escapeHtml(dossier.type)} · ${escapeHtml(dossier.order)}
+                    </span>
+                  </span>
+
+                  <span class="v5-result-side">
+                    ${dateMarkup(dossier)}
+                    ${statusPill(dossier)}
+                    ${chevron}
+                  </span>
+                </a>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderVariant6(items) {
+        return `
+          <div class="v6-shell">
+            ${items.map((dossier) => {
+              const status = statusMap[dossier.status];
+
+              return `
+                <a
+                  class="v6-row report-link"
+                  href="${reportHref(dossier)}"
+                  aria-label="${escapeHtml(reportLabel(dossier))}"
+                >
+                  <span class="v6-user">
+                    ${avatar(dossier)}
+                    <span class="v6-copy">
+                      <strong class="v6-name">${escapeHtml(dossier.name)}</strong>
+                      <span class="v6-type">${escapeHtml(dossier.type)}</span>
+                    </span>
+                  </span>
+
+                  <span class="v6-signal">
+                    <span class="v6-signal-copy">
+                      <span>${status.progressLabel}</span>
+                      <span>${dossier.progress}%</span>
+                    </span>
+
+                    <span class="v6-track">
+                      <i
+                        style="
+                          --progress:${dossier.progress}%;
+                          --track-color:${status.color};
+                          --track-glow:${status.glow};
+                        "
+                      ></i>
+                    </span>
+                  </span>
+
+                  ${dateMarkup(dossier, "v6-date")}
+
+                  <span style="display:flex;align-items:center;gap:10px">
+                    ${statusPill(dossier)}
+                    ${chevron}
+                  </span>
+                </a>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      function renderVariant7(items) {
+        const doneItems = items.filter((dossier) => dossier.status === "done");
+        const latestReady = doneItems[0];
+
+        return `
+          <div class="v7-shell">
+            <div class="v7-summary">
+              <div class="v7-summary-main">
+                <span class="v7-summary-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="m6 12 4 4 8-9"></path>
+                    <circle cx="12" cy="12" r="9"></circle>
+                  </svg>
+                </span>
+
+                <span class="v7-summary-copy">
+                  <strong>
+                    ${doneItems.length
+                      ? `${doneItems.length} ${doneItems.length === 1 ? "отчёт готов" : "отчёта готовы"}`
+                      : "Нет готовых отчётов"}
+                  </strong>
+                  <span>
+                    Готовые досье открываются сразу; остальные продолжают обновляться.
+                  </span>
+                </span>
+              </div>
+
+              ${latestReady ? `
+                <a class="v7-latest" href="${reportHref(latestReady)}">
+                  Открыть последний
+                  ${chevron}
+                </a>
+              ` : ""}
+            </div>
+
+            <div class="v7-list">
+              ${items.map((dossier) => `
+                <a
+                  class="v7-row report-link"
+                  href="${reportHref(dossier)}"
+                  aria-label="${escapeHtml(reportLabel(dossier))}"
+                >
+                  <span class="v7-user">
+                    ${avatar(dossier)}
+                    <span class="v7-copy">
+                      <strong class="v7-name">${escapeHtml(dossier.name)}</strong>
+                      <span class="v7-meta">
+                        <span>${escapeHtml(dossier.type)}</span>
+                        <span>·</span>
+                        <span class="v7-order">${escapeHtml(dossier.order)}</span>
+                      </span>
+                    </span>
+                  </span>
+
+                  ${typePill(dossier)}
+                  ${dateMarkup(dossier, "v7-date")}
+
+                  <span class="v7-end">
+                    ${statusPill(dossier)}
+                    ${chevron}
+                  </span>
+                </a>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderVariant8(items) {
+        const counts = {
+          done: dossiers.filter((item) => item.status === "done").length,
+          active: dossiers.filter(
+            (item) => item.status === "work" || item.status === "queue"
+          ).length,
+          error: dossiers.filter((item) => item.status === "error").length
+        };
+
+        return `
+          <div class="v8-shell">
+            <div class="v8-stats">
+              <button
+                class="v8-stat"
+                type="button"
+                data-filter="done"
+                style="
+                  --stat-color:var(--green);
+                  --stat-bg:rgba(var(--green-rgb),.1);
+                "
+              >
+                <span class="v8-stat-copy">
+                  <span>Готово</span>
+                  <strong>${counts.done}</strong>
+                </span>
+                <i class="v8-stat-dot"></i>
+              </button>
+
+              <button
+                class="v8-stat"
+                type="button"
+                data-filter="active"
+                style="
+                  --stat-color:var(--amber);
+                  --stat-bg:rgba(var(--amber-rgb),.1);
+                "
+              >
+                <span class="v8-stat-copy">
+                  <span>В процессе</span>
+                  <strong>${counts.active}</strong>
+                </span>
+                <i class="v8-stat-dot"></i>
+              </button>
+
+              <button
+                class="v8-stat"
+                type="button"
+                data-filter="error"
+                style="
+                  --stat-color:var(--red);
+                  --stat-bg:rgba(var(--red-rgb),.1);
+                "
+              >
+                <span class="v8-stat-copy">
+                  <span>Требует внимания</span>
+                  <strong>${counts.error}</strong>
+                </span>
+                <i class="v8-stat-dot"></i>
+              </button>
+            </div>
+
+            <div class="v8-board">
+              <div class="v8-board-head">
+                <strong>Досье</strong>
+                <span>${items.length} из ${dossiers.length}</span>
+              </div>
+
+              <div class="v8-grid">
+                ${items.map((dossier) => `
+                  <a
+                    class="v8-card report-link"
+                    href="${reportHref(dossier)}"
+                    aria-label="${escapeHtml(reportLabel(dossier))}"
+                  >
+                    ${avatar(dossier)}
+
+                    <span class="v8-card-copy">
+                      <strong class="v8-card-name">${escapeHtml(dossier.name)}</strong>
+                      <span class="v8-card-meta">
+                        <span>${escapeHtml(dossier.type)}</span>
+                        <span>·</span>
+                        ${dateMarkup(dossier)}
+                      </span>
+                    </span>
+
+                    <span class="v8-card-side">
+                      ${statusPill(dossier)}
+                      ${chevron}
+                    </span>
+                  </a>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      const renderers = {
+        1: renderVariant1,
+        2: renderVariant2,
+        3: renderVariant3,
+        4: renderVariant4,
+        5: renderVariant5,
+        6: renderVariant6,
+        7: renderVariant7,
+        8: renderVariant8
+      };
+
+      function syncControls() {
+        document.querySelectorAll("[data-set-variant]").forEach((button) => {
+          const isActive = Number(button.dataset.setVariant) === state.variant;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        document.querySelectorAll("[data-filter]").forEach((button) => {
+          const isActive = button.dataset.filter === state.filter;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+
+        if (
+          dossierSearch &&
+          dossierSearch.value !== state.query &&
+          document.activeElement !== dossierSearch
+        ) {
+          dossierSearch.value = state.query;
+        }
+      }
+
+      function render() {
+        const items = getVisibleDossiers();
+
+        visibleCount.textContent = String(items.length);
+        sidebarCount.textContent = String(dossiers.length);
+
+        stage.innerHTML = items.length
+          ? renderers[state.variant](items)
+          : emptyMarkup();
+
+        syncControls();
+      }
+
+      function saveVariant() {
+        try {
+          localStorage.setItem(
+            "zelscan-dossier-ux-variant",
+            String(state.variant)
+          );
+        } catch (_) {}
+
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set("variant", String(state.variant));
+          history.replaceState(null, "", url);
+        } catch (_) {}
+      }
+
+      function setVariant(nextVariant, announce = true) {
+        let value = Number(nextVariant);
+
+        if (!Number.isFinite(value)) {
+          value = 1;
+        }
+
+        if (value < 1) value = 8;
+        if (value > 8) value = 1;
+
+        state.variant = value;
+        document.body.dataset.variant = String(value);
+
+        const meta = variants[value];
+        variantGroup.textContent = meta.group;
+        variantName.textContent = meta.name;
+        variantNote.textContent = meta.note;
+
+        saveVariant();
+        render();
+
+        if (announce) {
+          variantLive.textContent = `Выбран вариант ${meta.name}. ${meta.note}`;
+        }
+      }
+
+      function setFilter(filter) {
+        state.filter = filter === state.filter && filter !== "all"
+          ? "all"
+          : filter;
+
+        render();
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        const toastText = document.getElementById("toastText");
+
+        toastText.textContent = message;
+        toast.classList.add("is-visible");
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove("is-visible");
+        }, 2600);
+      }
+
+      document.addEventListener("click", (event) => {
+        const variantButton = event.target.closest("[data-set-variant]");
+
+        if (variantButton) {
+          setVariant(variantButton.dataset.setVariant);
+          return;
+        }
+
+        const filterButton = event.target.closest("[data-filter]");
+
+        if (filterButton) {
+          setFilter(filterButton.dataset.filter);
+        }
+      });
+
+      document.addEventListener("input", (event) => {
+        if (!event.target.matches(".js-dossier-search")) {
+          return;
+        }
+
+        const source = event.target;
+        const restoreFocus = source.classList.contains("js-variant-search");
+        const caret = source.selectionStart ?? source.value.length;
+
+        state.query = source.value;
+        render();
+
+        if (restoreFocus) {
+          const replacement = document.querySelector(".js-variant-search");
+
+          if (replacement) {
+            replacement.focus();
+            replacement.setSelectionRange(caret, caret);
+          }
+        }
+      });
+
+      document.getElementById("previousVariant").addEventListener("click", () => {
+        setVariant(state.variant - 1);
+      });
+
+      document.getElementById("nextVariant").addEventListener("click", () => {
+        setVariant(state.variant + 1);
+      });
+
+      document.getElementById("globalProbe").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") {
+          return;
+        }
+
+        const query = event.currentTarget.value.trim();
+
+        if (!query) {
+          return;
+        }
+
+        showToast(`Переход к созданию проверки: ${query}`);
+
+        setTimeout(() => {
+          window.location.href =
+            `zelscan_dashboard.html?query=${encodeURIComponent(query)}`;
+        }, 350);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (!event.altKey) {
+          return;
+        }
+
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          setVariant(state.variant - 1);
+          return;
+        }
+
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          setVariant(state.variant + 1);
+          return;
+        }
+
+        if (/^[1-8]$/.test(event.key)) {
+          event.preventDefault();
+          setVariant(Number(event.key));
+        }
+      });
+
+      function getInitialVariant() {
+        try {
+          const queryVariant = Number(
+            new URL(window.location.href).searchParams.get("variant")
+          );
+
+          if (queryVariant >= 1 && queryVariant <= 8) {
+            return queryVariant;
+          }
+        } catch (_) {}
+
+        try {
+          const savedVariant = Number(
+            localStorage.getItem("zelscan-dossier-ux-variant")
+          );
+
+          if (savedVariant >= 1 && savedVariant <= 8) {
+            return savedVariant;
+          }
+        } catch (_) {}
+
+        return 1;
+      }
+
+      setVariant(getInitialVariant(), false);
+    })();
+  </script>
+</body>
+</html>

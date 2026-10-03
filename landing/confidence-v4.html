@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Уверенность в себе — блок</title>
+</head>
+<body style="margin:0;background:#020202">
+
+<!-- ===== BLOCK: Уверенность в себе ===== -->
+<section class="cfz" id="cfz">
+  <div class="cfz__glow" aria-hidden="true"></div>
+
+  <header class="cfz__head">
+    <div class="cfz__titles">
+      <div class="cfz__eyebrow">Речевые сигналы</div>
+      <h2 class="cfz__title">Уверенность в себе</h2>
+      <p class="cfz__sub">Баланс твёрдых формулировок и оговорок в том, как человек говорит о себе и своих решениях.</p>
+    </div>
+    <div class="cfz__rel">
+      <span class="cfz__rel-label">Надёжность оценки</span>
+      <span class="cfz__rel-value" data-rel>средняя</span>
+      <span class="cfz__rel-meta"><span data-total>27</span> сигналов</span>
+    </div>
+  </header>
+
+  <div class="cfz__hero">
+    <div class="cfz__score">
+      <span class="cfz__score-num" data-score>34</span><span class="cfz__score-pct">%</span>
+    </div>
+    <div class="cfz__level">
+      <span class="cfz__level-dot" data-dot></span>
+      <span class="cfz__level-text" data-level>осторожный</span>
+      <span class="cfz__level-hint" data-hint>оговорок заметно больше, чем утверждений</span>
+    </div>
+  </div>
+
+  <div class="cfz__scale">
+    <div class="cfz__track">
+      <div class="cfz__track-grad"></div>
+      <div class="cfz__marker" data-marker style="left:34%">
+        <span class="cfz__marker-halo"></span>
+        <span class="cfz__marker-dot"></span>
+      </div>
+    </div>
+    <div class="cfz__ticks">
+      <span>осторожный</span>
+      <span>сбалансированный</span>
+      <span>уверенный</span>
+      <span>категоричный</span>
+    </div>
+  </div>
+
+  <div class="cfz__grid">
+    <div class="cfz__col cfz__col--amber">
+      <div class="cfz__col-head">
+        <span class="cfz__col-name">Сомнения</span>
+        <span class="cfz__col-num" data-hedging>18</span>
+      </div>
+      <div class="cfz__bar"><i data-hedging-bar style="width:100%"></i></div>
+      <div class="cfz__chips" data-hedging-chips></div>
+    </div>
+
+    <div class="cfz__ratio">
+      <span class="cfz__ratio-line" aria-hidden="true"></span>
+      <span class="cfz__ratio-value" data-ratio>2.0×</span>
+      <span class="cfz__ratio-label" data-ratio-dir>влево</span>
+      <span class="cfz__ratio-line" aria-hidden="true"></span>
+    </div>
+
+    <div class="cfz__col cfz__col--green cfz__col--right">
+      <div class="cfz__col-head">
+        <span class="cfz__col-num" data-certain>9</span>
+        <span class="cfz__col-name">Уверенные</span>
+      </div>
+      <div class="cfz__bar cfz__bar--right"><i data-certain-bar style="width:50%"></i></div>
+      <div class="cfz__chips cfz__chips--right" data-certain-chips></div>
+    </div>
+  </div>
+
+  <footer class="cfz__foot">
+    <span>Считаются лексические маркеры уверенности и хеджирования на всю выборку сообщений.</span>
+    <span class="cfz__foot-dim">Оценка описывает манеру речи, а не компетентность.</span>
+  </footer>
+</section>
+
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
+
+.cfz{
+  --bg:#020202;
+  --fg:#EBEBEB;
+  --amber:#F59E0B;
+  --green:#34D399;
+  --red:#EF4444;
+  --blue:#3B82F6;
+  --cyan:#22D3EE;
+  --dim:rgba(235,235,235,.46);
+  --dimmer:rgba(235,235,235,.28);
+  --accent:var(--amber);
+
+  position:relative;
+  box-sizing:border-box;
+  width:100%;
+  max-width:1080px;
+  margin:0 auto;
+  padding:56px 56px 44px;
+  overflow:hidden;
+  background:
+    radial-gradient(120% 140% at 12% -10%, rgba(245,158,11,.10) 0%, rgba(2,2,2,0) 52%),
+    radial-gradient(90% 120% at 100% 0%, rgba(34,211,238,.06) 0%, rgba(2,2,2,0) 48%),
+    var(--bg);
+  color:var(--fg);
+  font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400;
+  font-feature-settings:"tnum" 1,"cv05" 1;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+.cfz *{box-sizing:border-box}
+
+.cfz__glow{
+  position:absolute;
+  inset:auto auto -220px 50%;
+  width:760px;height:420px;
+  transform:translateX(-50%);
+  background:radial-gradient(50% 50% at 50% 50%, var(--accent) 0%, rgba(2,2,2,0) 70%);
+  opacity:.16;
+  filter:blur(70px);
+  pointer-events:none;
+  transition:background .6s ease,opacity .6s ease;
+}
+
+/* ---------- head ---------- */
+.cfz__head{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:48px;
+}
+.cfz__eyebrow{
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--dimmer);
+  margin-bottom:14px;
+}
+.cfz__title{
+  margin:0;
+  font-size:26px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  line-height:1.15;
+}
+.cfz__sub{
+  margin:12px 0 0;
+  max-width:520px;
+  font-size:14px;
+  line-height:1.6;
+  color:var(--dim);
+}
+.cfz__rel{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:6px;
+  text-align:right;
+  white-space:nowrap;
+}
+.cfz__rel-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dimmer)}
+.cfz__rel-value{font-size:17px;font-weight:500;color:var(--cyan);text-shadow:0 0 22px rgba(34,211,238,.35)}
+.cfz__rel-meta{font-size:12px;color:var(--dimmer)}
+
+/* ---------- hero ---------- */
+.cfz__hero{
+  position:relative;
+  display:flex;
+  align-items:baseline;
+  gap:28px;
+  margin-top:52px;
+}
+.cfz__score{
+  display:flex;
+  align-items:baseline;
+  line-height:.9;
+  color:var(--accent);
+  text-shadow:0 0 60px rgba(245,158,11,.30);
+  transition:color .5s ease,text-shadow .5s ease;
+}
+.cfz__score-num{font-size:72px;font-weight:400;letter-spacing:-.045em}
+.cfz__score-pct{font-size:28px;font-weight:400;margin-left:4px;opacity:.62}
+.cfz__level{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding-bottom:10px}
+.cfz__level-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 4px rgba(245,158,11,.14),0 0 18px rgba(245,158,11,.55);
+  transition:background .5s ease,box-shadow .5s ease;
+}
+.cfz__level-text{font-size:19px;font-weight:500;letter-spacing:-.015em}
+.cfz__level-hint{font-size:13px;color:var(--dimmer)}
+
+/* ---------- scale ---------- */
+.cfz__scale{position:relative;margin-top:44px}
+.cfz__track{position:relative;height:6px;border-radius:99px;overflow:visible}
+.cfz__track-grad{
+  position:absolute;inset:0;border-radius:99px;
+  background:linear-gradient(90deg,
+    rgba(245,158,11,.85) 0%,
+    rgba(245,158,11,.30) 22%,
+    rgba(235,235,235,.13) 46%,
+    rgba(52,211,153,.32) 70%,
+    rgba(52,211,153,.85) 88%,
+    rgba(239,68,68,.75) 100%);
+  box-shadow:0 10px 40px rgba(0,0,0,.6) inset;
+}
+.cfz__marker{position:absolute;top:50%;transform:translate(-50%,-50%);transition:left .7s cubic-bezier(.22,.8,.24,1)}
+.cfz__marker-halo{
+  position:absolute;left:50%;top:50%;
+  width:44px;height:44px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(50% 50% at 50% 50%, rgba(235,235,235,.30) 0%, rgba(2,2,2,0) 72%);
+  filter:blur(2px);
+}
+.cfz__marker-dot{
+  position:relative;display:block;
+  width:14px;height:14px;border-radius:50%;
+  background:#FFFFFF;
+  box-shadow:0 0 0 5px rgba(2,2,2,.9),0 0 28px rgba(255,255,255,.55);
+}
+.cfz__ticks{
+  display:flex;justify-content:space-between;
+  margin-top:20px;
+  font-size:12px;
+  color:var(--dimmer);
+}
+.cfz__ticks span:nth-child(1){color:rgba(245,158,11,.55)}
+.cfz__ticks span:nth-child(3){color:rgba(52,211,153,.55)}
+
+/* ---------- columns ---------- */
+.cfz__grid{
+  display:grid;
+  grid-template-columns:1fr 132px 1fr;
+  align-items:start;
+  gap:0 28px;
+  margin-top:56px;
+}
+.cfz__col{position:relative;padding:4px 0}
+.cfz__col--right{text-align:right}
+.cfz__col-head{display:flex;align-items:baseline;gap:14px}
+.cfz__col--right .cfz__col-head{justify-content:flex-end}
+.cfz__col-name{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.cfz__col-num{font-size:34px;font-weight:400;letter-spacing:-.03em;line-height:1}
+.cfz__col--amber .cfz__col-num{color:var(--amber);text-shadow:0 0 34px rgba(245,158,11,.28)}
+.cfz__col--green .cfz__col-num{color:var(--green);text-shadow:0 0 34px rgba(52,211,153,.28)}
+.cfz__bar{position:relative;height:3px;margin-top:22px;border-radius:99px;background:rgba(235,235,235,.07);overflow:hidden}
+.cfz__bar i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.22,.8,.24,1)}
+.cfz__col--amber .cfz__bar i{background:linear-gradient(90deg,rgba(245,158,11,.25),var(--amber));box-shadow:0 0 18px rgba(245,158,11,.45)}
+.cfz__col--green .cfz__bar i{background:linear-gradient(90deg,var(--green),rgba(52,211,153,.25));box-shadow:0 0 18px rgba(52,211,153,.45);margin-left:auto}
+.cfz__bar--right i{margin-left:auto}
+.cfz__chips{display:flex;flex-wrap:wrap;gap:10px 12px;margin-top:26px}
+.cfz__chips--right{justify-content:flex-end}
+.cfz__chip{
+  font-size:13px;
+  line-height:1;
+  padding:9px 2px 10px;
+  color:rgba(235,235,235,.72);
+  background-image:linear-gradient(90deg,currentColor,currentColor);
+  background-size:100% 1px;
+  background-position:0 100%;
+  background-repeat:no-repeat;
+  opacity:.9;
+}
+.cfz__col--amber .cfz__chip{color:rgba(245,158,11,.78)}
+.cfz__col--green .cfz__chip{color:rgba(52,211,153,.78)}
+.cfz__chip+.cfz__chip{margin-left:2px}
+
+/* ---------- ratio ---------- */
+.cfz__ratio{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding-top:2px;
+}
+.cfz__ratio-line{width:1px;flex:1 0 34px;background:linear-gradient(180deg,rgba(235,235,235,0),rgba(235,235,235,.16),rgba(235,235,235,0))}
+.cfz__ratio-value{font-size:22px;font-weight:500;letter-spacing:-.02em;color:var(--fg);text-shadow:0 0 30px rgba(235,235,235,.22)}
+.cfz__ratio-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dimmer)}
+
+/* ---------- foot ---------- */
+.cfz__foot{
+  display:flex;align-items:center;justify-content:space-between;gap:32px;
+  margin-top:52px;padding-top:22px;
+  font-size:12px;color:var(--dimmer);
+  background:linear-gradient(90deg,rgba(235,235,235,.12),rgba(235,235,235,0)) 0 0/100% 1px no-repeat;
+}
+.cfz__foot-dim{opacity:.7}
+
+@media (max-width:860px){
+  .cfz{padding:40px 24px 32px}
+  .cfz__head{flex-direction:column;gap:24px}
+  .cfz__rel{align-items:flex-start;text-align:left}
+  .cfz__grid{grid-template-columns:1fr;gap:40px}
+  .cfz__ratio{flex-direction:row}
+  .cfz__ratio-line{height:1px;width:auto;flex:1;background:linear-gradient(90deg,rgba(235,235,235,0),rgba(235,235,235,.16),rgba(235,235,235,0))}
+  .cfz__col--right,.cfz__chips--right{text-align:left;justify-content:flex-start}
+  .cfz__col--right .cfz__col-head{justify-content:flex-start;flex-direction:row-reverse}
+  .cfz__col--green .cfz__bar i,.cfz__bar--right i{margin-left:0}
+  .cfz__ticks span:nth-child(2),.cfz__ticks span:nth-child(3){display:none}
+}
+</style>
+
+<script>
+(function () {
+  // ==== данные блока (замените на реальные) ====
+  var DATA = {
+    score: 34,
+    certain: 9,
+    hedging: 18,
+    certain_markers: ["точно", "факт", "уверен", "ясно"],
+    hedging_markers: ["наверное", "возможно", "думаю", "если честно"],
+    reliability: "средняя"
+  };
+
+  var root = document.getElementById("cfz");
+  if (!root) return;
+
+  var score = Math.max(0, Math.min(100, Math.round(DATA.score)));
+  var total = DATA.certain + DATA.hedging;
+
+  var level = score >= 80
+    ? { text: "категоричный", color: "#EF4444", rgb: "239,68,68", hint: "почти нет оговорок — речь звучит безапелляционно" }
+    : score >= 60
+      ? { text: "уверенный", color: "#34D399", rgb: "52,211,153", hint: "твёрдых формулировок ощутимо больше" }
+      : score >= 30
+        ? { text: "осторожный", color: "#F59E0B", rgb: "245,158,11", hint: "оговорок заметно больше, чем утверждений" }
+        : { text: "сбалансированный", color: "#3B82F6", rgb: "59,130,246", hint: "речь держится на осторожных конструкциях" };
+
+  if (score >= 40 && score < 60) {
+    level = { text: "сбалансированный", color: "#3B82F6", rgb: "59,130,246", hint: "уверенность и сомнения примерно в равновесии" };
+  }
+
+  root.style.setProperty("--accent", level.color);
+  root.querySelector(".cfz__glow").style.background =
+    "radial-gradient(50% 50% at 50% 50%, rgba(" + level.rgb + ",1) 0%, rgba(2,2,2,0) 70%)";
+  var scoreEl = root.querySelector(".cfz__score");
+  scoreEl.style.color = level.color;
+  scoreEl.style.textShadow = "0 0 60px rgba(" + level.rgb + ",.30)";
+  var dot = root.querySelector("[data-dot]");
+  dot.style.background = level.color;
+  dot.style.boxShadow = "0 0 0 4px rgba(" + level.rgb + ",.14), 0 0 18px rgba(" + level.rgb + ",.55)";
+
+  root.querySelector("[data-score]").textContent = score;
+  root.querySelector("[data-level]").textContent = level.text;
+  root.querySelector("[data-hint]").textContent = level.hint;
+  root.querySelector("[data-rel]").textContent = DATA.reliability;
+  root.querySelector("[data-total]").textContent = total;
+  root.querySelector("[data-hedging]").textContent = DATA.hedging;
+  root.querySelector("[data-certain]").textContent = DATA.certain;
+
+  var max = Math.max(DATA.hedging, DATA.certain, 1);
+  root.querySelector("[data-hedging-bar]").style.width = Math.round((DATA.hedging / max) * 100) + "%";
+  root.querySelector("[data-certain-bar]").style.width = Math.round((DATA.certain / max) * 100) + "%";
+
+  var ratio = DATA.certain === 0 || DATA.hedging === 0
+    ? Math.max(DATA.certain, DATA.hedging)
+    : (max / Math.min(DATA.hedging, DATA.certain));
+  root.querySelector("[data-ratio]").textContent = ratio.toFixed(1) + "\u00D7";
+  root.querySelector("[data-ratio-dir]").textContent =
+    DATA.hedging > DATA.certain ? "влево" : DATA.certain > DATA.hedging ? "вправо" : "равновесие";
+
+  function chips(node, words) {
+    node.innerHTML = "";
+    words.slice(0, 5).forEach(function (w) {
+      var s = document.createElement("span");
+      s.className = "cfz__chip";
+      s.textContent = w;
+      node.appendChild(s);
+    });
+  }
+  chips(root.querySelector("[data-hedging-chips]"), DATA.hedging_markers);
+  chips(root.querySelector("[data-certain-chips]"), DATA.certain_markers);
+
+  var marker = root.querySelector("[data-marker]");
+  marker.style.left = "0%";
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { marker.style.left = score + "%"; });
+  });
+})();
+</script>
+<!-- ===== /BLOCK ===== -->
+
+</body>
+</html>

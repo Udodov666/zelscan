@@ -1,0 +1,31 @@
+/* Animated brand logo — ported 1:1 from zelscan-deploy/landing/assets/css/header-logo.css */
+.brand-logo{display:flex;align-items:center;gap:7px;flex:0 0 auto;width:auto!important;height:auto!important;text-decoration:none}
+.brand-logo .brand-firma{display:block;width:23px;height:23px;flex:none;overflow:visible}
+.brand-logo .brand-text{display:block;width:105px;height:23px;flex:none;object-fit:contain;object-position:left center;opacity:0;transform:translateY(4px);animation:brand-word-rise 340ms cubic-bezier(.16,.8,.2,1) 720ms both}
+.brand-logo .brand-petal{transform-box:fill-box;transform-origin:center;opacity:0;animation:brand-petal-in 470ms cubic-bezier(.16,.78,.22,1) both}
+.brand-logo .brand-petal:nth-child(1){animation-delay:30ms}
+.brand-logo .brand-petal:nth-child(2){animation-delay:125ms}
+.brand-logo .brand-petal:nth-child(3){animation-delay:220ms}
+.brand-logo .brand-petal:nth-child(4){animation-delay:315ms}
+.brand-logo.is-entered .brand-petal{animation:none;opacity:1;transition:transform 420ms cubic-bezier(.22,.61,.36,1)}
+.brand-logo.is-entered .brand-text{opacity:1;transform:none}
+.brand-logo.skip-entrance .brand-petal,.brand-logo.skip-entrance .brand-text{animation:none!important}
+.brand-logo.is-entered:is(:hover,:focus-visible) .brand-petal:nth-child(1){transform:translate(-0.8px,0.8px)}
+.brand-logo.is-entered:is(:hover,:focus-visible) .brand-petal:nth-child(2){transform:translate(0.8px,0.8px)}
+.brand-logo.is-entered:is(:hover,:focus-visible) .brand-petal:nth-child(3){transform:translate(-0.8px,-0.8px)}
+.brand-logo.is-entered:is(:hover,:focus-visible) .brand-petal:nth-child(4){transform:translate(0.8px,-0.8px)}
+@keyframes brand-petal-in{from{opacity:0;transform:translateY(3px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes brand-word-rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .brand-logo .brand-petal,.brand-logo .brand-text{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
+}
+/* Mobile: slightly smaller logo (как в панели) */
+@media (max-width:640px){
+  .brand-logo{gap:6px}
+  .brand-logo .brand-firma{width:21px;height:21px}
+  .brand-logo .brand-text{width:96px;height:21px}
+}
+@media (max-width:380px){
+  .brand-logo .brand-firma{width:19px;height:19px}
+  .brand-logo .brand-text{width:86px;height:19px}
+}

@@ -1,0 +1,186 @@
+/* iOS Liquid Glass material (используется модалками/меню) */
+.zs-glass{
+  background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0) 22%), rgba(28,28,30,.62);
+  -webkit-backdrop-filter:blur(42px) saturate(180%);backdrop-filter:blur(42px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.acc-pill{position:relative}
+.acc-pill.zs-profile-loading{box-sizing:border-box;width:112px;min-width:112px;max-width:112px;overflow:hidden}
+.zs-profile-skeleton{display:flex;align-items:center;gap:9px;flex:0 0 92px;width:92px;min-width:92px;max-width:92px;overflow:hidden;opacity:1;transition:opacity var(--zsk-fade,220ms)}
+.zs-profile-skeleton-av{width:34px;min-width:34px;max-width:34px;height:34px;flex:0 0 34px}
+.zs-profile-skeleton-name{display:block!important;width:49px!important;min-width:49px!important;max-width:49px!important;height:14px;flex:0 0 49px!important}
+.zs-profile-loading>.av,.zs-profile-loading>.nm,.zs-profile-loading>.who,.zs-profile-loading>.acc-menu-av,.zs-profile-loading>.acc-menu-who{display:none!important}
+.sb-user .zs-profile-skeleton{gap:12px;flex:1}.sb-user .zs-profile-skeleton-av{width:42px;height:42px;border-radius:14px}.sb-user .zs-profile-skeleton-name{width:88px}
+.acc-menu-user .zs-profile-skeleton{position:absolute;inset:7px 8px 11px}.acc-menu-user .zs-profile-skeleton-av{width:38px;height:38px;border-radius:13px}.acc-menu-user .zs-profile-skeleton-name{width:104px}
+@media(prefers-reduced-motion:reduce){.zs-profile-skeleton{transition:none}}
+
+/* ── Anti-FOUC: пока UI не готов, прячем баланс и бейдж уведомлений, ──────────
+   чтобы они не мигали на миллисекунду при загрузке страницы.
+   Класс zs-ui-ready ставит account-ui.js после того, как определит
+   реальное состояние (залогинен ли юзер, настройка show_balance, unread). */
+html:not(.zs-ui-ready) .bal-pill{display:none !important}
+html:not(.zs-bal-ready) .bal-pill{display:none !important}
+html:not(.zs-ui-ready) .t-badge{opacity:0 !important;visibility:hidden !important}
+/* Колокольчик скрыт, пока не загрузится его CSS (zs-noti-ready ставит account-ui.js) */
+html:not(.zs-noti-ready) .zs-noti-trigger{visibility:hidden !important}
+/* Баланc-пилюля в хедере (на меcте бывшей кнопки «Новое доcье») */
+.bal-pill{display:inline-flex;align-items:center;gap:9px;height:42px;padding:0 16px 0 12px;border-radius:666px;background:rgba(255,255,255,.045);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,box-shadow .15s}
+.bal-pill:hover{background:rgba(255,255,255,.075)}
+.bal-pill svg{width:24px;height:24px;flex:none;color:#EBEBEB}
+.bal-pill .amt{font-family:Inter,sans-serif;font-size:15px;font-weight:500;letter-spacing:-.01em;color:#EBEBEB;font-variant-numeric:tabular-nums}
+.bal-pill .cur{font-family:Inter,sans-serif;font-size:15px;font-weight:500;color:#EBEBEB;margin-left:-3px}
+@media(max-width:640px){.bal-pill{height:44px;padding:0 13px;gap:7px}}
+.acc-menu{position:fixed;z-index:12000;width:262px;padding:10px;border-radius:24px;background:rgba(10,11,13,.3);box-shadow:0 24px 62px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.025);-webkit-backdrop-filter:blur(24px) saturate(45%);backdrop-filter:blur(24px) saturate(45%);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;transition:opacity .16s,transform .16s,visibility .16s}
+.acc-menu.open{opacity:1;visibility:visible;transform:none}
+.acc-menu.flip{transform-origin:bottom right;transform:translateY(6px) scale(.98)}
+.acc-menu.flip.open{transform:none}
+
+.acc-menu-user{display:flex;align-items:center;gap:10px;padding:7px 8px 11px}
+.acc-menu-av{position:relative;width:38px;height:38px;border-radius:13px;flex:none;display:grid;place-items:center;overflow:hidden;background:linear-gradient(145deg,#67dbff 2%,#268df1 58%,#174a7c);color:#fff;font-size:15px;font-weight:500;box-shadow:inset 0 1px 0 rgba(255,255,255,.34)}
+.acc-menu-av::after{content:"";position:absolute;right:-9px;top:-11px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.19);filter:blur(2px);pointer-events:none}
+.acc-menu-av img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover}
+/* Градиент-фолбэк под аватаркой (оранжевый в .acc-pill/.sb-user, синий в .acc-menu-av)
+   нужен только когда аватара нет и рисуется буква ника. Как только внутри есть <img> —
+   гасим фон/тень/псевдоэлемент, иначе они просвечивают из-под аватара (прозрачные края
+   webp, момент до загрузки). Подключено на всех страницах с аккаунт-шапкой. */
+.acc-pill .av:has(img),.sb-user .av:has(img){background:none!important;box-shadow:none!important}
+.acc-menu-av:has(img){background:none!important;box-shadow:none!important}
+.acc-menu-av:has(img)::after{display:none!important}
+.acc-menu-who{min-width:0;flex:1}
+.acc-menu-name{font-size:14.5px;line-height:18px;font-weight:500;color:#f2f2f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-menu-id{display:inline-flex;align-items:center;height:17px;margin-top:3px;padding:0 6px;border-radius:6px;background:linear-gradient(180deg,#b38a16,#8b6300);color:#ffda58;font-size:10px;line-height:17px;font-weight:500;letter-spacing:.01em;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.acc-menu-id:empty{display:none}
+.acc-balance{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 2px 10px;padding:10px 12px 10px 16px;min-height:58px;border-radius:16px;background:rgba(255,255,255,.045)}
+.acc-balance::before{content:"";position:absolute;z-index:0;inset:-22px -14px -16px 32%;background:radial-gradient(circle at 78% 4%,rgba(255,255,255,.92) 0,rgba(255,255,255,.3) 10%,rgba(226,232,236,.1) 20%,transparent 56%);filter:blur(5px);mix-blend-mode:screen;pointer-events:none}
+.acc-balance::after{content:"";position:absolute;z-index:1;top:0;right:7px;width:132px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),rgba(255,255,255,.58),transparent);box-shadow:0 0 11px rgba(255,255,255,.24);pointer-events:none}
+.acc-balance>*{position:relative;z-index:2}
+.acc-balance-copy{min-width:0;flex:1}
+.acc-balance-copy span{display:block;font-size:11.5px;font-weight:400;letter-spacing:.01em;color:#77787d}
+.acc-balance-copy b{display:block;margin-top:3px;font-size:14.5px;font-weight:400;letter-spacing:-.01em;color:#f4f4f3;white-space:nowrap}
+.acc-topup-mini{width:30px;height:30px;padding:0;border:0;border-radius:999px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.acc-topup-mini:hover{background:rgba(255,255,255,.16);color:#fff}
+.acc-topup-mini svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.acc-menu-list{display:grid;margin-top:4px}
+.acc-menu-item{width:100%;height:40px;padding:0 6px;border:0;border-radius:14px;background:transparent;color:#d2d3d6;display:flex;align-items:center;gap:6px;text-decoration:none;font:400 13.5px Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;text-align:left;transition:background .14s,color .14s}
+.acc-menu-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.acc-menu-item svg{width:30px;height:30px;padding:7px;box-sizing:border-box;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.acc-menu-sep{height:1px;margin:8px;background:rgba(255,255,255,.055)}
+.acc-menu-item.danger{color:#f06d72}
+.acc-menu-item.danger:hover{background:rgba(240,109,114,.07);color:#ff8186}
+@media(prefers-reduced-transparency:reduce){.acc-menu{background:#1b1b1e;backdrop-filter:none}}
+.topup-backdrop{position:fixed;z-index:13000;inset:0;background:rgba(0,0,0,.42);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);
+  display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:.2s}
+.topup-backdrop.open{opacity:1;visibility:visible}
+.topup-backdrop.closing{opacity:0;visibility:hidden}
+.topup-sheet{position:relative;width:min(460px,100%);padding:28px;
+  border-radius:28px;
+  background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,0) 22%), rgba(28,28,30,.62);
+  -webkit-backdrop-filter:blur(42px) saturate(180%);backdrop-filter:blur(42px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.28);
+  animation:zs-modal-in .32s cubic-bezier(.32,.72,0,1) both}
+.topup-sheet::before{content:"";position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  width:38px;height:5px;border-radius:3px;background:rgba(255,255,255,.38)}
+@keyframes zs-modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.topup-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-top:14px}
+.topup-title{font-size:22px;font-weight:600;letter-spacing:-.02em;color:#f5f5f7}
+.topup-sub{font-size:13px;line-height:1.5;color:#a1a1a8;margin-top:7px}
+.topup-close{width:36px;height:36px;flex:none;border:0;border-radius:13px;background:rgba(255,255,255,.1);color:#9a9aa0;font-size:20px;cursor:pointer;transition:background .16s}
+.topup-close:hover{background:rgba(255,255,255,.16);color:#fff}
+.topup-rate{display:none}
+.topup-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:22px}
+.topup-preset{height:50px;border:1px solid rgba(255,255,255,.1);border-radius:15px;background:rgba(255,255,255,.06);color:#cfcfd4;font:600 13px Inter;cursor:pointer;transition:transform .12s, background .16s, border-color .16s, color .16s}
+.topup-preset:hover{background:rgba(255,255,255,.1)}
+.topup-preset:active{transform:scale(.97)}
+.topup-preset.active{background:rgba(94,224,168,.16);border-color:rgba(94,224,168,.5);color:#5ee0a8}
+.topup-field{display:flex;align-items:center;margin-top:14px;height:56px;padding:0 18px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(255,255,255,.06);transition:border-color .18s, box-shadow .18s}
+.topup-field:focus-within{border-color:rgba(94,224,168,.55);box-shadow:0 0 0 4px rgba(94,224,168,.12)}
+.topup-field input{flex:1;min-width:0;border:0;outline:0;background:none;color:#f5f5f7;font:500 15px Inter}
+.topup-field input::placeholder{color:#6d6d73}
+.topup-field span{font-size:13px;color:#9a9aa0}
+.topup-summary{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:0 2px;font-size:12px;color:#8a8a90}
+.topup-summary b{color:#e6e6ea;font-weight:600;font-size:13px}
+.topup-submit{width:100%;height:54px;margin-top:24px;border:0;border-radius:16px;background:#f5f5f7;color:#0a0a0a;font:650 14px Inter;cursor:pointer;transition:transform .12s, background .16s}
+.topup-submit:hover{background:#fff}
+.topup-submit:active{transform:scale(.98)}
+.topup-submit:disabled{opacity:.45}
+.topup-note{font-size:11px;line-height:1.45;color:#6d6d73;text-align:center;margin-top:14px}
+.zs-toast{position:fixed;z-index:14000;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,12px);padding:12px 16px;
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,0) 60%), rgba(28,28,30,.62);
+  -webkit-backdrop-filter:blur(40px) saturate(180%);backdrop-filter:blur(40px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);border-radius:14px;color:#f5f5f7;font:500 13px Inter;
+  box-shadow:0 16px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.22);opacity:0;visibility:hidden;transition:.24s cubic-bezier(.32,.72,0,1)}
+.zs-toast.on{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+/* ================= поповер баланcа (hover на .bal-pill) ================= */
+.bal-wrap{position:relative;display:inline-flex}
+.bpop{position:absolute;top:calc(100% + 9px);right:0;width:300px;padding:12px;border-radius:24px;
+  background:linear-gradient(145deg,rgba(39,39,42,.34),rgba(18,18,20,.38));
+  box-shadow:0 24px 62px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.025);
+  -webkit-backdrop-filter:blur(28px) saturate(145%);backdrop-filter:blur(28px) saturate(145%);
+  opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;
+  transition:opacity .16s,transform .16s,visibility .16s;z-index:11000}
+.bal-wrap:hover .bpop,.bal-wrap .bpop.open{opacity:1;visibility:visible;transform:none}
+/* невидимый моcт, чтобы курcор не «проваливалcя» между пилюлей и поповером */
+.bpop::before{content:"";position:absolute;bottom:100%;left:0;right:0;height:12px}
+.bpop-title{font:600 12.5px Inter;letter-spacing:.02em;color:#a9a9ae;padding:5px 8px 9px}
+.bp2-card{position:relative;isolation:isolate;display:flex;align-items:center;
+  justify-content:space-between;gap:10px;border-radius:16px;background:rgba(255,255,255,.045);
+  padding:11px 12px 11px 14px;margin-bottom:8px;min-height:60px}
+.bp2-card:last-child{margin-bottom:0}
+.bp2-card.lit{overflow:hidden}
+.bp2-copy{min-width:0}
+.bp2-copy .k{display:flex;align-items:center;font:400 11.5px Inter;letter-spacing:.01em;color:#77787d}
+.bp2-copy .v{display:block;margin-top:4px;font:500 20px Inter;letter-spacing:-.01em;color:#f4f4f3;font-variant-numeric:tabular-nums}
+.bp2-copy .v .u{margin-left:.28em;color:#c2c2c8;font-weight:500;font-size:1em}
+.bp2-card.lit::before{content:"";position:absolute;z-index:0;inset:-22px -14px -16px 32%;
+  background:radial-gradient(circle at 78% 4%,rgba(255,255,255,.9) 0,rgba(255,255,255,.3) 10%,rgba(226,232,236,.1) 20%,transparent 56%);
+  filter:blur(5px);mix-blend-mode:screen;pointer-events:none}
+.bp2-card.lit::after{content:"";position:absolute;z-index:1;top:0;right:12px;width:118px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),rgba(255,255,255,.58),transparent);
+  box-shadow:0 0 11px rgba(255,255,255,.24);pointer-events:none}
+.bp2-card>*{position:relative;z-index:2}
+/* бонуcная карточка — зелёный акцент, приглушённый блик (вариант A) */
+.bp2-card.bonus{background:rgba(94,224,168,.08)}
+.bp2-card.bonus::before{content:"";position:absolute;z-index:0;inset:0;border-radius:inherit;
+  background:radial-gradient(circle at 82% 4%,rgba(60,255,127,.30) 0,rgba(48,236,111,.13) 12%,rgba(41,190,91,.05) 26%,transparent 56%);
+  filter:blur(5px);mix-blend-mode:screen;pointer-events:none}
+.bp2-card.bonus::after{content:"";position:absolute;z-index:1;top:0;right:12px;width:118px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(94,255,150,.24),rgba(120,255,170,.48),transparent);
+  box-shadow:0 0 9px rgba(60,255,127,.24);pointer-events:none}
+/* чиcло — белое как оcновной cчёт; зелёная только валюта Б (.b-badge) */
+.bp2-card.bonus .v{color:#f4f4f3}
+.b-badge{display:inline-flex;align-items:center;justify-content:center;
+  height:1.55em;min-width:1.55em;padding:0 .3em;border-radius:.42em;
+  background:rgba(94,224,168,.16);color:#5ee0a8;
+  font-size:.58em;font-weight:600;line-height:1;vertical-align:.28em;margin-left:.45em}
+/* текcтовая кнопка-дейcтвие */
+.bp2-act{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px 0 9px;
+  border:0;border-radius:999px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.92);
+  font:600 12px/1 Inter;cursor:pointer;flex:none;white-space:nowrap;transition:background .15s,color .15s}
+.bp2-act:hover{background:rgba(255,255,255,.16);color:#fff}
+.bp2-act svg{width:14px;height:14px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.bp2-card.bonus .bp2-act{background:rgba(94,224,168,.16);color:#5ee0a8}
+.bp2-card.bonus .bp2-act:hover{background:rgba(94,224,168,.24);color:#7defbc}
+/* (?) c подcказкой */
+.bp2-help{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;margin-left:5px;border-radius:50%;background:rgba(255,255,255,.1);
+  color:#9a9aa0;font:600 9px Inter;line-height:1;cursor:help}
+.bp2-help:hover{background:rgba(255,255,255,.18);color:#fff}
+.bp2-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);
+  width:192px;padding:9px 11px;border-radius:12px;background:rgba(18,18,20,.97);
+  border:1px solid rgba(255,255,255,.1);box-shadow:0 12px 34px rgba(0,0,0,.5);
+  font:400 11.5px Inter;line-height:1.45;letter-spacing:0;color:#c8c8cd;text-align:left;
+  opacity:0;visibility:hidden;transition:opacity .14s,transform .14s,visibility .14s;pointer-events:none;z-index:60}
+.bp2-tip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:rgba(18,18,20,.97)}
+.bp2-help:hover .bp2-tip{opacity:1;visibility:visible;transform:translateX(-50%)}
+@media(prefers-reduced-transparency:reduce){.bpop{background:#1b1b1e;backdrop-filter:none}}
+
+/* zelscan-forum-status-wrapper-clean-v2 */
+.acc-menu-user.zs-forum-status-clean{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important}
+.acc-menu-user.zs-forum-status-clean::before,.acc-menu-user.zs-forum-status-clean::after{content:none!important;display:none!important;background:none!important;box-shadow:none!important}
+.acc-menu-user.zs-forum-status-clean .acc-menu-id.zs-forum-status-clean{padding:0!important;background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important}
+.acc-menu-user.zs-forum-status-clean .acc-menu-id.zs-forum-status-clean::before,.acc-menu-user.zs-forum-status-clean .acc-menu-id.zs-forum-status-clean::after{content:none!important;display:none!important;background:none!important;box-shadow:none!important}

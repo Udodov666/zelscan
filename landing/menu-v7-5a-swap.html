@@ -1,0 +1,282 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>V7-5a — Сравнение: обычный vs доработанный</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#020202;color:#EBEBEB;font-family:Inter,sans-serif;
+    min-height:100vh;padding:40px 20px;
+    background-image:radial-gradient(ellipse 60% 40% at 50% -5%,rgba(94,224,168,.06),transparent)}
+  .wrap{display:flex;flex-wrap:wrap;gap:48px;justify-content:center;align-items:flex-start;max-width:700px;margin:0 auto}
+  .col{display:flex;flex-direction:column;gap:14px;align-items:center}
+  .col-label{font:600 13px Inter;color:#77787d;letter-spacing:.04em;text-transform:uppercase}
+  .col-label.pro{color:#5ee0a8}
+  .num{font-variant-numeric:tabular-nums}
+  .bbadge{display:inline-flex;align-items:center;justify-content:center;height:1.55em;min-width:1.55em;padding:0 .3em;
+    border-radius:.42em;background:rgba(94,224,168,.16);color:#5ee0a8;font-size:.58em;font-weight:600;line-height:1;
+    vertical-align:.28em;margin-left:.45em}
+
+  /* ── оболочка меню ── */
+  .acc-menu{position:relative;width:262px;padding:11px;border-radius:24px;
+    background:linear-gradient(145deg,rgba(39,39,42,.34),rgba(18,18,20,.38));
+    box-shadow:0 24px 62px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.025);
+    backdrop-filter:blur(28px) saturate(145%)}
+  .acc-menu-user{display:flex;align-items:center;gap:10px;padding:7px 8px 11px}
+  .acc-menu-av{position:relative;width:38px;height:38px;border-radius:13px;flex:none;display:grid;place-items:center;overflow:hidden;
+    background:linear-gradient(145deg,#67dbff 2%,#268df1 58%,#174a7c);color:#fff;font-size:15px;font-weight:500;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.34)}
+  .acc-menu-av::after{content:"";position:absolute;right:-9px;top:-11px;width:28px;height:28px;border-radius:50%;
+    background:rgba(255,255,255,.19);filter:blur(2px);pointer-events:none}
+  .acc-menu-who{min-width:0;flex:1}
+  .acc-menu-name{font-size:14.5px;line-height:18px;font-weight:500;color:#f2f2f0}
+  .acc-menu-id{display:inline-flex;align-items:center;height:17px;margin-top:3px;padding:0 6px;border-radius:6px;
+    background:linear-gradient(180deg,#b38a16,#8b6300);color:#ffda58;font-size:10px;line-height:17px;font-weight:500;letter-spacing:.01em;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+  .acc-menu-list{display:grid;margin-top:4px}
+  .acc-menu-item{width:100%;height:40px;padding:0 6px;border:0;border-radius:14px;background:transparent;color:#d2d3d6;
+    display:flex;align-items:center;gap:6px;text-decoration:none;font:400 13.5px Inter;cursor:pointer;text-align:left;
+    transition:background .14s,color .14s}
+  .acc-menu-item:hover{background:rgba(255,255,255,.05);color:#fff}
+  .acc-menu-item svg{width:30px;height:30px;padding:7px;box-sizing:border-box;flex:none;fill:none;stroke:currentColor;
+    stroke-width:1.75;stroke-linecap=round;stroke-linejoin=round}
+  .acc-menu-sep{height:1px;margin:8px;background:rgba(255,255,255,.055)}
+  .acc-menu-item.danger{color:#f06d72}
+  .acc-menu-item.danger:hover{background:rgba(240,109,114,.07);color:#ff8186}
+
+  .bal{margin:6px 2px 10px}
+
+  /* ── карточка со свечением ── */
+  .bal-card{position:relative;isolation:isolate;overflow:hidden;border-radius:16px;background:rgba(255,255,255,.045);
+    padding:4px 14px}
+  .bal-card::before{content:"";position:absolute;z-index:0;inset:-22px -14px -16px 32%;
+    background:radial-gradient(circle at 78% 4%,rgba(255,255,255,.9) 0,rgba(255,255,255,.3) 10%,rgba(226,232,236,.1) 20%,transparent 56%);
+    filter:blur(5px);mix-blend-mode:screen;pointer-events:none;
+    transition:background .25s ease-out}
+  .bal-card::after{content:"";position:absolute;z-index:1;top:0;right:12px;width:118px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),rgba(255,255,255,.35),transparent);
+    box-shadow:0 0 11px rgba(255,255,255,.24);pointer-events:none;
+    transition:background .25s ease-out,box-shadow .25s ease-out}
+  .bal-card .sec{position:relative;z-index:2;padding:8px 0;display:flex;flex-direction:column;gap:5px}
+  .bal-card .krow{display:flex;align-items:center;justify-content:space-between}
+  .bal-card .k{font:400 12px Inter;color:#77787d;
+    transition:color .2s ease-out}
+  .bal-card .vline{position:relative;z-index:2;display:flex;align-items:center;gap:7px}
+  .bal-card .v{font:500 18px Inter;color:#f4f4f3;
+    transition:color .2s ease-out,opacity .18s ease-out,transform .18s ease-out}
+  .bal-card .v .bbadge{font-size:.62em}
+  .bal-card .v.inactive{color:rgba(255,255,255,.35);cursor:pointer}
+  .bal-card .v.inactive:hover{color:rgba(255,255,255,.55)}
+  .bal-card .v.inactive .bbadge{background:rgba(255,255,255,.07);color:rgba(255,255,255,.35)}
+  .bal-card .sep{color:#4c4d52;font:400 14px Inter}
+  .bal-card .swap{position:relative;z-index:2;display:grid;place-items:center;width:auto;height:auto;border:0;border-radius:50%;
+    background:none;color:#c8c8cd;cursor:pointer;transition:transform .2s ease-out,color .15s;flex:none;padding:4px;margin:-4px}
+  .bal-card .swap:hover{color:#fff;transform:rotate(180deg)}
+  .bal-card .swap:active{transform:rotate(180deg) scale(.9)}
+  .bal-card .swap svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin=round}
+  .bal-card .topup{width:100%;height:32px;margin-top:10px;border:0;border-radius:10px;background:#f5f5f7;color:#0a0a0a;
+    font:500 12px Inter;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+    transition:transform 160ms ease-out,background 160ms ease-out}
+  .bal-card .topup:hover{background:#fff}
+  .bal-card .topup:active{transform:scale(.97)}
+  .bal-card .topup svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-linecap:round}
+  .bal-card .topup svg circle{stroke-width:1.8}
+  .bal-card .topup svg path{stroke-width:2.6}
+
+  /* ── состояние «бонус активен» ── */
+  .bal-card.swapped{background:rgba(94,224,168,.08)}
+  .bal-card.swapped::before{background:radial-gradient(circle at 82% 4%,rgba(60,255,127,.30) 0,rgba(48,236,111,.13) 12%,rgba(41,190,91,.05) 26%,transparent 56%)}
+  .bal-card.swapped::after{background:linear-gradient(90deg,transparent,rgba(94,255,150,.2),rgba(120,255,170,.42),transparent);box-shadow:0 0 9px rgba(60,255,127,.24)}
+  .bal-card.swapped .k{color:rgba(255,255,255,.35)}
+  .bal-card.swapped .vline .v:first-child{color:#5ee0a8}
+
+  /* ── fade/swap анимация (только pro) ── */
+  .pro .bal-card .vline{transition:opacity .12s ease-out,transform .12s ease-out}
+  .pro .bal-card.anim .vline{opacity:0;transform:translateY(-4px)}
+
+  /* ── prefers-reduced-motion ── */
+  @media(prefers-reduced-motion:reduce){
+    .pro .bal-card .v,
+    .pro .bal-card .vline,
+    .pro .bal-card .v.inactive,
+    .pro .bal-card .k,
+    .pro .bal-card .swap,
+    .pro .bal-card .topup,
+    .pro .bal-card::before,
+    .pro .bal-card::after{transition-duration:0ms!important}
+  }
+
+  .hint{margin-top:10px;font-size:11px;color:#6d6d73;text-align:center;max-width:262px}
+  .hints{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;max-width:700px;margin:24px auto 0}
+  .hints p{width:262px;text-align:center;font-size:11px;color:#6d6d73}
+  .hints b{color:#a9a9ae;font-weight:500}
+</style></head>
+<body>
+
+<div class="wrap">
+
+  <!-- ═══ ОБЫЧНЫЙ ═══ -->
+  <div class="col">
+    <div class="col-label">Обычный</div>
+    <div class="acc-menu">
+      <div class="acc-menu-user">
+        <div class="acc-menu-av">U</div>
+        <div class="acc-menu-who"><div class="acc-menu-name">Udodov</div><div class="acc-menu-id">#638074 ✦</div></div>
+      </div>
+      <div class="bal">
+        <div class="bal-card" id="balCardPlain">
+          <div class="sec">
+            <div class="krow">
+              <span class="k">Основной счёт</span>
+              <button class="swap" onclick="zsSwapPlain(this)" title="Сменить счёт">
+                <svg viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+              </button>
+            </div>
+            <span class="vline">
+              <span class="v num">466 ₽</span>
+              <span class="sep">/</span>
+              <span class="v inactive num" onclick="zsSwapPlain(this)">110<span class="bbadge">Б</span></span>
+            </span>
+            <button class="topup" id="topupPlain">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.5v7M8.5 12h7"/></svg>
+              <span>Пополнить</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="acc-menu-list">
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M3 7.5V6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1.5"/><path d="M4.5 10h15l-1.4 8.2A2 2 0 0 1 16.1 20H6.9a2 2 0 0 1-2-1.8L3.5 10Z"/></svg>Мои досье</a>
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>Настройки</a>
+        <a class="acc-menu-item" href="https://t.me/udodov228" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21.198 2.435a2.242 2.242 0 0 0-2.224-.3L2.488 8.4a2.242 2.242 0 0 0 .03 4.2l4.1 1.4 1.54 4.622a2.242 2.242 0 0 0 3.5.884l2.465-2.452 4.378 3.2a2.242 2.242 0 0 0 3.575-.96l3.072-14.22a2.242 2.242 0 0 0-.45-2.46Z"/></svg>Поддержка</a>
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 0 1 2 2v18l-3-2-3 2-2-2-2 2-3-2-3 2V4a2 2 0 0 1 2-2Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>Транзакции</a>
+        <div class="acc-menu-sep"></div>
+        <a class="acc-menu-item danger"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"/></svg>Выйти</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ДОРАБОТАННЫЙ (PRO) ═══ -->
+  <div class="col">
+    <div class="col-label pro">Доработанный</div>
+    <div class="acc-menu pro">
+      <div class="acc-menu-user">
+        <div class="acc-menu-av">U</div>
+        <div class="acc-menu-who"><div class="acc-menu-name">Udodov</div><div class="acc-menu-id">#638074 ✦</div></div>
+      </div>
+      <div class="bal">
+        <div class="bal-card" id="balCardPro">
+          <div class="sec">
+            <div class="krow">
+              <span class="k">Основной счёт</span>
+              <button class="swap" onclick="zsSwapPro(this)" title="Сменить счёт">
+                <svg viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+              </button>
+            </div>
+            <span class="vline">
+              <span class="v num">466 ₽</span>
+              <span class="sep">/</span>
+              <span class="v inactive num" onclick="zsSwapPro(this)">110<span class="bbadge">Б</span></span>
+            </span>
+            <button class="topup" id="topupPro">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.5v7M8.5 12h7"/></svg>
+              <span>Пополнить</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="acc-menu-list">
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M3 7.5V6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v1.5"/><path d="M4.5 10h15l-1.4 8.2A2 2 0 0 1 16.1 20H6.9a2 2 0 0 1-2-1.8L3.5 10Z"/></svg>Мои досье</a>
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>Настройки</a>
+        <a class="acc-menu-item" href="https://t.me/udodov228" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M21.198 2.435a2.242 2.242 0 0 0-2.224-.3L2.488 8.4a2.242 2.242 0 0 0 .03 4.2l4.1 1.4 1.54 4.622a2.242 2.242 0 0 0 3.5.884l2.465-2.452 4.378 3.2a2.242 2.242 0 0 0 3.575-.96l3.072-14.22a2.242 2.242 0 0 0-.45-2.46Z"/></svg>Поддержка</a>
+        <a class="acc-menu-item"><svg viewBox="0 0 24 24"><path d="M6 2h12a2 2 0 0 1 2 2v18l-3-2-3 2-2-2-2 2-3-2-3 2V4a2 2 0 0 1 2-2Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>Транзакции</a>
+        <div class="acc-menu-sep"></div>
+        <a class="acc-menu-item danger"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"/></svg>Выйти</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ REFERENCE (V3) ═══ -->
+ <p class="hint" style="margin-top:32px;font-size:13px;color:#5ee0a8">Третий вариант убран — будет заменён на 6 новых вариантов от другого ИИ.</p>
+
+</div>
+
+<div class="hints">
+  <p>Мгновенная смена без анимации</p>
+  <p><b>Анимированный своп</b> · отклик кнопки <b>scale(.97)</b> · плавный блик · <b>prefers-reduced-motion</b></p>
+  <p><b>Filled-иконки</b> · жирность <b>500</b> · height <b>44px</b> · больше воздуха</p>
+  <p style="width:100%;margin-top:6px;color:#555">+ 6 новых вариантов (задача для другого ИИ)</p>
+</div>
+
+<script>
+  /* ── обычный: мгновенный своп ── */
+  function zsSwapPlain(el){
+    const card = document.getElementById('balCardPlain');
+    const k = card.querySelector('.k');
+    const vs = card.querySelectorAll('.vline .v');
+    const btn = document.getElementById('topupPlain');
+    if(vs.length < 2) return;
+    const a = vs[0], b = vs[1];
+    const t = a.innerHTML; a.innerHTML = b.innerHTML; b.innerHTML = t;
+    a.classList.remove('inactive'); a.removeAttribute('onclick');
+    b.classList.add('inactive'); b.setAttribute('onclick','zsSwapPlain(this)');
+    k.textContent = (k.textContent.trim() === 'Основной счёт') ? 'Бонусный счёт' : 'Основной счёт';
+    if(btn){
+      const s = btn.querySelector('span');
+      if(s) s.textContent = (s.textContent.trim() === 'Пополнить') ? 'Ввести промокод' : 'Пополнить';
+    }
+    card.classList.toggle('swapped');
+  }
+
+  /* ── доработанный: анимированный своп (Emil's rules) ── */
+  function zsSwapPro(el){
+    const card = document.getElementById('balCardPro');
+    if(card.classList.contains('anim')) return; // не прерывать анимацию
+    const k = card.querySelector('.k');
+    const vline = card.querySelector('.vline');
+    const vs = vline.querySelectorAll('.v');
+    const btn = document.getElementById('topupPro');
+    if(vs.length < 2) return;
+
+    // fade out
+    card.classList.add('anim');
+
+    setTimeout(()=>{
+      const a = vs[0], b = vs[1];
+      const t = a.innerHTML; a.innerHTML = b.innerHTML; b.innerHTML = t;
+      a.classList.remove('inactive'); a.removeAttribute('onclick');
+      b.classList.add('inactive'); b.setAttribute('onclick','zsSwapPro(this)');
+      k.textContent = (k.textContent.trim() === 'Основной счёт') ? 'Бонусный счёт' : 'Основной счёт';
+      if(btn){
+        const s = btn.querySelector('span');
+        if(s) s.textContent = (s.textContent.trim() === 'Пополнить') ? 'Ввести промокод' : 'Пополнить';
+      }
+      card.classList.toggle('swapped');
+
+      // fade in
+      requestAnimationFrame(()=>{
+        card.classList.remove('anim');
+      });
+    },120);
+  }
+ 
+  /* ── reference: мгновенный своп (как обычный) ── */
+  function zsSwapRef(el){
+    const card = document.getElementById('balCardRef');
+    const k = card.querySelector('.k');
+    const vs = card.querySelectorAll('.vline .v');
+    const btn = document.getElementById('topupRef');
+    if(vs.length < 2) return;
+    const a = vs[0], b = vs[1];
+    const t = a.innerHTML; a.innerHTML = b.innerHTML; b.innerHTML = t;
+    a.classList.remove('inactive'); a.removeAttribute('onclick');
+    b.classList.add('inactive'); b.setAttribute('onclick','zsSwapRef(this)');
+    k.textContent = (k.textContent.trim() === 'Основной счёт') ? 'Бонусный счёт' : 'Основной счёт';
+    if(btn){
+      const s = btn.querySelector('span');
+      if(s) s.textContent = (s.textContent.trim() === 'Пополнить') ? 'Ввести промокод' : 'Пополнить';
+    }
+    card.classList.toggle('swapped');
+  }
+</script>
+</body></html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>zelscan · модалка заказа v4</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-height:100vh;}
+
+.tbar{position:fixed;left:16px;top:16px;z-index:50;display:flex;flex-direction:column;gap:10px;padding:12px 14px;border-radius:14px;border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.02);}
+.tbar .h{font:500 10.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:#666;}
+.tbar .row{display:flex;gap:6px;margin-top:6px;}
+.tbar button{height:30px;padding:0 12px;border-radius:9px;cursor:pointer;font:500 12px Inter;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#a9a9ae;}
+.tbar button.on{border-color:rgba(43,173,114,.5);background:rgba(43,173,114,.14);color:#5ee0a8;}
+
+.tp-bg{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.5);}
+
+/* ===== оболочка (язык модалки пополнения) ===== */
+.tp{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;padding:28px 32px 32px;gap:10px;width:498px;background:rgba(10,11,13,.8);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);border-radius:48px;}
+.tp-inner{display:flex;flex-direction:column;align-items:center;gap:32px;width:434px;}
+.tp-head{display:flex;align-items:center;justify-content:space-between;width:434px;height:42px;align-self:stretch;}
+.tp-title{font:500 24px/29px Inter;color:#F3F3F5;}
+.tp-x{display:flex;justify-content:center;align-items:center;padding:12px;width:42px;height:42px;flex:none;background:#121316;border-radius:666px;border:none;cursor:pointer;}
+.tp-x svg{width:21px;height:21px;display:block;}
+.tp-body{display:flex;flex-direction:column;align-items:flex-start;gap:32px;width:434px;align-self:stretch;}
+.tp-top{display:flex;flex-direction:column;align-items:flex-start;gap:28px;width:434px;align-self:stretch;}
+.tp-group{display:flex;flex-direction:column;align-items:flex-start;gap:16px;width:434px;align-self:stretch;}
+.tp-lab-row{display:flex;justify-content:space-between;align-items:center;gap:16px;width:434px;height:17px;align-self:stretch;}
+.tp-label{font:400 14px/17px Inter;color:#707177;}
+.tp-link{background:none;border:none;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:400 13.5px/16px Inter;color:#74757B;}
+.tp-link svg{width:15px;height:15px;display:block;}
+.tp-link:hover{color:#ACADB3;}
+
+/* ===== карточка пользователя ===== */
+.tp-user{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:4px;width:434px;height:70px;background:#121316;border-radius:24px;align-self:stretch;}
+.tp-user-in{position:relative;display:flex;justify-content:space-between;align-items:center;padding:10px;gap:10px;isolation:isolate;width:426px;height:62px;border-radius:20px;background:rgba(255,255,255,.05);overflow:hidden;}
+.tp-glow{position:absolute;width:82px;height:82px;left:-11px;top:-41.62px;background:rgba(43,173,114,.2);filter:blur(50px);border-radius:50%;z-index:0;}
+.tp-m-row{display:flex;align-items:center;gap:13px;height:42px;z-index:1;}
+.tp-av{display:flex;justify-content:center;align-items:center;width:42px;height:42px;flex:none;border-radius:16px;border:1px solid rgba(255,255,255,.05);background:radial-gradient(circle at 40% 30%,#F59E0B,#7C2D12 70%);font:500 16px/1 Inter;color:#fff;}
+.tp-m-txt{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.tp-m-name{font:500 14px/17px Inter;color:#EBEBEB;white-space:nowrap;}
+.tp-m-sub{font:400 13.5px/16px Inter;color:#717278;white-space:nowrap;}
+.tp-ghost{z-index:1;flex:none;display:flex;align-items:center;justify-content:center;height:30px;padding:0 12px;border:none;border-radius:100px;background:rgba(255,255,255,.06);cursor:pointer;font:500 12.5px/15px Inter;letter-spacing:.1px;color:rgba(255,255,255,.9);}
+.tp-ghost:hover{background:rgba(255,255,255,.1);}
+
+/* ===== вертикальные карточки тарифа ===== */
+.tp-tariffs{display:flex;align-items:stretch;gap:12px;width:434px;align-self:stretch;}
+.tp-t{position:relative;flex:1;min-width:0;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:16px;background:#121316;border-radius:24px;border:none;cursor:pointer;text-align:left;transition:background .16s ease,box-shadow .16s ease;}
+.tp-t:hover{background:#15161A;}
+.tp-t.on{background:#16171B;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);}
+.tp-t .tp-glow{opacity:0;transition:opacity .16s ease;}
+.tp-t.on .tp-glow{opacity:1;}
+.tp-t-head{margin:0 0 18px;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;z-index:1;}
+.tp-t-ic{display:flex;justify-content:center;align-items:center;padding:9px;width:38px;height:38px;flex:none;border-radius:14px;border:1px solid rgba(255,255,255,.05);background:radial-gradient(100.7% 100.7% at 50% -0.7%, #3A3C41 16.92%, #282A2D 91.23%);transition:background .16s ease;}
+.tp-t.on .tp-t-ic{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);}
+.tp-t-ic svg{width:20px;height:20px;display:block;}
+.tp-pill{display:flex;justify-content:center;align-items:center;padding:3px 9px;height:21px;flex:none;border-radius:100px;background:rgba(255,255,255,.06);font:500 12.5px/15px Inter;letter-spacing:.1px;color:rgba(255,255,255,.9);}
+.tp-pill.green{background:rgba(43,173,114,.14);color:#5ED09B;}
+.tp-t-name{margin:0 0 7px;font:500 15px/18px Inter;color:#EBEBEB;z-index:1;}
+.tp-t-price{margin:0 0 15px;display:flex;align-items:baseline;gap:6px;z-index:1;}
+.tp-t-price .n{font:400 28px/34px Inter;color:#F4F4F6;}
+.tp-t-price .c{font:400 19px/23px Inter;color:#717278;}
+.tp-t-sep{position:relative;margin:0 0 15px;width:100%;height:0;z-index:1;}
+.tp-t-sep::after{content:'';position:absolute;left:0;right:0;top:0;border-top:1px solid rgba(255,255,255,.04);}
+.tp-t-list{display:flex;flex-direction:column;gap:9px;width:100%;z-index:1;}
+.tp-f{display:flex;align-items:center;gap:8px;font:400 13px/16px Inter;color:#B4B4BA;}
+.tp-f.off{color:#4A4B50;}
+.tp-f .ic{width:14px;height:14px;flex:none;display:flex;align-items:center;justify-content:center;}
+.tp-f .ic svg{width:14px;height:14px;display:block;}
+
+/* ===== бонусы: списание поверх суммы ===== */
+.tp-bonus{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;padding:4px;width:434px;height:70px;background:#121316;border-radius:24px;align-self:stretch;}
+.tp-bonus-in{position:relative;display:flex;justify-content:space-between;align-items:center;padding:10px;gap:10px;isolation:isolate;width:426px;height:62px;border-radius:20px;background:transparent;overflow:hidden;cursor:pointer;border:none;transition:background .16s ease;}
+.tp-bonus.on .tp-bonus-in{background:rgba(255,255,255,.05);}
+.tp-bonus .tp-glow{opacity:0;transition:opacity .16s ease;}
+.tp-bonus.on .tp-glow{opacity:1;}
+.tp-b-ic{display:flex;justify-content:center;align-items:center;padding:10px;width:42px;height:42px;flex:none;border-radius:16px;border:1px solid rgba(255,255,255,.05);background:radial-gradient(100.7% 100.7% at 50% -0.7%, #3A3C41 16.92%, #282A2D 91.23%);transition:background .16s ease;}
+.tp-bonus.on .tp-b-ic{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);}
+.tp-b-ic svg{width:22px;height:22px;display:block;}
+.tp-sw{position:relative;z-index:1;flex:none;width:44px;height:26px;border-radius:666px;background:rgba(255,255,255,.08);transition:background .16s ease;}
+.tp-bonus.on .tp-sw{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);}
+.tp-sw i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:666px;background:#F4F4F6;transition:transform .18s cubic-bezier(.4,0,.2,1);}
+.tp-bonus.on .tp-sw i{transform:translateX(18px);}
+
+/* ===== действия ===== */
+.tp-actions{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:20px;width:434px;align-self:stretch;}
+.tp-err{display:flex;align-items:center;justify-content:center;gap:9px;height:20px;font:400 14px/17px Inter;color:#F52121;}
+.tp-err svg{width:16px;height:16px;flex:none;display:block;}
+.tp-btn{display:flex;justify-content:center;align-items:center;padding:19px 24px;gap:10px;width:434px;height:56px;background:#1E1F22;border-radius:666px;border:none;cursor:pointer;font:500 15px/18px Inter;color:#FFFFFF;align-self:stretch;transition:background .16s ease;}
+.tp-btn:hover{background:#25262A;}
+.tp-btn.light{background:#F1F1F3;color:#0A0A0B;}
+.tp-btn.light:hover{background:#FFFFFF;}
+.tp-btn.green{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);color:#FFFFFF;}
+.tp-btn .sub{font:400 15px/18px Inter;color:rgba(255,255,255,.55);}
+.tp-btn.light .sub{color:rgba(10,10,11,.45);}
+
+/* ===== сбор ===== */
+.tp-stat{display:flex;flex-direction:column;align-items:center;gap:24px;width:434px;align-self:stretch;}
+.tp-stat-ic{position:relative;display:flex;justify-content:center;align-items:center;width:68px;height:68px;flex:none;background:#151619;border-radius:666px;transition:background .3s ease;}
+.tp-stat-ic.ok{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #36D38F 16.92%, #30AA75 91.23%);}
+.tp-ring{position:absolute;inset:0;transform:rotate(-90deg);}
+.tp-ring .track{stroke:rgba(255,255,255,.05);}
+.tp-ring .fill{stroke:#2BAD72;stroke-linecap:round;transition:stroke-dashoffset .45s cubic-bezier(.4,0,.2,1);}
+.tp-stat-ic.ok .tp-ring{opacity:0;}
+.tp-pct{font:500 15px/1 Inter;color:#F3F3F5;font-variant-numeric:tabular-nums;}
+.tp-check{display:none;width:30px;height:30px;}
+.tp-stat-ic.ok .tp-pct{display:none;}
+.tp-stat-ic.ok .tp-check{display:block;}
+.tp-stat-txt{display:flex;flex-direction:column;align-items:center;gap:12px;width:434px;text-align:center;}
+.tp-stat-lab{font:400 14px/17px Inter;color:#68696F;}
+.tp-stat-big{font:500 32px/39px Inter;color:#EBEBEB;max-width:434px;}
+.tp-card{display:flex;flex-direction:column;align-items:flex-start;padding:16px 18px;gap:12px;width:434px;background:#121316;border-radius:24px;align-self:stretch;}
+.tp-card-row{display:flex;justify-content:space-between;align-items:center;gap:24px;width:398px;align-self:stretch;}
+.tp-card-k{display:flex;align-items:center;gap:10px;font:400 13.5px/16px Inter;color:#74757B;}
+.tp-card-k .dot{width:18px;height:18px;border-radius:666px;flex:none;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);font:500 10px/1 Inter;color:#4A4B50;}
+.tp-card-row.done .tp-card-k{color:#C4C4C9;}
+.tp-card-row.done .dot{background:rgba(43,173,114,.14);color:#2BAD72;}
+.tp-card-row.active .tp-card-k{color:#F4F4F6;}
+.tp-card-row.active .dot{background:rgba(43,173,114,.10);color:#2BAD72;}
+.tp-card-v{font:400 13.5px/16px Inter;color:#74757B;font-variant-numeric:tabular-nums;}
+.tp-card-sep{position:relative;width:398px;height:0;flex:none;align-self:stretch;}
+.tp-card-sep::after{content:'';position:absolute;left:0;right:0;top:0;border-top:1px solid rgba(255,255,255,.025);}
+.shimmer{background:linear-gradient(100deg,#5a5a60 30%,#f4f4f6 50%,#5a5a60 70%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 1.7s linear infinite;}
+@keyframes shim{from{background-position:180% 0}to{background-position:-80% 0}}
+.tp-row2{display:flex;align-items:flex-start;gap:12px;width:434px;align-self:stretch;}
+.tp-row2 .tp-btn{width:auto;flex:1;}
+.hidden{display:none!important;}
+</style></head>
+<body>
+
+<div class="tbar">
+  <div>
+    <div class="h">Экран</div>
+    <div class="row" id="screenBtns">
+      <button data-s="order" class="on">Заказ</button>
+      <button data-s="prog">Сбор</button>
+      <button data-s="done">Собрано</button>
+    </div>
+  </div>
+  <div>
+    <div class="h">Баланс, ₽</div>
+    <div class="row" id="balBtns">
+      <button data-b="0">0</button>
+      <button data-b="30">30</button>
+      <button data-b="240" class="on">240</button>
+    </div>
+  </div>
+  <div>
+    <div class="h">Бонусы, ₽</div>
+    <div class="row" id="bonBtns">
+      <button data-x="0" class="on">0</button>
+      <button data-x="50">50</button>
+      <button data-x="69">69</button>
+      <button data-x="300">300</button>
+    </div>
+  </div>
+</div>
+
+<div class="tp-bg">
+
+  <!-- ============ ЗАКАЗ ============ -->
+  <div class="tp" id="sOrder">
+    <div class="tp-inner">
+      <div class="tp-head">
+        <div class="tp-title">Собрать досье</div>
+        <button class="tp-x" type="button"><svg viewBox="0 0 21 21" fill="none"><path d="M5.25 5.25l10.5 10.5M15.75 5.25l-10.5 10.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tp-body">
+        <div class="tp-top">
+
+          <div class="tp-group">
+            <div class="tp-lab-row"><span class="tp-label">Пользователь</span></div>
+            <div class="tp-user">
+              <div class="tp-user-in">
+                <div class="tp-glow"></div>
+                <div class="tp-m-row">
+                  <div class="tp-av">K</div>
+                  <div class="tp-m-txt">
+                    <div class="tp-m-name">karandawww</div>
+                    <div class="tp-m-sub">#4301528 · 12 480 сообщений</div>
+                  </div>
+                </div>
+                <button class="tp-ghost" type="button">Изменить</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp-group">
+            <div class="tp-lab-row">
+              <span class="tp-label">Выберите тариф</span>
+              <button class="tp-link" type="button">
+                <svg viewBox="0 0 15 15" fill="none"><path d="M1.3 7.5S3.4 3.3 7.5 3.3s6.2 4.2 6.2 4.2-2.1 4.2-6.2 4.2S1.3 7.5 1.3 7.5Z" stroke="currentColor" stroke-width="1.2"/><circle cx="7.5" cy="7.5" r="1.9" stroke="currentColor" stroke-width="1.2"/></svg>
+                Пример отчёта
+              </button>
+            </div>
+            <div class="tp-tariffs" id="tariffs"></div>
+          </div>
+
+          <!-- БОНУСЫ — блок появляется только при наличии бонусов -->
+          <div class="tp-group hidden" id="bonusGroup">
+            <div class="tp-bonus on" id="bonusCard">
+              <div class="tp-bonus-in" id="bonusIn" role="switch" aria-checked="true" tabindex="0">
+                <div class="tp-glow"></div>
+                <div class="tp-m-row">
+                  <div class="tp-b-ic">
+                    <svg viewBox="0 0 22 22" fill="none"><path d="M2.8 8.8h16.4v10.4H2.8V8.8Z" stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 8.8v10.4M2.8 13.4h16.4" stroke="#FFFFFF" stroke-width="1.6"/><path d="M11 8.8S9.4 3.4 6.9 4.2c-2.2.7-1.5 4.6 4.1 4.6Zm0 0s1.6-5.4 4.1-4.6c2.2.7 1.5 4.6-4.1 4.6Z" stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="tp-m-txt">
+                    <div class="tp-m-name" id="bonusName">Списать 69 ₽ бонусами</div>
+                    <div class="tp-m-sub" id="bonusSub">Доплата 30 ₽ с баланса</div>
+                  </div>
+                </div>
+                <div class="tp-sw"><i></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tp-actions">
+          <div class="tp-err hidden" id="balErr">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#F52121" stroke-width="1.3"/><path d="M8 4.6v4.2M8 11.1h.01" stroke="#F52121" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span id="balErrTxt">Не хватает 30 ₽</span>
+          </div>
+          <button class="tp-btn" type="button" id="goBtn">Собрать досье <span class="sub">· 99 ₽</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ СБОР + ЗАВЕРШЕНИЕ ============ -->
+  <div class="tp hidden" id="sProg">
+    <div class="tp-inner">
+      <div class="tp-head">
+        <div class="tp-title" id="progTitle">Собираем досье</div>
+        <button class="tp-x" type="button"><svg viewBox="0 0 21 21" fill="none"><path d="M5.25 5.25l10.5 10.5M15.75 5.25l-10.5 10.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tp-stat">
+        <div class="tp-stat-ic" id="statIc">
+          <svg class="tp-ring" viewBox="0 0 68 68">
+            <circle class="track" cx="34" cy="34" r="31" fill="none" stroke-width="3"/>
+            <circle class="fill" id="ring" cx="34" cy="34" r="31" fill="none" stroke-width="3" stroke-dasharray="194.8" stroke-dashoffset="194.8"/>
+          </svg>
+          <span class="tp-pct" id="ringPct">0%</span>
+          <svg class="tp-check" viewBox="0 0 30 30" fill="none"><path d="M8 15.4l4.3 4.2 9.7-10" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="tp-stat-txt">
+          <div class="tp-stat-lab" id="progLab">Создаём заказ</div>
+          <div class="tp-stat-big shimmer" id="progStage">Профиль</div>
+        </div>
+      </div>
+
+      <div class="tp-body">
+        <div class="tp-card" id="stages"></div>
+        <div class="tp-row2">
+          <button class="tp-btn" type="button" id="progBtn">Свернуть в фон</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var TARIFFS = [
+  {
+    k: 'basic', name: '\u0411\u0430\u0437\u043e\u0432\u044b\u0439', price: 69, pill: null,
+    icon: '<svg viewBox="0 0 20 20" fill="none"><path d="M3.3 15.8V7.5M7.8 15.8V3.8M12.2 15.8v-5.4M16.7 15.8v-3.3" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"/></svg>',
+    feats: ['\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c', '\u041f\u043e\u0432\u0435\u0434\u0435\u043d\u0438\u0435', '\u041f\u0441\u0438\u0445\u043e\u043c\u0435\u0442\u0440\u0438\u043a\u0438'],
+    off: ['AI-\u0432\u0435\u0440\u0434\u0438\u043a\u0442', '\u041f\u043e\u0440\u0442\u0440\u0435\u0442 \u0438 \u0434\u043e\u0432\u0435\u0440\u0438\u0435']
+  },
+  {
+    k: 'full', name: '\u041f\u043e\u043b\u043d\u044b\u0439', price: 99, pill: '\u0421\u043e\u0432\u0435\u0442\u0443\u0435\u043c',
+    icon: '<svg viewBox="0 0 20 20" fill="none"><path d="M10 2.5l1.6 4.4L16 8.5l-4.4 1.6L10 14.5 8.4 10.1 4 8.5l4.4-1.6L10 2.5Z" fill="#FFFFFF"/><path d="M15.4 13l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6Z" fill="#FFFFFF"/></svg>',
+    feats: ['\u0410\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u044c', '\u041f\u043e\u0432\u0435\u0434\u0435\u043d\u0438\u0435', '\u041f\u0441\u0438\u0445\u043e\u043c\u0435\u0442\u0440\u0438\u043a\u0438', 'AI-\u0432\u0435\u0440\u0434\u0438\u043a\u0442', '\u041f\u043e\u0440\u0442\u0440\u0435\u0442 \u0438 \u0434\u043e\u0432\u0435\u0440\u0438\u0435'],
+    off: []
+  }
+];
+var CHECK = '<span class="ic"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.4l3 3 6-6.6" stroke="#2BAD72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+var DASH = '<span class="ic"><svg viewBox="0 0 14 14" fill="none"><path d="M3.5 7h7" stroke="#4A4B50" stroke-width="1.6" stroke-linecap="round"/></svg></span>';
+var RUB = ' \u20bd';
+
+var tariff = 'full';
+var balance = 240;   // рублёвый баланс Lolzteam
+var bonus = 0;       // бонусный счёт (1 бонус = 1 \u20bd)
+var useBonus = true; // включён по умолчанию
+
+var tariffsEl = document.getElementById('tariffs');
+var errEl = document.getElementById('balErr');
+var errTxt = document.getElementById('balErrTxt');
+var goBtn = document.getElementById('goBtn');
+var bonusGroup = document.getElementById('bonusGroup');
+var bonusCard = document.getElementById('bonusCard');
+var bonusName = document.getElementById('bonusName');
+var bonusSub = document.getElementById('bonusSub');
+var bonusIn = document.getElementById('bonusIn');
+
+function nf(n) { return Number(n).toLocaleString('ru'); }
+function cost() { return TARIFFS.filter(function (t) { return t.k === tariff; })[0].price; }
+
+function renderTariffs() {
+  tariffsEl.innerHTML = TARIFFS.map(function (t) {
+    var on = t.k === tariff;
+    var feats = t.feats.map(function (f) { return '<div class="tp-f">' + CHECK + f + '</div>'; })
+      .concat(t.off.map(function (f) { return '<div class="tp-f off">' + DASH + f + '</div>'; })).join('');
+    return '<button type="button" class="tp-t' + (on ? ' on' : '') + '" data-t="' + t.k + '">' +
+      '<div class="tp-glow"></div>' +
+      '<div class="tp-t-head"><div class="tp-t-ic">' + t.icon + '</div>' +
+      (t.pill ? '<span class="tp-pill green">' + t.pill + '</span>' : '') + '</div>' +
+      '<div class="tp-t-name">' + t.name + '</div>' +
+      '<div class="tp-t-price"><span class="n">' + t.price + '</span><span class="c">\u20bd</span></div>' +
+      '<div class="tp-t-sep"></div>' +
+      '<div class="tp-t-list">' + feats + '</div>' +
+      '</button>';
+  }).join('');
+}
+
+function sync() {
+  renderTariffs();
+
+  var c = cost();
+  var bonusPart = useBonus ? Math.min(bonus, c) : 0;
+  var rubPart = c - bonusPart;
+  var lack = Math.max(0, rubPart - balance);
+
+  // блок бонусов — только когда есть что списать
+  bonusGroup.classList.toggle('hidden', bonus <= 0);
+  bonusCard.classList.toggle('on', useBonus);
+  bonusIn.setAttribute('aria-checked', useBonus ? 'true' : 'false');
+  var willUse = Math.min(bonus, c);
+  bonusName.textContent = '\u0421\u043f\u0438\u0441\u0430\u0442\u044c ' + nf(willUse) + RUB + ' \u0431\u043e\u043d\u0443\u0441\u0430\u043c\u0438';
+  if (!useBonus) {
+    bonusSub.textContent = '\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u043e ' + nf(bonus) + RUB + ' \u0431\u043e\u043d\u0443\u0441\u0430\u043c\u0438';
+  } else if (rubPart === 0) {
+    bonusSub.textContent = '\u0417\u0430\u043a\u0430\u0437 \u043f\u043e\u043b\u043d\u043e\u0441\u0442\u044c\u044e \u0431\u043e\u043d\u0443\u0441\u0430\u043c\u0438, \u043e\u0441\u0442\u0430\u043d\u0435\u0442\u0441\u044f ' + nf(bonus - willUse) + RUB;
+  } else {
+    bonusSub.textContent = '\u0414\u043e\u043f\u043b\u0430\u0442\u0430 ' + nf(rubPart) + RUB + ' \u0441 \u0431\u0430\u043b\u0430\u043d\u0441\u0430';
+  }
+
+  // ошибка и кнопка
+  errEl.classList.toggle('hidden', lack <= 0);
+  errTxt.textContent = '\u041d\u0435 \u0445\u0432\u0430\u0442\u0430\u0435\u0442 ' + nf(lack) + RUB;
+  goBtn.classList.toggle('green', lack > 0);
+  if (lack > 0) {
+    goBtn.innerHTML = '\u041f\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u0431\u0430\u043b\u0430\u043d\u0441 <span class="sub">\u00b7 ' + nf(lack) + RUB + '</span>';
+  } else if (rubPart === 0) {
+    goBtn.innerHTML = '\u0421\u043e\u0431\u0440\u0430\u0442\u044c \u0434\u043e\u0441\u044c\u0435 <span class="sub">\u00b7 \u0431\u043e\u043d\u0443\u0441\u0430\u043c\u0438</span>';
+  } else {
+    goBtn.innerHTML = '\u0421\u043e\u0431\u0440\u0430\u0442\u044c \u0434\u043e\u0441\u044c\u0435 <span class="sub">\u00b7 ' + nf(rubPart) + RUB + '</span>';
+  }
+}
+
+tariffsEl.addEventListener('click', function (e) {
+  var b = e.target.closest('.tp-t'); if (!b) return;
+  tariff = b.dataset.t; sync();
+});
+bonusIn.addEventListener('click', function () { useBonus = !useBonus; sync(); });
+bonusIn.addEventListener('keydown', function (e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); useBonus = !useBonus; sync(); }
+});
+document.getElementById('balBtns').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+  balance = +b.dataset.b; sync();
+});
+document.getElementById('bonBtns').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+  bonus = +b.dataset.x; useBonus = true; sync();
+});
+
+/* ===== сбор ===== */
+var STAGES = [
+  { l: '\u041f\u0440\u043e\u0444\u0438\u043b\u044c', total: 0 },
+  { l: '\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u044f', total: 12480 },
+  { l: '\u0422\u0435\u043c\u044b', total: 84 },
+  { l: '\u0421\u0442\u0435\u043d\u0430', total: 36 },
+  { l: '\u041c\u0435\u0442\u0440\u0438\u043a\u0438', total: 0 }
+];
+var CIRC = 194.8, timer = null;
+var stagesEl = document.getElementById('stages');
+var ringEl = document.getElementById('ring');
+var pctEl = document.getElementById('ringPct');
+var statIc = document.getElementById('statIc');
+var labEl = document.getElementById('progLab');
+var stageEl = document.getElementById('progStage');
+var progTitle = document.getElementById('progTitle');
+var progBtn = document.getElementById('progBtn');
+
+function renderStages(idx, cnt) {
+  var html = [];
+  STAGES.forEach(function (s, i) {
+    var st = i < idx ? 'done' : i === idx ? 'active' : '';
+    var dot = i < idx ? '\u2713' : '\u00b7';
+    var v = s.total ? (i < idx ? nf(s.total) : i === idx ? nf(cnt || 0) + ' / ' + nf(s.total) : '') : '';
+    if (i) html.push('<div class="tp-card-sep"></div>');
+    html.push('<div class="tp-card-row ' + st + '"><div class="tp-card-k"><span class="dot">' + dot + '</span>' + s.l + '</div><div class="tp-card-v">' + v + '</div></div>');
+  });
+  stagesEl.innerHTML = html.join('');
+}
+function setPct(p) {
+  pctEl.textContent = Math.round(p) + '%';
+  ringEl.style.strokeDashoffset = CIRC * (1 - p / 100);
+}
+function finish() {
+  clearInterval(timer);
+  setPct(100);
+  renderStages(STAGES.length, 0);
+  statIc.classList.add('ok');
+  stageEl.classList.remove('shimmer');
+  progTitle.textContent = '\u0414\u043e\u0441\u044c\u0435 \u0441\u043e\u0431\u0440\u0430\u043d\u043e';
+  labEl.textContent = '\u0421\u043e\u0431\u0440\u0430\u043d\u043e \u0437\u0430 2 \u043c\u0438\u043d 14 \u0441\u0435\u043a';
+  stageEl.textContent = '\u041f\u043e\u043b\u043d\u043e\u0435 \u0434\u043e\u0441\u044c\u0435 \u0433\u043e\u0442\u043e\u0432\u043e';
+  progBtn.className = 'tp-btn light';
+  progBtn.textContent = '\u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u0432 \u043e\u0442\u0447\u0451\u0442';
+  [].forEach.call(document.querySelectorAll('#screenBtns button'), function (x) { x.classList.toggle('on', x.dataset.s === 'done'); });
+}
+function resetProg() {
+  clearInterval(timer);
+  statIc.classList.remove('ok');
+  stageEl.classList.add('shimmer');
+  progTitle.textContent = '\u0421\u043e\u0431\u0438\u0440\u0430\u0435\u043c \u0434\u043e\u0441\u044c\u0435';
+  labEl.textContent = '\u0421\u043e\u0437\u0434\u0430\u0451\u043c \u0437\u0430\u043a\u0430\u0437';
+  stageEl.textContent = '\u041f\u0440\u043e\u0444\u0438\u043b\u044c';
+  progBtn.className = 'tp-btn';
+  progBtn.textContent = '\u0421\u0432\u0435\u0440\u043d\u0443\u0442\u044c \u0432 \u0444\u043e\u043d';
+  setPct(0);
+  renderStages(-1, 0);
+}
+function show(s) {
+  document.getElementById('sOrder').classList.toggle('hidden', s !== 'order');
+  document.getElementById('sProg').classList.toggle('hidden', s === 'order');
+  [].forEach.call(document.querySelectorAll('#screenBtns button'), function (x) { x.classList.toggle('on', x.dataset.s === s); });
+}
+function startProg() {
+  show('prog'); resetProg();
+  var idx = 0, sub = 0, per = 100 / STAGES.length;
+  setTimeout(function () {
+    timer = setInterval(function () {
+      var s = STAGES[idx];
+      labEl.textContent = '\u0421\u043e\u0431\u0438\u0440\u0430\u0435\u043c \u0434\u0430\u043d\u043d\u044b\u0435';
+      stageEl.textContent = s.l;
+      if (s.total) {
+        sub += Math.max(1, Math.floor(s.total / 22));
+        if (sub >= s.total) sub = s.total;
+        setPct(idx * per + (sub / s.total) * per);
+        renderStages(idx, sub);
+        if (sub >= s.total) { idx++; sub = 0; }
+      } else {
+        setPct((idx + 1) * per); renderStages(idx, 0); idx++;
+      }
+      if (idx >= STAGES.length) finish();
+    }, 130);
+  }, 450);
+}
+
+document.getElementById('screenBtns').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  var s = b.dataset.s;
+  clearInterval(timer);
+  if (s === 'prog') startProg();
+  else if (s === 'done') { show('done'); resetProg(); finish(); }
+  else show('order');
+});
+goBtn.addEventListener('click', function () {
+  if (goBtn.classList.contains('green')) return; // здесь откроется модалка пополнения
+  startProg();
+});
+
+sync();
+renderStages(-1, 0);
+</script>
+</body></html>

@@ -1,0 +1,158 @@
+/* Zelscan — центр уведомлений (колокольчик + popover).
+ * Popover повторяет стиль .acc-menu (account-ui.css).
+ * Элементы списка — в стиле тостов .zs-notice (zs-notice.css).
+ * Бейдж — по примеру transitions.dev (.t-badge / .t-badge-dot).
+ */
+
+/* ── Триггер-колокольчик в шапке ─────────────────────────────────────────── */
+.zs-noti-trigger{
+  position:relative;               /* якорь для .t-badge */
+  display:grid;place-items:center;
+  width:42px;height:42px;flex:none;
+  border:0;border-radius:666px;
+  background:transparent;            /* без лишней подложки в хедере */
+  color:#62646a;                     /* базовый «неактивный» цвет из сайдбара (--sb-muted) */
+  cursor:pointer;
+  transition:background 160ms ease,color 160ms ease;
+}
+.zs-noti-trigger:hover{background:rgba(255,255,255,.06);color:#ebebeb}
+.zs-noti-trigger:active{transform:scale(.96)}
+.zs-noti-trigger i{font-size:16px;line-height:1}
+.zs-noti-trigger[aria-expanded="true"]{background:rgba(255,255,255,.09);color:#fff}
+
+/* ── Бейдж непрочитанных (пример transitions.dev) ────────────────────────── */
+:root{
+  --badge-slide-dur:260ms;
+  --badge-pop-dur:500ms;
+  --badge-pop-close-dur:180ms;
+  --badge-fade-dur:400ms;
+  --badge-fade-close-dur:180ms;
+  --badge-blur:2px;
+  --badge-offset-x:-8.2px;
+  --badge-offset-y:12.4px;
+  --badge-slide-ease:cubic-bezier(0.22,1,0.36,1);
+  --badge-pop-ease:cubic-bezier(0.34,1.36,0.64,1);
+  --badge-close-ease:cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes t-badge-slide-in{
+  from{transform:translate(var(--badge-offset-x),var(--badge-offset-y))}
+  to{transform:translate(0,0)}
+}
+.t-badge{position:absolute;top:-1px;right:-1px;pointer-events:none;will-change:transform}
+/* Anti-FOUC: пока UI не готов (нет .zs-ui-ready на <html>), бейдж полностью
+   скрыт и без анимации — иначе он «выезжает» из localStorage-кэша, а потом
+   исчезает после серверной проверки (мелькание при перезагрузке). */
+html:not(.zs-ui-ready) .t-badge,
+html:not(.zs-ui-ready) .t-badge .t-badge-dot{
+  opacity:0 !important;visibility:hidden !important;
+  animation:none !important;transition:none !important;
+}
+.t-badge[data-open="true"]{animation:t-badge-slide-in var(--badge-slide-dur) var(--badge-slide-ease)}
+.t-badge-dot{
+  display:grid;place-items:center;
+  min-width:17px;height:17px;padding:0 4px;
+  border-radius:999px;
+  background:#e65062;color:#fff;
+  font:400 10.5px/1 Inter,Arial,sans-serif;
+  box-shadow:0 0 0 2px #0f1012;   /* обводка под фон шапки */
+  transform-origin:center;transform:scale(1);opacity:1;filter:blur(0);
+  transition:
+    transform var(--badge-pop-dur) var(--badge-pop-ease),
+    opacity var(--badge-fade-dur) var(--badge-pop-ease),
+    filter var(--badge-pop-dur) var(--badge-pop-ease);
+  will-change:transform,opacity,filter;
+}
+.t-badge[data-open="false"] .t-badge-dot{
+  transform:scale(0);opacity:0;filter:blur(var(--badge-blur));
+  transition:
+    transform var(--badge-pop-close-dur) var(--badge-close-ease),
+    opacity var(--badge-fade-close-dur) var(--badge-close-ease),
+    filter var(--badge-pop-close-dur) var(--badge-close-ease);
+}
+
+/* ── Popover (повторяет .acc-menu) ───────────────────────────────────────── */
+.zs-noti-pop{
+  position:fixed;z-index:12000;
+  width:340px;max-width:calc(100vw - 24px);
+  padding:11px;border-radius:24px;
+  background:rgba(10,11,13,.3);
+  box-shadow:0 24px 62px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.025);
+  backdrop-filter:blur(28px) saturate(145%);
+  opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);
+  transform-origin:top left;
+  transition:opacity .16s,transform .16s,visibility .16s;
+}
+.zs-noti-pop.open{opacity:1;visibility:visible;transform:none}
+
+/* ── Заголовок ───────────────────────────────────────────────────────────── */
+.zs-noti-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:6px 6px 10px;
+}
+.zs-noti-title{margin:0;color:#f3f3f5;font:600 15px Inter,system-ui,sans-serif;letter-spacing:-.02em}
+.zs-noti-deleteall{
+  align-self:center;border:0;background:transparent;color:#8b8e93;cursor:pointer;
+  font:500 12px/1 Inter,Arial,sans-serif;padding:5px 6px;border-radius:6px;
+  transition:color 140ms ease,background 140ms ease;
+}
+.zs-noti-deleteall:hover{color:#f0f1f1;background:rgba(255,255,255,.06)}
+.zs-noti-deleteall:disabled{cursor:wait;opacity:.55}
+.zs-noti-deleteall[hidden]{display:none}
+
+/* ── Список ──────────────────────────────────────────────────────────────── */
+.zs-noti-list{
+  display:grid;gap:6px;max-height:min(60vh,420px);overflow:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent;
+}
+.zs-noti-list::-webkit-scrollbar{width:6px}
+.zs-noti-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:999px}
+
+/* Элемент — в стиле .zs-notice */
+.zs-noti-item{
+  --tone:#5e9bf8;
+  display:grid;grid-template-columns:20px minmax(0,1fr);align-items:start;gap:10px;
+  padding:12px 12px;border:0;border-radius:12px;
+  background:rgba(255,255,255,.03);color:#f1f2f2;
+  text-align:left;cursor:default;
+  transition:background 140ms ease;
+}
+.zs-noti-item.is-clickable{cursor:pointer}
+.zs-noti-item.is-clickable:hover{background:rgba(255,255,255,.06)}
+.zs-noti-item--success{--tone:#34d399}
+.zs-noti-item--error{--tone:#e65062}
+.zs-noti-item--warning{--tone:#ecab27}
+.zs-noti-item--info{--tone:#5e9bf8}
+
+.zs-noti-ic{width:20px;height:20px;display:grid;place-items:center;color:var(--tone);margin-top:1px}
+.zs-noti-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.zs-noti-body{min-width:0}
+.zs-noti-item-title{
+  display:flex;align-items:center;gap:7px;
+  color:#f0f1f1;font:600 13px Inter,Arial,sans-serif;letter-spacing:-.01em;
+}
+.zs-noti-item-title-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zs-noti-text{margin:3px 0 0;color:#a7a9ad;font:400 12px/1.4 Inter,Arial,sans-serif;word-break:break-word}
+/* Дата уведомления — в правом углу строки заголовка */
+.zs-noti-time{margin-left:auto;flex:none;color:#6d7076;font:400 11px Inter,Arial,sans-serif}
+
+/* ── Пустое состояние ────────────────────────────────────────────────────── */
+.zs-noti-empty{
+  display:grid;place-items:center;text-align:center;
+  min-height:120px;padding:24px 12px;
+  color:#6d7076;font:400 13px Inter,Arial,sans-serif;
+}
+.zs-noti-empty[hidden]{display:none}
+
+/* ── Загрузка ────────────────────────────────────────────────────────────── */
+.zs-noti-loading{
+  display:grid;place-items:center;min-height:80px;
+  color:#6d7076;font:400 13px Inter,Arial,sans-serif;
+}
+.zs-noti-loading[hidden]{display:none}
+
+@media(max-width:640px){
+  .zs-noti-pop{width:calc(100vw - 20px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .zs-noti-pop,.t-badge,.t-badge-dot{animation:none!important;transition:none!important}
+}

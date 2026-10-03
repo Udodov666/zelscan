@@ -1,0 +1,25 @@
+[Unit]
+Description=Zelscan backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=zelscan
+Group=zelscan
+WorkingDirectory=/opt/zelscan
+EnvironmentFile=/etc/zelscan/zelscan.env
+ExecStart=/opt/zelscan/.venv/bin/python /opt/zelscan/app/server.py
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=120
+KillSignal=SIGTERM
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/zelscan /var/backups/zelscan
+
+[Install]
+WantedBy=multi-user.target

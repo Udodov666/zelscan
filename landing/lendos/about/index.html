@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="О проекте Zelscan: какие данные используются и как работает сервис.">
+  <title>Zelscan — О проекте</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="/css/brand-logo.css?v=1">
+  <link rel="stylesheet" href="/css/loader.css?v=2">
+</head>
+<body>
+<svg class="loader" id="pageLoader" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="loaderShineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F0F0F0" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#F0F0F0" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#F0F0F0" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="loaderHoles" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="900">
+      <rect width="1440" height="900" fill="#fff"/>
+      <g transform="translate(693.9 423.9) scale(2.25)">
+        <g class="loader-holes" fill="#000">
+      <path d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z"/>
+      <path d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z"/>
+      <path d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z"/>
+      <path d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z"/>
+        </g>
+      </g>
+    </mask>
+    <mask id="loaderShineMask" maskUnits="userSpaceOnUse" x="-24" y="-24" width="72" height="72">
+      <g fill="#fff">
+      <path d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z"/>
+      <path d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z"/>
+      <path d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z"/>
+      <path d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z"/>
+      </g>
+    </mask>
+  </defs>
+  <rect class="loader-dim" width="1440" height="900" fill="#020202" mask="url(#loaderHoles)"/>
+  <g transform="translate(693.9 423.9) scale(2.25)">
+    <g class="loader-mark" fill="#F0F0F0" fill-opacity=".15">
+      <path d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z"/>
+      <path d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z"/>
+      <path d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z"/>
+      <path d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z"/>
+    </g>
+    <g mask="url(#loaderShineMask)">
+      <rect class="loader-shine" x="-12" y="-8" width="12" height="40" fill="url(#loaderShineGrad)"/>
+    </g>
+  </g>
+</svg>
+
+  <a class="skip-link" href="#content">К содержанию</a>
+  <div class="hdr-floating" id="floatingHeader" aria-hidden="true"></div>
+
+  <main id="content">
+    <section class="hero-outer" id="top" aria-labelledby="pageTitle">
+      <div class="promo" id="promoBar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5L12 2z" fill="#fff"></path><path d="M18 14l1 3.5L22 18l-3 1-1 3-1-3-3-1 3-1 1-3z" fill="#fff" opacity="0.5"></path></svg>
+        <span class="promo-t" data-text="20 ₽ на баланс по промокоду:">20 ₽ на баланс по промокоду:</span>
+        <span class="promo-code"><b>LOLZTEAM</b></span>
+        <button class="promo-close" id="promoClose" type="button" aria-label="Закрыть">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M1 1L9 9M9 1L1 9" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="heroblock" id="hero">
+        <header class="hdr">
+          <div class="brand-logo-wrap">
+            <a href="/" aria-label="Zelscan — на главную">
+              <a class="brand-logo brand-logo--header" href="/" aria-label="Zelscan — на главную"><svg class="brand-firma" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="brand-petal" d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z" fill="white"/><path class="brand-petal" d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z" fill="white"/><path class="brand-petal" d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z" fill="white"/><path class="brand-petal" d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z" fill="white"/></svg><img class="brand-text" src="/images/text.svg" alt="Zelscan"></a>
+            </a>
+          </div>
+          <button class="hdr-login" type="button" data-href="https://app.zelscan.xyz/app?oauth_start=1">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M5.076 12.819c1.373 1.116 2.959 1.751 4.65 1.751 2.516 0 4.799-1.41 6.493-3.706-.715-.969-1.535-1.78-2.434-2.394l-1.444.72a3.1 3.1 0 0 1 .491 1.675 3.104 3.104 0 0 1-3.106 3.101 3.107 3.107 0 0 1-2.91-2.016l-1.74.87Zm3.582-1.788c.034.225.14.434.303.598.203.202.478.316.765.315.598 0 1.082-.483 1.082-1.08 0-.292-.117-.558-.307-.753l-1.843.92Z" fill="black"/>
+              <path d="m5.467 10.84 10.522-5.058L13.677.972l-1.195 4.251-1.435-2.987-1.195 4.251L8.417 2l-1.196 5.752-1.435-2.987-1.195 4.251-1.435-2.987-1.927 6.849 2.63-1.264 1.608-.773Z" fill="black"/>
+            </svg>
+            Войти в аккаунт
+          </button>
+        </header>
+
+        <div class="hero-content">
+          <h1 id="pageTitle" data-split="chars">Информация<br>о проекте</h1>
+          <p class="hero-lead" data-split="words">Что анализирует Zelscan, какие данные использует и чего сервис не делает.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="document" id="facts">
+      <section class="document-intro section">
+        <p class="section-label" data-reveal>01 / Назначение</p>
+        <div>
+          <h2 data-split="words">Что делает Zelscan</h2>
+          <p class="large-copy" data-reveal data-delay="240">Zelscan анализирует доступные данные профиля на <a href="https://lolz.team/" target="_blank" rel="noopener noreferrer">lolz.team</a>: публикации, активность и особенности общения. На их основе сервис формирует психологический портрет аккаунта.</p>
+          <p>Результат относится к поведению конкретного профиля внутри форума. Он не содержит сведений о том, кто владеет аккаунтом в реальной жизни.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <p class="section-label" data-reveal>02 / Данные</p>
+        <div>
+          <h2 data-split="words">Какие данные используются</h2>
+          <dl class="fact-list shine">
+            <div data-reveal><dt>Источник</dt><dd>lolz.team</dd></div>
+            <div data-reveal><dt>Профиль</dt><dd>Ник, ID, дата регистрации и доступная статистика аккаунта</dd></div>
+            <div data-reveal><dt>Контент</dt><dd>Темы, посты и сообщения пользователя</dd></div>
+            <div data-reveal><dt>Активность</dt><dd>Частота публикаций, форумная репутация и динамика участия</dd></div>
+            <div data-reveal><dt>Результат</dt><dd>Интерпретация поведения и стиля общения профиля</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section" id="api">
+        <p class="section-label" data-reveal>03 / Техника</p>
+        <div>
+          <h2 data-split="words">Как мы работаем с API</h2>
+          <p class="tech-lead" data-reveal data-delay="240">Полная техническая картина: что сервис собирает через официальный API, как обрабатывает данные и какая нагрузка приходится на форум.</p>
+
+          <dl class="fact-list shine">
+            <div data-reveal><dt>Метод</dt><dd>Официальный API lolzteam: Bearer-токены, эндпоинт поиска <code>/search/posts</code> и профильные запросы. HTML-страницы не скрейпятся.</dd></div>
+            <div data-reveal><dt>Вид данных</dt><dd>Только публичные сообщения пользователя (темы и стена профиля) и публичный профиль.</dd></div>
+            <div data-reveal><dt>Объём на досье</dt><dd>До 700 последних публичных сообщений.</dd></div>
+            <div data-reveal><dt>Запросов на досье</dt><dd>Около 90: ≈9 POST + ≈72 GET, суммарно ~25 секунд.</dd></div>
+            <div data-reveal><dt>Частота</dt><dd>Один заказ = одна сессия сбора. Повторные просмотры отчёта идут из кэша, без запросов к форуму.</dd></div>
+            <div data-reveal><dt>Хранение</dt><dd>Собранные сообщения лежат в закрытом хранилище сервиса и используются только для расчёта метрик досье.</dd></div>
+          </dl>
+
+          <div class="tech-sub">
+            <h3>Что происходит с сообщениями</h3>
+            <p>Живой пример обработки: реальные шаги одного сбора — от сырого поста до метрик досье.</p>
+            <div class="flow">
+              <article class="shine">
+                <div class="flow-head"><span class="flow-step">01</span><span class="flow-cat">Сбор</span></div>
+                <h4>Сырые публичные посты</h4>
+                <div class="raw-post"><p>ворк после 15:00</p><small>тема: «Есть ли ребята, взрослые, которые» · Оффтопик · ♥ 1</small></div>
+                <div class="raw-post"><p>зеленка ворк</p><small>Торговля · ♥ 0</small></div>
+                <small class="flow-n">700 постов · 9 поисковых окон · 81 запрос</small>
+              </article>
+              <article class="shine">
+                <div class="flow-head"><span class="flow-step">02</span><span class="flow-cat">Обработка</span></div>
+                <h4>Считаются метрики текста</h4>
+                <div class="metric-chip"><b data-val="3.6" data-dec="1">3.6</b><span>слов в среднем на пост</span></div>
+                <div class="metric-chip"><b data-val="1" data-suffix="%">1%</b><span>CAPS-сообщений</span></div>
+                <div class="metric-chip"><b data-val="1.5" data-dec="1" data-suffix=" / 100">1.5 / 100</b><span>эго-маркеров «я» на посты</span></div>
+                <div class="metric-chip"><b data-val="2" data-suffix="%">2%</b><span>токсичных сообщений</span></div>
+              </article>
+              <article class="shine">
+                <div class="flow-head"><span class="flow-step">03</span><span class="flow-cat">Досье</span></div>
+                <h4>Итоговый отчёт</h4>
+                <p data-reveal data-delay="150">Из метрик складываются разделы досье: индекс доверия, архетипы общения, эмоциональный фон, триггеры, признание ошибок и эмпатия, поведенческие паттерны.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="tech-sub">
+            <h3>Один заказ одновременно</h3>
+            <p>Заказы выстраиваются в очередь и обрабатываются строго по одному: пока идёт сбор по первому, остальные ждут. Форум нагружает один последовательный поток, а не пул параллельных парсеров.</p>
+            <div class="queue" aria-hidden="true">
+              <div class="queue-item -active" data-reveal>
+                <span class="queue-ic" style="display:flex;align-items:center;justify-content:center"><img src="assets/images/ic-profile.svg" alt=""></span>
+                <div><b>Заказ 1</b><span class="st"><i></i>Обрабатывается · 700 сообщений</span></div>
+              </div>
+              <div class="queue-item" data-reveal>
+                <span class="queue-ic" style="display:flex;align-items:center;justify-content:center"><img src="assets/images/ic-profile.svg" alt=""></span>
+                <div><b>Заказ 2</b><span>В очереди</span></div>
+              </div>
+              <div class="queue-item">
+                <span class="queue-ic" style="display:flex;align-items:center;justify-content:center"><img src="assets/images/ic-profile.svg" alt=""></span>
+                <div><b>Заказ 3</b><span>В очереди</span></div>
+              </div>
+              <div class="queue-arrow" data-reveal data-delay="320">&#8594;</div>
+              <div class="queue-worker" data-reveal data-delay="420">
+                <span class="queue-ic" style="display:flex;align-items:center;justify-content:center"><img src="assets/images/ic-dosie.svg" alt=""></span>
+                <div><b>1 воркер</b><span>Сбор данных</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tech-sub">
+            <h3>Токены и лимиты</h3>
+            <p>У API лимит на каждый токен: <code>POST /search/posts</code> — 30 запросов в минуту, GET — 300. У сервиса пять токенов: три работают на сбор сообщений, отдельный — на поиск и топы, ещё один — на профили.</p>
+            <div class="token-cards">
+              <article data-reveal>
+                <div class="tk-top">
+                  <span class="tk-ic"><img src="assets/images/ic-chat.svg" alt=""></span>
+                  <span class="tk-count"><b>3</b> токена</span>
+                </div>
+                <h4>Сбор сообщений</h4>
+                <p>Каждое новое поисковое окно создаётся на следующем токене по кругу — нагрузка 30/мин делится ровно.</p>
+              </article>
+              <article data-reveal>
+                <div class="tk-top">
+                  <span class="tk-ic"><img src="assets/images/ic-search.svg" alt=""></span>
+                  <span class="tk-count"><b>1</b> токен</span>
+                </div>
+                <h4>Поиск и топы</h4>
+                <p>Поиск, топы, аватары и проверки доступности. Лёгкие запросы не конкурируют со сбором сообщений.</p>
+              </article>
+              <article data-reveal>
+                <div class="tk-top">
+                  <span class="tk-ic"><img src="assets/images/ic-profile.svg" alt=""></span>
+                  <span class="tk-count"><b>1</b> токен</span>
+                </div>
+                <h4>Профили</h4>
+                <p>Публичная карточка пользователя: статистика, статус, дата регистрации.</p>
+              </article>
+            </div>
+            <ul class="plain-list tech-list">
+              <li data-reveal>Бюджеты считаются из заголовков X-RateLimit-Remaining (резерв 2 запроса) — токен с исчерпанным бюджетом пропускается.</li>
+              <li data-reveal>Пагинация окна никогда не переезжает на другой токен: курсор поиска привязан к токену, который создал окно.</li>
+              <li data-reveal>Ответ 429 — пауза строго по Retry-After, повтор с другим токеном.</li>
+              <li data-reveal>Ротация существует, чтобы укладываться в лимиты, а не обходить их.</li>
+            </ul>
+          </div>
+
+          <div class="stat-strip shine shine-dark">
+            <div data-reveal><b data-count="700">700</b><span>сообщений в одном отчёте</span></div>
+            <div data-reveal data-delay="120"><b data-count="24.7" data-dec="1" data-suffix=" с">24.7 с</b><span>длительность сбора</span></div>
+            <div data-reveal data-delay="240"><b data-count="3" data-suffix=" / 3 / 3">3 / 3 / 3</b><span>POST-запросы по токенам</span></div>
+            <div data-reveal data-delay="360"><b>0</b><span>ошибок и 429 в реальном прогоне</span></div>
+          </div>
+          <p class="tech-note">Цифры — из реального прогона. Лог телеметрии сохраняется для каждого сбора и предоставляется администрации по запросу.</p>
+        </div>
+      </section>
+
+      <section class="section scope-section">
+        <p class="section-label" data-reveal>04 / Ограничения</p>
+        <div>
+          <h2 data-split="words">Чего сервис не делает</h2>
+          <ul class="plain-list">
+            <li data-reveal>Не использует сторонние OSINT-сервисы и базы утечек.</li>
+            <li data-reveal>Не ищет имя, фамилию, дату рождения, адрес или местоположение владельца.</li>
+            <li data-reveal>Не ищет телефон, электронную почту, соцсети и аккаунты на других площадках.</li>
+            <li data-reveal>Не сопоставляет профиль с реальным человеком.</li>
+            <li data-reveal>Не предназначен для деанонимизации пользователей.</li>
+            <li data-reveal>Не читает личные сообщения и содержимое разделов под хайдами.</li>
+            <li data-reveal>Не публикует и не передаёт собранные сообщения третьим лицам.</li>
+            <li data-reveal>Не хранит API-токены в коде или репозитории.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section report-section">
+        <p class="section-label" data-reveal>05 / Отчёт</p>
+        <div>
+          <h2 data-split="words">Как трактовать результат</h2>
+          <div class="report-notes">
+            <article data-reveal><span>01</span><h3>Это не диагноз</h3><p>Психологический портрет — вероятностная интерпретация текстов и поведения аккаунта, а не медицинское заключение.</p></article>
+            <article data-reveal data-delay="120"><span>02</span><h3>Возможна ошибка</h3><p>На выводы влияют сарказм, ролевая манера общения, неполная история и контекст отдельных обсуждений.</p></article>
+            <article data-reveal data-delay="240"><span>03</span><h3>Нужна проверка</h3><p>Для решений модерации следует смотреть исходные публикации. Отчёт не является самостоятельным доказательством нарушения.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <p class="section-label" data-reveal>06 / Вопросы</p>
+        <div>
+          <h2 data-split="words">Короткие ответы</h2>
+          <div class="faq" data-accordion>
+            <details open>
+              <summary>Это OSINT-сервис?<i aria-hidden="true"></i></summary>
+              <p>Нет в смысле поиска личности по внешним источникам. Zelscan работает с данными профиля внутри lolz.team и не подключает сторонние OSINT-инструменты.</p>
+            </details>
+            <details>
+              <summary>Можно узнать, кто стоит за ником?<i aria-hidden="true"></i></summary>
+              <p>Нет. Сервис не устанавливает реальную личность владельца аккаунта.</p>
+            </details>
+            <details>
+              <summary>Откуда берутся данные?<i aria-hidden="true"></i></summary>
+              <p>Из доступного профиля пользователя на lolz.team: тем, постов, сообщений, активности и форумной статистики.</p>
+            </details>
+            <details>
+              <summary>Можно принимать решение только по отчёту?<i aria-hidden="true"></i></summary>
+              <p>Нет. Отчёт помогает быстрее оценить профиль, но решение следует проверять по исходным публикациям и правилам форума.</p>
+            </details>
+            <details>
+              <summary>Сколько запросов к форуму занимает один отчёт?<i aria-hidden="true"></i></summary>
+              <p>Около 90: девять поисковых окон и примерно 72 страницы результатов, суммарно ~25 секунд. Телеметрия каждого запроса сохраняется.</p>
+            </details>
+            <details>
+              <summary>Почему у сервиса несколько API-токенов?<i aria-hidden="true"></i></summary>
+              <p>У API есть лимит на токен — 30 поисковых запросов в минуту. Три токена сбора позволяют укладываться в лимиты при одном одновременном заказе: нагрузка распределяется по кругу равномерно.</p>
+            </details>
+            <details>
+              <summary>Zelscan связан с lolz.team?<i aria-hidden="true"></i></summary>
+              <p>Zelscan — отдельный сервис. Эта страница описывает его назначение и не означает официального одобрения со стороны администрации форума.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="document-end">
+        <p data-reveal>Если модерации нужна дополнительная информация о работе сервиса — включая полный лог запросов любого сбора — можно связаться с автором проекта.</p>
+        <a href="https://t.me/udodov228" data-reveal data-delay="150" target="_blank" rel="noopener noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
+      </section>
+    </div>
+  </main>
+
+  <footer class="ft">
+    <div class="ft-bg"><video class="ft-video" autoplay muted loop playsinline poster="assets/images/darkk.webp"><source src="assets/images/water.mp4" type="video/mp4"></video><div class="ft-photo"></div></div>
+    <div class="ft-inner">
+      <div class="ft-top">
+        <a class="brand-logo brand-logo--footer" href="/" aria-label="Zelscan — на главную"><svg class="brand-firma" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="brand-petal" d="M16.9854 0.0755556C15.8488 -0.0892432 14.7326 0.0106677 13.6714 0.423398C11.7918 1.15443 10.9008 2.76056 11.3014 4.60852C11.9824 7.75033 15.1785 10.1016 18.5259 9.87732C19.6469 9.80222 20.639 9.38204 21.4535 8.59536C22.911 7.18736 22.8423 4.82199 22.0079 3.35017C20.9374 1.46192 19.2428 0.426919 16.9854 0.0755556Z" fill="white"/><path class="brand-petal" d="M7.95432 2.89937C7.2596 2.38735 6.45838 2.22314 5.61431 2.32881C2.15556 2.76196 0.0273265 5.9032 0.396983 8.98111C0.504444 9.87546 0.961794 10.6226 1.85715 11.0217C2.82886 11.4549 3.83635 11.3993 4.80915 11.054C7.3231 10.1613 8.71187 8.3768 9.01922 5.85364C9.15096 4.77177 8.92846 3.7194 7.95432 2.89937Z" fill="white"/><path class="brand-petal" d="M20.3538 12.0455C19.0856 11.7084 17.8787 11.9679 16.7565 12.594C14.1016 14.0754 12.8678 17.1719 13.5213 19.9688C13.8196 21.2457 14.5148 22.2846 15.7623 22.8876C17.2792 23.621 18.7562 23.3506 20.1249 22.5241C21.8866 21.4602 22.7928 19.8373 23.2141 17.8557C23.3651 16.8387 23.3692 15.8283 23.0623 14.8321C22.6432 13.4723 21.8312 12.4382 20.3538 12.0455Z" fill="white"/><path class="brand-petal" d="M11.2852 18.6781C10.8273 15.3179 7.22616 12.7983 3.77082 13.4494C0.170124 14.1281 -0.842149 17.7901 0.692199 20.2977C1.65495 21.8709 3.15443 22.7137 5.02563 23.1419C5.91051 23.3188 6.79642 23.3532 7.69517 23.2221C10.2412 22.8505 11.6175 21.1183 11.2852 18.6781Z" fill="white"/></svg><img class="brand-text" src="/images/text.svg" alt="Zelscan"></a>
+        <div class="ft-author-row">
+          <span class="ft-launched">Проект запустил</span>
+          <button class="ft-badge" id="profileTrigger" type="button">
+            <span class="ft-badge-av"><img src="assets/images/avava.png" alt=""></span>
+            <span class="ft-badge-name">Дмитрий Удодов</span>
+          </button>
+        </div>
+      </div>
+      <div class="ft-sp"></div>
+      <div class="ft-links">
+        <a href="#facts">О проекте</a>
+        <a href="#">Политика конфиденциальности</a>
+        <a href="#">Пользовательское соглашение</a>
+        <a href="https://t.me/udodov228" target="_blank" rel="noopener noreferrer">Поддержка</a>
+      </div>
+      <div class="ft-word-wrap"><span class="ft-word">ZELSCAN</span></div>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileName" aria-hidden="true">
+    <div class="modal">
+      <button class="modal-close" type="button" aria-label="Закрыть">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+      <div class="modal-header">
+        <img class="modal-avatar" src="assets/images/avava.png" alt="">
+        <div class="modal-header-info"><div class="modal-name" id="profileName">Дмитрий Удодов</div><div class="modal-nick">@udodov228</div></div>
+      </div>
+      <div class="modal-desc">Product Designer &amp; AI-Integrator. Создаю проекты на стыке дизайна, кода и нейросетей под ключ.</div>
+      <div class="modal-projects">
+        <div class="modal-projects-lbl">Портфолио</div>
+        <div class="modal-projects-scroll">
+          <div class="modal-pcard" style="background-image:url('assets/images/preview.png')"><span>Редизайн платформы<br>и внедрение AI</span></div>
+          <div class="modal-pcard modal-pcard--dark" style="background-image:url('assets/images/preview2.png')"><span>Дизайн и брендинг<br>криптообменника</span></div>
+          <div class="modal-pcard" style="background-image:url('assets/images/preview3.png')"><span>Лендинг<br>NFT мессенджера</span></div>
+          <div class="modal-pcard" style="background-image:url('assets/images/preview4.png')"><span>Креативы и баннеры<br>для бук. компаний</span></div>
+          <div class="modal-pcard" style="background-image:url('assets/images/preview5.png')"><span>Детейлинг чат-бот<br>с CRM системой</span></div>
+        </div>
+      </div>
+      <a class="modal-tg-btn" href="https://t.me/udodov228" target="_blank" rel="noopener noreferrer"><img src="assets/images/telegram.svg" width="22" height="22" alt="">Написать в Telegram</a>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+<script src="/js/loader.js"></script>
+<script src="/js/brand-logo.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!--
+  Profile Modal — self-contained component markup.
+  Usage: paste this block into a page, include profile-modal.css and
+  profile-modal.js. Open with: ProfileModal.open()  (or a trigger with
+  data-pm-open). Content (name, nick, description, portfolio, Telegram)
+  is preserved from the original design.
+-->
+<div class="pm-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="pmName">
+  <div class="pm-modal">
+    <button class="pm-close" type="button" aria-label="Закрыть">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+
+    <div class="pm-header">
+      <img class="pm-avatar" src="images/avava.png" alt="">
+      <div class="pm-header-info">
+        <div class="pm-name" id="pmName">Дмитрий Удодов</div>
+        <div class="pm-nick">@lolz_nickname</div>
+      </div>
+    </div>
+
+    <div class="pm-desc">Product Designer &amp; AI-Integrator. Создаю проекты на стыке дизайна, кода и нейросетей под ключ.</div>
+
+    <div class="pm-projects">
+      <div class="pm-projects-lbl">Портфолио</div>
+      <div class="pm-projects-scroll">
+        <div class="pm-pcard" style="background-image:url('images/preview.png')"><span style="color:#fff">Редизайн платформы<br>и внедрение AI</span></div>
+        <div class="pm-pcard" style="background-image:url('images/preview2.png')"><span style="color:#1C1C1E">Дизайн и брендинг<br>криптообменника</span></div>
+        <div class="pm-pcard" style="background-image:url('images/preview3.png')"><span style="color:#fff">Лендинг<br>NFT мессенджера</span></div>
+        <div class="pm-pcard" style="background-image:url('images/preview4.png')"><span style="color:#fff">Креативы и баннеры<br>для бук. компаний</span></div>
+        <div class="pm-pcard" style="background-image:url('images/preview5.png')"><span style="color:#fff">Детейлинг чат-бот<br>с CRM системой</span></div>
+      </div>
+    </div>
+
+    <a class="pm-tg-btn" href="https://t.me/lolz_nickname" target="_blank" rel="noopener">
+      <img src="images/telegram.svg" width="22" height="22" alt="Telegram">
+      Написать в Telegram
+    </a>
+  </div>
+</div>

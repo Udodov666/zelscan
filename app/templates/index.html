@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOLZ // DOSSIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- =========== TOP BAR =========== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="logo">
+      <span class="logo-mark">◆</span>
+      <span class="logo-text">LOLZ<span class="dim">//</span>DOSSIER</span>
+    </a>
+    <div class="topbar-right">
+      <a href="https://lolzteam.readme.io/reference" target="_blank" rel="noopener" class="topbar-link">API ↗</a>
+      <a href="https://zelenka.guru" target="_blank" rel="noopener" class="topbar-link">forum ↗</a>
+      <span class="topbar-status" id="navStatus">●</span>
+    </div>
+  </div>
+</header>
+
+<!-- =========== HERO (форма) =========== -->
+<section class="hero" id="heroSection">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow">Forum behavioral analysis</p>
+      <h1>Досье на любого<br>пользователя <span class="accent">Лолза</span>.</h1>
+      <p class="lead">
+        Введи ник или ID — соберу профиль, темы, посты и сделаю
+        разбор манеры, конфликтности и психотипа. Только API.
+      </p>
+    </div>
+
+    <form id="searchForm" class="search-card">
+      <label class="field-label" for="userSearchInput">Ник, ID или ссылка на профиль</label>
+
+      <!-- поиск с дропдауном -->
+      <div class="search-wrap" id="searchWrap">
+        <div class="input-row">
+          <input id="userSearchInput" type="text" placeholder="root_duck или 5254256" autocomplete="off">
+          <button type="submit" id="analyzeBtn" class="btn-primary">
+            <span class="btn-text">Анализировать</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+        <!-- дропдаун результатов поиска -->
+        <ul id="searchDropdown" class="search-dropdown hidden"></ul>
+      </div>
+
+      <!-- выбранный юзер -->
+      <div id="selectedUser" class="selected-user hidden">
+        <img id="selectedAvatar" class="sel-avatar" src="" alt="">
+        <div class="sel-info">
+          <span id="selectedUsername" class="sel-name">—</span>
+          <span id="selectedUid" class="sel-uid">#—</span>
+        </div>
+        <button type="button" id="clearUser" class="sel-clear" title="Изменить">✕</button>
+      </div>
+
+      <!-- тариф -->
+      <div class="tariff-row">
+        <label class="tariff-opt">
+          <input type="radio" name="reportType" value="basic" checked>
+          <span class="tariff-card">
+            <span class="tariff-name">Базовый</span>
+            <span class="tariff-price"><s style="opacity:.5">9 ₽</s> 0 ₽</span>
+            <span class="tariff-desc">Активность, поведение, психометрики</span>
+          </span>
+        </label>
+        <label class="tariff-opt">
+          <input type="radio" name="reportType" value="full">
+          <span class="tariff-card">
+            <span class="tariff-name">Полный <span class="tariff-ai">AI</span></span>
+            <span class="tariff-price"><s style="opacity:.5">19 ₽</s> 0 ₽</span>
+            <span class="tariff-desc">+ вердикт, портрет, индекс доверия</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- доп. опции (свёрнуто) -->
+      <details class="advanced-opts">
+        <summary>Расширенные настройки</summary>
+        <div class="search-options">
+          <label class="opt">
+            <span>Сообщений страниц:</span>
+            <select id="timelinePages">
+              <option value="10">10 (~200)</option>
+              <option value="15">15 (~300)</option>
+              <option value="25" selected>25 (~500, рекомендуется)</option>
+              <option value="40">40 (максимум до 500)</option>
+            </select>
+          </label>
+          <label class="opt">
+            <span>Тем:</span>
+            <select id="threadPages">
+              <option value="5">5</option>
+              <option value="15" selected>15</option>
+              <option value="30">30</option>
+            </select>
+          </label>
+          <label class="opt checkbox-opt">
+            <input type="checkbox" id="refreshFlag">
+            <span>Сбросить кеш</span>
+          </label>
+        </div>
+      </details>
+      <p class="hint">
+        Тест: <code data-uid="5254256">root_duck (5254256)</code>
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- =========== LOADING =========== -->
+<section id="loadingSection" class="loading-section hidden">
+  <div class="container">
+    <div class="loading-card">
+      <div class="loading-spinner"></div>
+      <h3 id="loadingTitle">Сканируем сообщения...</h3>
+      <p id="loadingSubtitle" class="muted">30-90 сек</p>
+
+      <!-- Очередь -->
+      <div id="queueInfo" class="queue-info hidden">
+        <div class="queue-position">👥 Вы в очереди: <strong id="queuePosition">—</strong></div>
+        <div class="queue-eta" id="queueEta"></div>
+      </div>
+
+      <!-- Прогресс по этапам -->
+      <div id="progressStages" class="progress-stages"></div>
+
+      <div class="loading-progress"><div class="loading-progress-bar" id="loadingBar"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========== ERROR =========== -->
+<section id="errorSection" class="error-section hidden">
+  <div class="container">
+    <div class="error-card">
+      <div class="error-icon">⚠</div>
+      <h3>Что-то пошло не так</h3>
+      <p id="errorText" class="muted"></p>
+      <button onclick="document.getElementById('errorSection').classList.add('hidden')" class="btn-secondary">Закрыть</button>
+    </div>
+  </div>
+</section>
+
+<!-- =========== DOSSIER (мульти-страничный) =========== -->
+<div id="dossierApp" class="dossier-app hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-user" id="sidebarUser">
+        <div class="sidebar-avatar" id="sidebarAvatar">
+          <img id="sidebarAvatarImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+          <span id="sidebarAvatarLetter">?</span>
+        </div>
+        <div class="sidebar-userinfo">
+          <div class="sidebar-username" id="sidebarUsername">—</div>
+          <div class="sidebar-uid" id="sidebarUid">#—</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="overview">
+        <span class="nav-icon">◆</span>
+        <span>Обзор</span>
+      </a>
+      <a href="#" class="nav-item" data-page="activity">
+        <span class="nav-icon">◉</span>
+        <span>Активность</span>
+      </a>
+      <a href="#" class="nav-item" data-page="behavior">
+        <span class="nav-icon">◐</span>
+        <span>Поведение</span>
+      </a>
+      <a href="#" class="nav-item" data-page="psychology">
+        <span class="nav-icon">✦</span>
+        <span>Психология</span>
+        <span class="nav-badge" id="psychBadge" style="display:none">AI</span>
+      </a>
+      <a href="#" class="nav-item" data-page="ai">
+        <span class="nav-icon">⚡</span>
+        <span>AI-анализ</span>
+        <span class="nav-badge" id="aiNavBadge" style="display:none">AI</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-secondary sidebar-back" onclick="backToSearch()">← Новый поиск</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- ============ PAGE: OVERVIEW ============ -->
+    <div class="page active" id="page-overview">
+      <!-- VERDICT HERO -->
+      <section class="verdict-hero" id="verdictHero">
+        <div class="verdict-tags" id="verdictTags"></div>
+        <h1 id="verdictUsername" class="verdict-username"></h1>
+        <p id="verdictSentence" class="verdict-sentence"></p>
+      </section>
+
+      <!-- KEY METRICS GRID -->
+      <section class="metrics-grid" id="overviewMetrics"></section>
+
+      <!-- CARD -->
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Профиль</h2>
+          <span class="section-meta">ID <span id="cardUid"></span></span>
+        </div>
+        <div class="section-body" id="cardBody"></div>
+      </section>
+
+      <!-- SAFETY -->
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Безопасность</h2>
+        </div>
+        <div class="section-body" id="safetyBody"></div>
+      </section>
+
+      <!-- FINAL VERDICT -->
+      <section class="section-block verdict-block" id="finalVerdictSection">
+        <div class="section-header">
+          <h2>Вердикт</h2>
+        </div>
+        <div class="section-body" id="finalVerdictBody"></div>
+      </section>
+    </div>
+
+    <!-- ============ PAGE: ACTIVITY ============ -->
+    <div class="page" id="page-activity">
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Когда обитает</h2>
+        </div>
+        <div class="section-body" id="activityTimeBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Динамика по годам</h2>
+        </div>
+        <div class="section-body" id="activityYearsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Где обитает</h2>
+        </div>
+        <div class="section-body" id="activityForumsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Реакции на посты</h2>
+        </div>
+        <div class="section-body" id="activityReactionsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🔥 Топ тем по просмотрам</h2>
+        </div>
+        <div class="section-body" id="activityTopThreadsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>❤️ Топ постов по лайкам</h2>
+        </div>
+        <div class="section-body" id="activityTopPostsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Стена профиля</h2>
+        </div>
+        <div class="section-body" id="activityWallBody"></div>
+      </section>
+    </div>
+
+    <!-- ============ PAGE: BEHAVIOR ============ -->
+    <div class="page" id="page-behavior">
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Манера общения</h2>
+        </div>
+        <div class="section-body" id="behaviorMannerBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Типажи</h2>
+        </div>
+        <div class="section-body" id="behaviorTypesBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Эмоциональный фон</h2>
+        </div>
+        <div class="section-body" id="behaviorEmotionBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Эго и уверенность</h2>
+        </div>
+        <div class="section-body" id="behaviorEgoBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Конфликтность</h2>
+        </div>
+        <div class="section-body" id="behaviorConflictBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🎯 Триггеры</h2>
+        </div>
+        <div class="section-body" id="behaviorTriggersBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🙏 Признание ошибок</h2>
+        </div>
+        <div class="section-body" id="behaviorMistakesBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>❤️ Эмпатия</h2>
+        </div>
+        <div class="section-body" id="behaviorEmpathyBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>👶 Отношение к новичкам</h2>
+        </div>
+        <div class="section-body" id="behaviorNewbiesBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Грамотность</h2>
+        </div>
+        <div class="section-body" id="behaviorLiteracyBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Интересы и экспертиза</h2>
+        </div>
+        <div class="section-body" id="behaviorInterestsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Примеры фраз</h2>
+        </div>
+        <div class="section-body" id="behaviorPhrasesBody"></div>
+      </section>
+    </div>
+
+    <!-- ============ PAGE: PSYCHOLOGY ============ -->
+    <div class="page" id="page-psychology">
+      <div class="psych-intro" id="psychIntro">
+        <p class="muted">🧠 Психологический портрет от DeepSeek на основе постов и фактов. Оценки 0-10.</p>
+      </div>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Как общается</h2>
+          <span class="section-meta" id="psychModel"></span>
+        </div>
+        <div class="section-body" id="psychMannerBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>Big Five (OCEAN)</h2>
+        </div>
+        <div class="section-body" id="psychBigFiveBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🌑 Тёмная триада</h2>
+        </div>
+        <div class="section-body" id="psychDarkTriadBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>❤️ Эмоциональный интеллект</h2>
+        </div>
+        <div class="section-body" id="psychEIBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🛡 Защиты и искажения</h2>
+        </div>
+        <div class="section-body" id="psychDefensesBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🔗 Стиль привязанности</h2>
+        </div>
+        <div class="section-body" id="psychAttachmentBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>⚔️ Поведение в конфликтах</h2>
+        </div>
+        <div class="section-body" id="psychConflictBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🔮 Прогноз отношений</h2>
+        </div>
+        <div class="section-body" id="psychRelationsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>💎 Что внутри</h2>
+        </div>
+        <div class="section-body" id="psychCoreBody"></div>
+      </section>
+
+      <section class="section-block verdict-block">
+        <div class="section-header">
+          <h2>🎯 Резюме психолога</h2>
+        </div>
+        <div class="section-body" id="psychSummaryBody"></div>
+      </section>
+    </div>
+
+    <!-- ============ PAGE: AI ============ -->
+    <div class="page" id="page-ai">
+      <div class="psych-intro" id="aiIntro">
+        <p class="muted">⚡ AI-анализ: GigaChat Lite (портрет) + GigaChat-Max (инсайты)</p>
+      </div>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>📝 Базовый портрет</h2>
+          <span class="section-meta" id="aiLiteModel"></span>
+        </div>
+        <div class="section-body" id="aiLitePortraitBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🎭 Сценарии поведения</h2>
+        </div>
+        <div class="section-body" id="aiLiteScenariosBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🔑 Ключевые черты</h2>
+        </div>
+        <div class="section-body" id="aiLiteTraitsBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>🧠 Между строк</h2>
+          <span class="section-meta" id="aiMaxModel"></span>
+        </div>
+        <div class="section-body" id="aiMaxHiddenBody"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-header">
+          <h2>⚡ Предсказанные триггеры</h2>
+        </div>
+        <div class="section-body" id="aiMaxTriggersBody"></div>
+      </section>
+
+      <section class="section-block verdict-block">
+        <div class="section-header">
+          <h2>🎯 Однострочный вердикт</h2>
+        </div>
+        <div class="section-body" id="aiMaxVerdictBody"></div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p class="muted small">
+      <span class="logo-mark dim">◆</span>
+      Lolz Dossier · неофициальный аналитический инструмент ·
+      <a href="https://zelenka.guru" target="_blank">zelenka.guru</a>
+    </p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='app.js', v=4) }}"></script>
+</body>
+</html>

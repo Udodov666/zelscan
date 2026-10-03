@@ -1,0 +1,140 @@
+/* ===== V8 Cross Rays · Neon Edge ===== */
+
+/* ── Balance Badge (Б) ── */
+.bbadge{display:inline-flex;align-items:center;justify-content:center;height:17px;min-width:17px;margin-left:4px;padding:0 4px;border-radius:4px;background:rgba(94,224,168,.16);color:#5ee0a8;font-size:11px;font-weight:600;line-height:1;flex:none;white-space:nowrap;vertical-align:middle;font-family:Inter,sans-serif}
+
+/* ── Emerald Balance Card ── */
+.bal-card{position:relative;isolation:isolate;overflow:hidden;padding:4px 16px;border:0;border-radius:24px;
+  background:linear-gradient(180deg,#34d399 0%,#087b5b 54%,#05251e 100%);
+  box-shadow:inset 0 1px 0 rgb(209 250 229 / 0%),inset 0 -26px 40px rgba(0,0,0,.23),inset 0 0 28px rgba(255,255,255,.035),0 11px 28px rgb(0 0 0 / 0%)}
+.bal-card::before{position:absolute;z-index:1;inset:0;
+  background:radial-gradient(circle at 8% 24%,rgba(255,255,255,.48) 0 1px,transparent 1.35px),radial-gradient(circle at 27% 76%,rgba(255,255,255,.26) 0 .8px,transparent 1.2px),radial-gradient(circle at 53% 38%,rgba(255,255,255,.34) 0 .8px,transparent 1.2px),radial-gradient(circle at 79% 68%,rgba(255,255,255,.24) 0 .8px,transparent 1.2px),radial-gradient(circle at 93% 21%,rgba(255,255,255,.38) 0 .8px,transparent 1.2px);
+  content:"";opacity:.44;pointer-events:none}
+.bal-card::after{position:absolute;z-index:1;top:-1px;left:8%;width:84%;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(167,243,208,.9) 20%,rgba(255,255,255,.95) 50%,rgba(167,243,208,.9) 80%,transparent);
+  box-shadow:0 0 12px rgba(52,211,153,.7),0 0 30px rgba(52,211,153,.4),0 0 60px rgba(52,211,153,.2);
+  content:"";pointer-events:none;border-radius:50%;filter:blur(1px);animation:topGlow 3s ease-in-out infinite}
+@keyframes topGlow{0%,100%{opacity:.7;box-shadow:0 0 10px rgba(52,211,153,.5),0 0 25px rgba(52,211,153,.3)}50%{opacity:1;box-shadow:0 0 18px rgba(52,211,153,.9),0 0 35px rgba(52,211,153,.6)}}
+@keyframes glowPulse{0%,100%{opacity:.85;filter:blur(7px) saturate(1.4) brightness(1.1)}50%{opacity:1;filter:blur(8px) saturate(1.6) brightness(1.2)}}
+
+/* ── Cross Rays ── */
+.bal-rays{position:absolute;z-index:0;top:-120px;right:-46px;left:-46px;height:168px;pointer-events:none;filter:blur(7px) saturate(1.4) brightness(1.1);transform:scale(1.1);transform-origin:50% 0;opacity:.85;animation:glowPulse 3.5s ease-in-out infinite .7s}
+.bal-rays::before{position:absolute;inset:-12px 10% 24px;border-radius:50%;background:radial-gradient(ellipse at 50% 0,rgba(255,255,255,.3),transparent 62%);content:"";filter:blur(7px);opacity:.9}
+.bal-card .bal-rays{background:linear-gradient(65deg,transparent 0 45%,rgba(52,211,153,.3) 48%,rgba(110,231,183,.7) 58%,transparent 72%),linear-gradient(115deg,transparent 0 50%,rgba(0,67,48,.3) 55%,rgba(167,243,208,.8) 65%,rgba(220,252,231,.9) 76%,transparent 90%),radial-gradient(ellipse at 80% 0%,rgba(220,252,231,.85),transparent 35%)}
+
+/* ── Floating Stars ── */
+.stars-container{position:absolute;z-index:2;inset:0;pointer-events:none;overflow:hidden;border-radius:20px}
+.star{position:absolute;border-radius:50%;background:#fff;animation:floatDown var(--duration,6s) ease-in-out infinite alternate;animation-delay:var(--delay,0s)}
+.star.size-1{width:1px;height:1px}.star.size-05{width:.7px;height:.7px}
+@keyframes floatDown{0%{opacity:0;transform:translate(0,0) scale(.2)}15%{opacity:calc(var(--base-opacity,.9)*.2*var(--star-dim,1));transform:translate(0,5px) scale(.5)}50%{opacity:calc(var(--base-opacity,.9)*var(--star-dim,1));transform:translate(var(--drift-x,-4px),calc(var(--fall-y,18px)*.5)) scale(1.1)}100%{opacity:calc(var(--base-opacity,.9)*.1*var(--star-dim,1));transform:translate(var(--drift-x,-4px),var(--fall-y,18px)) scale(.6)}}
+/* звёзды основного счёта — на 50% темнее, на бонусном — обычные */
+.acc-menu .bal-card[data-account="rub"]{--star-dim:.5}
+.acc-menu .bal-card[data-account="bonus"]{--star-dim:1}
+
+/* ── Glow Layer (4 variants) ── */
+.bal-card .glow-layer{position:absolute;z-index:0;inset:0;pointer-events:none;border-radius:20px;opacity:0;transition:opacity .5s ease}
+.bal-card.variant-1 .glow-layer{opacity:1;background:radial-gradient(ellipse at 50% 100%,rgba(52,211,153,.5) 0%,transparent 70%);filter:blur(25px);transform:translateY(15px)}
+.bal-card.variant-2 .glow-layer{opacity:1;background:radial-gradient(ellipse at 50% 100%,rgba(16,185,129,.6) 0%,transparent 50%),radial-gradient(ellipse at 20% 100%,rgba(52,211,153,.3) 0%,transparent 40%),radial-gradient(ellipse at 80% 100%,rgba(52,211,153,.3) 0%,transparent 40%);filter:blur(35px);transform:translateY(10px) scale(1.1)}
+.bal-card.variant-3 .glow-layer{opacity:1;background:radial-gradient(ellipse at 50% 60%,rgba(52,211,153,.7) 0%,rgba(16,185,129,.4) 40%,transparent 70%);filter:blur(40px);transform:scale(1.2)}
+.bal-card.variant-4 .glow-layer{opacity:1;background:radial-gradient(ellipse at 50% 100%,rgba(52,211,153,.8) 0%,transparent 30%);filter:blur(15px);transform:translateY(5px);/* box-shadow:0 15px 30px -10px rgba(52,211,153,.4); */}
+
+/* ── Balance Content ── */
+.bal-card .sec{position:relative;z-index:3;display:flex;flex-direction:column;padding:8px 0}
+.bal-card .krow{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.bal-card .k{color:#fff;font-size:12px;font-weight:400;text-shadow:0 1px 8px rgba(0,0,0,.22);margin-top:4px}
+.balance-row{display:flex;align-items:center;gap:4px;justify-content:flex-start;margin-top:0;margin-bottom:0}
+.balance-row .v.main{flex:none;width:fit-content}
+.balance-row .sep{flex:none;width:fit-content}
+.balance-row .v.inactive{flex:none;width:fit-content;margin:0;padding:0;line-height:24px;font-size:18px}
+.bal-card .v{color:#fff;font-size:18px;font-weight:600;line-height:18px;text-shadow:0 2px 12px rgba(0,0,0,.22);display:inline-block;white-space:nowrap}
+.bal-card .v .bbadge{display:inline-flex;align-items:center;justify-content:center;height:16px;min-width:16px;padding:0 4px;margin-left:4px;border-radius:4px;background:rgb(0 0 0 / 12%);color:#ffffff;font-size:12px;font-weight:500;line-height:1;font-family:Inter,sans-serif;vertical-align:2.5px}
+.bal-card button.v{border:0;background:none}
+.bal-card .v.inactive{color:rgba(255,255,255,.43);cursor:pointer;font-weight:500;transition:color 150ms ease,transform 150ms ease;display:inline-block}
+.bal-card .v.inactive:hover{color:rgba(255,255,255,.72);transform:translateY(-1px)}
+.bal-card .v.inactive .bbadge{background:rgba(255,255,255,.1);color:rgba(255,255,255,.55)}
+.bal-card .sep{color:rgba(255,255,255,.28);font-size:14px;font-weight:400}
+
+/* ── Topup Button ── */
+.bal-card .topup{display:flex;align-items:center;justify-content:center;width:100%;height:35px;margin-top:14px;gap:6px;border:0;border-radius:66px;background:#f7f7f8;box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 1px 0 #fff;color:#0a0a0a;cursor:pointer;font-size:12px;font-weight:600;transition:transform 160ms ease,background 160ms ease,box-shadow 160ms ease}
+.bal-card .topup:hover{opacity:.88;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.22),inset 0 1px 0 #fff}
+.bal-card .topup:active{transform:scale(.97)}
+.bal-card .topup svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-linecap:round}
+.bal-card .topup svg circle{stroke-width:1.8}
+.bal-card .topup svg path{stroke-width:2.6}
+
+/* ── Balance container spacing ── */
+.bal{margin:6px 2px 10px;position:relative}
+.bal::after{content:"";position:absolute;inset:0;z-index:0;border-radius:20px;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(52,211,153,.48),transparent 70%);filter:blur(36px);transform:scale(1.2)}
+.bal .bal-card{position:relative;z-index:1}
+
+/* ── Account Switch Tabs ── */
+.account-switch{display:flex;align-items:center;gap:4px;padding:3px;border-radius:999px;background:rgba(0,0,0,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.account-btn{display:grid;width:21px;height:21px;flex:none;place-items:center;border:0;border-radius:50%;background:transparent;color:rgba(255,255,255,.7);cursor:pointer;font-size:12px;font-weight:600;line-height:1;transition:all 180ms ease}
+.account-btn:hover{color:#fff}
+.account-btn:active{transform:scale(.92)}
+.account-btn.active{background:#fff;color:#090a0b;box-shadow:none}
+
+/* ── Menu Items (V8) ── */
+.acc-menu-list{display:grid;margin-top:4px}
+.menu-item{display:flex;width:100%;align-items:center;gap:6px;padding:4px 6px;border:0;border-radius:11px;background:transparent;color:#d0d1d4;cursor:pointer;text-align:left;text-decoration:none;transition:background 140ms ease,color 140ms ease;font-size:13.5px;font-weight:600;letter-spacing:-.015em;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.menu-item:hover{background:rgba(255,255,255,.05);color:#fff}
+.menu-item .mi{display:grid;width:30px;height:30px;flex:none;place-items:center;color:#989a9e;transition:color 140ms ease}
+.menu-item:hover .mi{color:currentColor}
+.menu-item .mi i{font-size:15px}
+.menu-sep{height:1px;margin:8px;background:rgba(255,255,255,.055)}
+.menu-item.danger{color:#f06d72}
+.menu-item.danger .mi{color:currentColor}
+.menu-item.danger:hover{background:rgba(240,109,114,.07);color:#ff8186}
+
+/* ── Override old styles ── */
+.acc-menu{width:274px !important}
+/* .acc-menu .bal-card{background:linear-gradient(180deg,#34d399 0%,#087b5b 54%,#05251e 100%);box-shadow:0px 2px 6px #0000001c} */
+.acc-menu .acc-balance{display:none}
+.acc-menu .bal-pill,.acc-menu .acc-topup-mini{display:none !important}
+
+@media(prefers-reduced-motion:reduce){
+  .balance-card::after,.balance-card .glow-layer,.bal-rays,.star,.floatDown{animation:none!important}
+}
+
+/* ═══ Тёмная графитовая карточка баланса для основного счёта (rub).
+   Бонусный счёт ([data-account="bonus"]) — зелёный прод-дизайн,
+   который плавно кроссфейдится поверх тёмного (слой .bal-card-fx). ═══ */
+.acc-menu .bal-card{background:linear-gradient(180deg,#131316 0%,#0b0b0d 52%,#1a1a1c 100%)}
+.acc-menu .bal-card::before{background:none;opacity:1;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),inset 0 0 0 1px rgba(255,255,255,.01);border-radius:24px}
+.acc-menu .bal-card::after{display:none}
+.acc-menu .bal-card .bal-rays{display:block;position:absolute;z-index:0;top:-120px;right:-46px;left:-46px;height:168px;pointer-events:none;filter:blur(7px);transform:scale(1.1);transform-origin:50% 0;opacity:.45;animation:glowPulseDark 3.5s ease-in-out infinite .7s;background:linear-gradient(65deg,transparent 0 45%,rgb(255 255 255 / 9%) 48%,rgb(255 255 255 / 20%) 58%,transparent 72%),radial-gradient(ellipse at 80% 0%,rgb(255 255 255 / 26%),transparent 35%)}
+.acc-menu .bal-card .glow-layer{opacity:0}
+@keyframes glowPulseDark{0%,100%{opacity:.4;filter:blur(7px)}50%{opacity:.55;filter:blur(8px)}}
+
+/* зелёный ореол позади карточки — только для бонусного счёта */
+.acc-menu .bal::after{opacity:0;transition:opacity .4s ease}
+.acc-menu .bal:has(.bal-card[data-account="bonus"])::after{opacity:1}
+
+/* зелёный слой бонусного счёта — кроссфейд .4s */
+.acc-menu .bal-card .bal-card-fx{position:absolute;inset:0;z-index:0;border-radius:inherit;overflow:hidden;opacity:0;transition:opacity .4s ease;pointer-events:none;
+  background:linear-gradient(65deg,rgba(52,211,153,.26) 0%,transparent 42%),linear-gradient(180deg,#34d399 0%,#087b5b 54%,#05251e 100%);
+  box-shadow:inset 0 -26px 40px rgba(0,0,0,.23),inset 0 0 28px rgba(255,255,255,.035)}
+.acc-menu .bal-card .bal-card-fx::before{content:"";position:absolute;inset:0;border-radius:inherit;opacity:.44;
+  background:radial-gradient(circle at 8% 24%,rgba(255,255,255,.48) 0 1px,transparent 1.35px),radial-gradient(circle at 27% 76%,rgba(255,255,255,.26) 0 .8px,transparent 1.2px),radial-gradient(circle at 53% 38%,rgba(255,255,255,.34) 0 .8px,transparent 1.2px),radial-gradient(circle at 79% 68%,rgba(255,255,255,.24) 0 .8px,transparent 1.2px),radial-gradient(circle at 93% 21%,rgba(255,255,255,.38) 0 .8px,transparent 1.2px)}
+.acc-menu .bal-card .bal-card-fx::after{content:"";position:absolute;z-index:1;top:-1px;left:8%;width:84%;height:2px;border-radius:50%;filter:blur(1px);
+  background:linear-gradient(90deg,transparent,rgba(167,243,208,.9) 20%,rgba(255,255,255,.95) 50%,rgba(167,243,208,.9) 80%,transparent);
+  box-shadow:0 0 12px rgba(52,211,153,.7),0 0 30px rgba(52,211,153,.4),0 0 60px rgba(52,211,153,.2);animation:topGlow 3s ease-in-out infinite}
+.acc-menu .bal-card[data-account="bonus"] .bal-card-fx{opacity:1}
+.acc-menu .bal-card[data-account="bonus"] .bal-rays{opacity:.8}
+.acc-menu .bal-card[data-account="bonus"] .glow-layer{opacity:1}
+
+/* ── Apple-style переключение счетов ── */
+.acc-menu .bal-card .bal-card-fx{transition:opacity .55s cubic-bezier(.32,.72,.28,1),transform .55s cubic-bezier(.32,.72,.28,1);transform:scale(1.02)}
+.acc-menu .bal-card[data-account="bonus"] .bal-card-fx{transform:scale(1)}
+
+/* маленькое белое свечение сверху — только у основного счёта */
+.acc-menu .bal-card[data-account="rub"]::after{content:"";display:block;position:absolute;z-index:1;top:-1px;left:8%;width:84%;height:2px;border-radius:2px;pointer-events:none;box-shadow:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:topGlowDark 3.5s ease-in-out infinite}
+@keyframes topGlowDark{0%,100%{opacity:.45;box-shadow:0 0 8px rgba(52,211,153,.2)}50%{opacity:.8;box-shadow:0 0 14px rgba(52,211,153,.35)}}
+@keyframes topGlowSoft{0%,100%{opacity:.5}50%{opacity:.85}}
+
+/* V3 · мягкий блюр: текст виден всегда, на смене лишь слегка размывается */
+.acc-menu .bal-card .sec{transition:opacity .18s ease,filter .18s ease,transform .18s ease}
+.acc-menu .bal-card.is-switching .sec{opacity:1;transform:none;filter:blur(2.5px)}
+.acc-menu .bal-card .glow-layer{transition:opacity .55s cubic-bezier(.32,.72,.28,1)}
+.acc-menu .bal::after{transition:opacity .55s cubic-bezier(.32,.72,.28,1)}
+.acc-menu .bal-card .account-btn{transition:all 220ms cubic-bezier(.34,1.28,.5,1)}

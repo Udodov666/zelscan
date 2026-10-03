@@ -1,0 +1,623 @@
+
+/* Test lab only — My Dossiers card direction. The real project styles are not modified. */
+.my-dossiers .account-shell{
+  width:100%!important;
+  max-width:none!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.my-dossiers .account-head{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:24px!important;
+  margin:0 0 34px!important;
+  padding:0!important;
+}
+.my-dossiers .account-title{
+  margin:0!important;
+  color:#f5f5f5!important;
+  font-size:32px!important;
+  font-weight:500!important;
+  line-height:35px!important;
+  letter-spacing:-1.44px!important;
+}
+.my-dossiers .account-sub{
+  max-width:540px!important;
+  margin:9px 0 0!important;
+  color:#737378!important;
+  font-size:13.5px!important;
+  font-weight:400!important;
+  line-height:21px!important;
+}
+.my-dossiers .account-primary{
+  height:42px!important;
+  padding:0 14px!important;
+  gap:8px!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  color:#020202!important;
+  box-shadow:0 1px 2px rgba(0,0,0,.05), inset 0 0 0 .5px rgba(255,255,255,.05)!important;
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:14px!important;
+  font-weight:500!important;
+  line-height:17px!important;
+}
+.my-dossiers .account-primary:hover{background:#ececec!important;transform:none!important}
+.my-dossiers .account-toolbar{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 24px!important;
+  padding:0!important;
+  background:transparent!important;
+}
+.my-dossiers .dossier-lab-search{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:282px;
+  height:42px;
+  padding:0 14px;
+  box-sizing:border-box;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.035);
+  border-radius:16px;
+  color:#8a8a8e;
+}
+.my-dossiers .dossier-lab-search:focus-within{border-color:rgba(255,255,255,.09);background:rgba(255,255,255,.045)}
+.my-dossiers .dossier-lab-search svg{width:18px;height:18px;flex:0 0 18px;stroke:currentColor;stroke-width:1.5}
+.my-dossiers .dossier-lab-search input{width:100%;min-width:0;padding:0;border:0;outline:0;background:transparent;color:#e8e8e8;font:400 14px/17px Inter,system-ui,sans-serif;letter-spacing:-.14px}
+.my-dossiers .dossier-lab-search input::placeholder{color:#6b6b6b}
+.my-dossiers .dossier-lab-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0}
+.my-dossiers .dossier-lab-filters{display:flex;align-items:center;gap:4px;padding:3px;background:rgba(255,255,255,.035);border-radius:12px}
+.my-dossiers .dossier-filter{
+  height:32px;
+  padding:0 11px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#737378;
+  cursor:pointer;
+  font:500 12.5px/15px Inter,system-ui,sans-serif;
+  transition:background .14s ease,color .14s ease;
+}
+.my-dossiers .dossier-filter:hover{color:#d8d8da}
+.my-dossiers .dossier-filter.is-active{background:rgba(255,255,255,.08);color:#f3f3f4;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.05)}
+.my-dossiers .dossier-lab-sort{display:flex;align-items:center;gap:8px;height:42px;padding:0 12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.035);border-radius:12px;color:#737378}
+.my-dossiers .dossier-lab-sort i{font-style:normal;font-size:12px;font-weight:400;white-space:nowrap}
+.my-dossiers .dossier-lab-sort select{max-width:148px;padding:0;border:0;outline:0;background:transparent;color:#e8e8e8;font:500 12.5px/15px Inter,system-ui,sans-serif;cursor:pointer}
+.my-dossiers .dossier-lab-sort option{background:#161616;color:#e8e8e8}
+.my-dossiers .dossier-lab-empty{grid-column:1 / -1;display:flex;min-height:240px;align-items:center;justify-content:center;border-radius:24px;background:#0a0a0a;color:#737378;font:400 14px/20px Inter,system-ui,sans-serif;text-align:center}
+.my-dossiers .dossier-lab-empty--initial{flex-direction:column;gap:8px;padding:32px;color:#737378}
+.my-dossiers .dossier-lab-empty--initial i{position:relative;z-index:1;display:block;flex:0 0 auto;width:24px;height:24px;margin:0 0 4px;color:#8a8a8e;visibility:visible!important;opacity:1!important;font-family:"Font Awesome 6 Free"!important;font-size:24px;font-style:normal;font-weight:900!important;line-height:24px;text-indent:0;overflow:visible}
+.my-dossiers .dossier-lab-empty--initial h3{margin:0;color:#e8e8e8;font:500 16px/20px Inter,system-ui,sans-serif}
+.my-dossiers .dossier-lab-empty--initial p{margin:0;font:400 14px/20px Inter,system-ui,sans-serif}
+.my-dossiers .dossier-empty-action{height:40px;margin-top:12px;padding:0 16px;border:0;border-radius:12px;background:#fff;color:#050505;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;transition:background-color .15s ease,transform .15s ease}
+.my-dossiers .dossier-empty-action:hover{background:#e8e8e8}
+.my-dossiers .dossier-empty-action:active{transform:scale(.98)}
+.my-dossiers .dossier-empty-action:focus-visible{outline:2px solid #34d399;outline-offset:2px}
+@media (max-width:1100px){.my-dossiers .account-toolbar{align-items:center!important;flex-direction:row!important}.my-dossiers .dossier-lab-controls{justify-content:flex-end;flex:0 0 auto}}
+@media (max-width:680px){.my-dossiers .dossier-lab-controls{align-items:center;flex-direction:row}.my-dossiers .dossier-lab-filters{overflow-x:auto}.my-dossiers .dossier-filter{flex:0 0 auto}.my-dossiers .dossier-lab-sort{justify-content:space-between}.my-dossiers .dossier-lab-sort select{max-width:none;flex:1}}
+.my-dossiers #dossierEmpty{display:none!important}
+.my-dossiers .dossier-columns{display:none!important}
+.my-dossiers #dossierList{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:stretch!important;
+  gap:12px!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+}
+.my-dossiers .dossier-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  min-width:0;
+  min-height:244px;
+  padding:16px;
+  overflow:hidden;
+  color:#e8e8e8;
+  background:#0a0a0a;
+  border:0;
+  border-radius:24px;
+  cursor:pointer;
+  font-family:Inter,system-ui,sans-serif;
+  text-align:left;
+  transition:background .16s ease,transform .16s ease;
+}
+.my-dossiers .dossier-card:hover{background:#0d0d0d;transform:translateY(-1px)}
+
+.my-dossiers .dossier-card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  min-height:114px;
+}
+.my-dossiers .dossier-person{display:flex;flex-direction:column;align-items:flex-start!important;justify-content:center;gap:12px;min-width:0}
+.my-dossiers .dossier-avatar{
+  display:grid;
+  width:50px;
+  height:50px;
+  place-items:center;
+  overflow:hidden;
+  color:rgba(255,255,255,.9);
+  align-self:flex-start!important;
+  margin:0!important;
+  background:linear-gradient(145deg,#343941 0%,#16191e 100%);
+  border:3px solid rgba(255,255,255,.06);
+  border-radius:50%;
+  box-sizing:border-box;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:-.02em;
+}
+.my-dossiers .dossier-person-copy{display:flex;flex-direction:column;gap:10px;min-width:0}
+.my-dossiers .dossier-name-row{display:flex;align-items:center;gap:6px;min-width:0}
+.my-dossiers .dossier-name{overflow:hidden;color:#e8e8e8;font-size:16px;font-weight:500;line-height:20px;text-overflow:ellipsis;white-space:nowrap}
+.my-dossiers .dossier-verified{color:#737378;font-size:13px;line-height:16px}
+.my-dossiers .dossier-tags{display:flex;flex-wrap:wrap;gap:6px}
+.my-dossiers .dossier-tag{
+  height:22px;
+  padding:0 8px;
+  display:inline-flex;
+  align-items:center;
+  border-radius:66px;
+  background:rgba(255,255,255,.04);
+  box-shadow:inset 0 -10px 10px -12px rgba(88,166,222,.24);
+  color:#e8e8e8;
+  font-size:12px;
+  font-weight:500;
+  line-height:15px;
+}
+.my-dossiers .dossier-tag--warm{box-shadow:inset 0 -10px 10px -12px rgba(206,146,18,.24)}
+.my-dossiers .dossier-meta{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:15px;min-height:114px;flex:0 0 auto}
+.my-dossiers .dossier-plan{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  height:22px;
+  padding:0 8px 0 6px;
+  border-radius:66px;
+  background:rgba(255,255,255,.06);
+  box-shadow:inset 0 -10px 10px -12px #c5e0ee;
+  color:#fff;
+  font-size:12px;
+  font-weight:500;
+  line-height:15px;
+  white-space:nowrap;
+}
+.my-dossiers .dossier-plan-mark{color:#d7ecf5;font-size:16px;line-height:16px;transform:translateY(-.5px)}
+.my-dossiers .dossier-score{display:flex;align-items:center;gap:6px;color:#737378;font-size:12px;font-weight:400;line-height:16px}
+.my-dossiers .dossier-score i{color:#12ce90;font-size:13px}.my-dossiers .dossier-score-value{display:inline-flex;align-items:baseline;gap:0;font-size:13px}.my-dossiers .dossier-score strong{color:#d8d8da;font-weight:500;font-size:inherit}.my-dossiers .dossier-score-max{margin:0;padding:0;font-size:inherit}
+.my-dossiers .dossier-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:8px 0;background:rgba(255,255,255,.035);border-radius:14px}
+.my-dossiers .dossier-stat{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}.my-dossiers .dossier-stat + .dossier-stat:before{position:absolute;top:3px;bottom:3px;left:0;width:1px;background:rgba(255,255,255,.045);content:""}
+.my-dossiers .dossier-stat strong{color:#e8e8e8;font-size:14px;font-weight:500;line-height:17px}.my-dossiers .dossier-stat span{overflow:hidden;max-width:100%;color:#737378;font-size:11px;font-weight:400;line-height:13px;text-overflow:ellipsis;white-space:nowrap}
+.my-dossiers .dossier-bars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:8px 10px;background:rgba(255,255,255,.025);border-radius:14px}
+.my-dossiers .dossier-bar{min-width:0}.my-dossiers .dossier-bar-top{display:flex;align-items:baseline;gap:0;margin-bottom:6px}.my-dossiers .dossier-bar strong{font-size:14px;font-weight:500;line-height:17px}.my-dossiers .dossier-bar span{overflow:hidden;margin-left:0;color:#737378;font-size:11px;font-weight:400;line-height:12px;text-overflow:ellipsis;white-space:nowrap}.my-dossiers .dossier-track{height:3px;overflow:hidden;margin-bottom:1px;border-radius:99px;background:rgba(255,255,255,.05)}.my-dossiers .dossier-fill{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--dossier-bar-color) 73%,#fff 100%)}.my-dossiers .dossier-bar--confidence strong{color:#12ce90}.my-dossiers .dossier-bar--confidence .dossier-fill{--dossier-bar-color:#12ce90}.my-dossiers .dossier-bar--ego strong{color:#d19a27}.my-dossiers .dossier-bar--ego .dossier-fill{--dossier-bar-color:#d19a27}.my-dossiers .dossier-bar--conflict strong{color:#e73345}.my-dossiers .dossier-bar--conflict .dossier-fill{--dossier-bar-color:#e73345}
+@media (max-width:1320px){.my-dossiers #dossierList{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media (max-width:980px){.my-dossiers #dossierList{grid-template-columns:repeat(2,minmax(0,1fr))!important}.my-dossiers .account-head{margin-bottom:24px!important}}
+@media (max-width:620px){.my-dossiers .account-head{flex-direction:column!important;gap:18px!important}.my-dossiers .account-primary{width:100%;justify-content:center}.my-dossiers #dossierList{grid-template-columns:1fr!important}.my-dossiers .account-title{font-size:28px!important;line-height:32px!important}}
+
+
+/* Cards are the only supported representation in this lab. */
+.my-dossiers .view-pair,
+.my-dossiers .dossier-view-btn{display:none!important}
+.my-dossiers .dossier-lab-sort{position:relative;display:block;height:auto;padding:0;background:transparent;border:0}
+.my-dossiers .dossier-sort-trigger{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-width:184px;
+  height:42px;
+  padding:0 12px;
+  box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.035);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  color:#e8e8e8;
+  cursor:pointer;
+  font:500 12.5px/15px Inter,system-ui,sans-serif;
+}
+.my-dossiers .dossier-sort-trigger:hover,
+.my-dossiers .dossier-lab-sort.is-open .dossier-sort-trigger{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.07)}
+.my-dossiers .dossier-sort-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.my-dossiers .dossier-sort-trigger svg{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:#8a8a8e;stroke-width:1.7;transition:transform .16s ease}
+.my-dossiers .dossier-lab-sort.is-open .dossier-sort-trigger svg{transform:rotate(180deg)}
+.my-dossiers .dossier-sort-menu{
+  position:absolute;
+  top:calc(100% + 6px);
+  right:0;
+  z-index:40;
+  display:none;
+  width:184px;
+  padding:4px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+  background:#151515;
+  box-shadow:0 14px 32px rgba(0,0,0,.38);
+}
+.my-dossiers .dossier-lab-sort.is-open .dossier-sort-menu{display:block}
+.my-dossiers .dossier-sort-option{
+  display:flex;
+  width:100%;
+  height:34px;
+  align-items:center;
+  padding:0 9px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#8a8a8e;
+  cursor:pointer;
+  font:500 12.5px/15px Inter,system-ui,sans-serif;
+  text-align:left;
+}
+.my-dossiers .dossier-sort-option:hover{background:rgba(255,255,255,.06);color:#f3f3f4}
+.my-dossiers .dossier-sort-option.is-active{background:rgba(255,255,255,.08);color:#f3f3f4}
+.my-dossiers .dossier-pagination{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  width:100%;
+  margin:24px 0 0;
+}
+.my-dossiers .dossier-page-btn{
+  display:inline-flex;
+  width:34px;
+  height:34px;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:0;
+  border-radius:10px;
+  background:rgba(255,255,255,.035);
+  color:#85858a;
+  cursor:pointer;
+  font:500 12.5px/15px Inter,system-ui,sans-serif;
+  transition:background .14s ease,color .14s ease;
+}
+.my-dossiers .dossier-page-btn:hover:not(:disabled){background:rgba(255,255,255,.08);color:#f3f3f4}
+.my-dossiers .dossier-page-btn.is-active{background:rgba(255,255,255,.11);color:#f3f3f4}
+.my-dossiers .dossier-page-btn:disabled{opacity:.35;cursor:default}
+.my-dossiers .dossier-page-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8}
+@media (max-width:680px){.my-dossiers .dossier-sort-trigger{width:auto;min-width:0}.my-dossiers .dossier-sort-menu{width:max-content;min-width:180px;box-sizing:border-box}}
+
+
+/* Minimal toolbar: search plus one sort control. */
+.my-dossiers .account-toolbar{
+  justify-content:stretch!important;
+  width:100%!important;
+  gap:12px!important;
+}
+.my-dossiers .dossier-lab-search{
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.03)!important;
+}
+.my-dossiers .dossier-lab-search:focus-within{
+  border:0!important;
+  background:rgba(255,255,255,.045)!important;
+}
+.my-dossiers .dossier-lab-controls{
+  flex:0 0 auto!important;
+  justify-content:flex-end!important;
+  gap:0!important;
+}
+.my-dossiers .dossier-lab-sort{flex:0 0 auto!important}
+.my-dossiers .dossier-sort-trigger{
+  min-width:190px!important;
+  border:0!important;
+  border-radius:16px!important;
+  background:rgba(255,255,255,.03)!important;
+}
+.my-dossiers .dossier-sort-trigger:hover,
+.my-dossiers .dossier-lab-sort.is-open .dossier-sort-trigger{
+  border:0!important;
+  background:rgba(255,255,255,.055)!important;
+}
+.my-dossiers .dossier-sort-menu{
+  border:0!important;
+  border-radius:16px!important;
+  background:#151515!important;
+}
+@media (max-width:680px){
+  .my-dossiers .account-toolbar{gap:10px!important}
+  .my-dossiers .dossier-sort-trigger{min-width:164px!important}
+}
+
+
+/* Tariff markers: 3D asset, Basic neutral / Full AI green. */
+.my-dossiers .dossier-plan{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  height:22px;
+  padding:0 8px 0 6px;
+  border:0;
+  border-radius:66px;
+  font-size:12px;
+  font-weight:500;
+  line-height:15px;
+  white-space:nowrap;
+}
+.my-dossiers .dossier-plan--basic{
+  background:rgba(255,255,255,.06);
+  box-shadow:inset 0 -10px 10px -12px rgba(197,224,238,.92);
+  color:#f3f5f6;
+}
+.my-dossiers .dossier-plan--full{
+  background:rgb(255 255 255 / 6%);
+  box-shadow:inset 0 -10px 10px -12px rgba(52,211,153,.24);
+  color:#E8E8E8;
+}
+.my-dossiers .dossier-plan-icon{
+  display:block;
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+  object-fit:contain;
+  mix-blend-mode:screen;
+}
+.my-dossiers .dossier-plan-mark{display:none!important}
+
+
+/* Verification mark beside the dossier nickname. */
+.my-dossiers .dossier-verified{
+  display:inline-flex;
+  width:14px;
+  height:14px;
+  flex:0 0 14px;
+  align-items:center;
+  justify-content:center;
+  color:inherit;
+}
+.my-dossiers .dossier-verified img{
+  display:block;
+  width:14px;
+  height:14px;
+  object-fit:contain;
+}
+
+
+/* Real public profile data in dossier cards. */
+.my-dossiers .dossier-avatar{background:linear-gradient(145deg,#343941 0%,#16191e 100%)}
+.my-dossiers .dossier-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.my-dossiers .dossier-profile-link{cursor:pointer;text-decoration:none;transition:transform .15s ease,opacity .15s ease}
+.my-dossiers .dossier-profile-link:hover{transform:scale(1.08);opacity:.88}
+.my-dossiers .dossier-public-source{display:block;color:#737378;font-size:11px;font-weight:400;line-height:13px}
+.my-dossiers .dossier-stats--real{margin-top:auto}
+.my-dossiers .dossier-stats--real .dossier-stat strong{font-size:13px}
+
+
+/* Restore permanent test signal blocks while profile identity stays real. */
+.my-dossiers .dossier-profile-link:hover{transform:scale(1.08);opacity:1}
+.my-dossiers .dossier-profile-link:hover img{
+  filter:brightness(0) saturate(100%) invert(72%) sepia(58%) saturate(455%) hue-rotate(101deg) brightness(89%) contrast(88%);
+}
+.my-dossiers .dossier-card .dossier-bars{margin-top:0}
+
+
+/* Exact forum nickname styles supplied from public profile markup. */
+.my-dossiers .dossier-name--udodov{
+  background:linear-gradient(20deg,#006eff,#00ff81 52%,#fff 50%,#93cbff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  text-shadow:0 0 3px #00ffcf80;
+}
+.my-dossiers .dossier-name--tenderly{
+  color:#f8eeff;
+  text-shadow:3px 2px 1px #a84bff,3px 3px 3px #7958ff,0 0 3px #b15cff,0 0 3px #c55cff,0 0 3px #a25cff,1px 0 #efdeff,-1px 0 #efdeff,0 1px #efdeff,0 -1px #efdeff,-1px -1px 3px #a400ff;
+}
+
+
+/* dossier-toolbar-dimensions-v1 */
+.my-dossiers .dossier-lab-search{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:0 0 282px;
+  width:282px;
+  height:48px;
+  padding:0 16px;
+  box-sizing:border-box;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.035);
+  border-radius:16px;
+  color:#8a8a8e;
+}
+.my-dossiers .dossier-sort-trigger{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-width:184px;
+  height:48px;
+  padding:0 16px;
+  box-sizing:border-box;
+  border:1px solid rgba(255,255,255,.035);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  color:#e8e8e8;
+  cursor:pointer;
+  font:500 12.5px / 15px Inter,system-ui,sans-serif;
+}
+.my-dossiers .dossier-sort-trigger i{
+  font-size:15px;
+  line-height:1;
+}
+
+
+/* dossier-sort-typography-width-v1 */
+.my-dossiers .dossier-lab-sort{
+  width:184px;
+}
+.my-dossiers .dossier-sort-trigger{
+  width:100%;
+  min-width:0;
+  font:14px Inter,system-ui,sans-serif;
+}
+.my-dossiers .dossier-sort-menu{
+  width:100%;
+  min-width:100%;
+  box-sizing:border-box;
+}
+.my-dossiers .dossier-sort-option{
+  font:14px Inter,system-ui,sans-serif;
+}
+
+
+/* dossier-toolbar-filter-position-v1 */
+.my-dossiers .account-toolbar{
+  justify-content:flex-start!important;
+}
+.my-dossiers .dossier-lab-sort{
+  width:auto;
+  flex:0 0 auto;
+}
+.my-dossiers .dossier-sort-trigger{
+  width:auto;
+  min-width:184px;
+}
+.my-dossiers .dossier-sort-menu{
+  left:0;
+  right:auto;
+}
+
+
+/* dossier-report-status-badge-v1 */
+.my-dossiers .dossier-bars{
+  gap:16px;
+}
+.my-dossiers .dossier-card-badges{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.my-dossiers .dossier-report-status{
+  display:inline-flex;
+  align-items:center;
+  height:22px;
+  padding:0 8px;
+  box-sizing:border-box;
+  border-radius:66px;
+  font-size:12px;
+  font-weight:500;
+  line-height:15px;
+  white-space:nowrap;
+}
+.my-dossiers .dossier-report-status--ready{
+  background:rgba(18,206,144,.1);
+  color:#8be7c3;
+}
+.my-dossiers .dossier-report-status--working{
+  background:rgba(209,154,39,.1);
+  color:#efc96e;
+}
+.my-dossiers .dossier-report-status--error{
+  background:rgba(231,51,69,.1);
+  color:#ff9aa5;
+}
+
+
+/* dossier-lab-dashboard-search-icon-v1 */
+.my-dossiers .dossier-lab-search svg{
+  color:#424242;
+  stroke:#424242;
+}
+
+
+/* dossier-lab-search-icon-focus-states-v1 */
+.my-dossiers .dossier-lab-search svg,
+.my-dossiers .search[role="search"] > svg{
+  color:#424242;
+  stroke:#424242;
+  transition:color .16s ease,stroke .16s ease;
+}
+.my-dossiers .dossier-lab-search:focus-within svg,
+.my-dossiers .search[role="search"]:focus-within > svg{
+  color:#e8e8e8;
+  stroke:#e8e8e8;
+}
+
+
+/* dossier-avatar-photoblur-v1 */
+.my-dossiers .dossier-card{
+  isolation:isolate;
+}
+.my-dossiers .dossier-avatar-photoblur{
+  position:absolute;
+  z-index:0;
+  width:270px;
+  height:270px;
+  left:-12px;
+  top:-217px;
+  display:block;
+  border-radius:66px;
+  object-fit:cover;
+  opacity:.24;
+  filter:blur(120px);
+  pointer-events:none;
+  user-select:none;
+}
+.my-dossiers .dossier-card > :not(.dossier-avatar-photoblur){
+  position:relative;
+  z-index:1;
+}
+
+
+/* dossier-plan-hover-highlight-v1 */
+.my-dossiers .dossier-plan{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:background .16s ease,box-shadow .16s ease;
+}
+.my-dossiers .dossier-plan::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:1px;
+  border-radius:inherit;
+  background:linear-gradient(112deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.035) 43%,rgba(255,255,255,0) 72%);
+  opacity:0;
+  transition:opacity .18s ease;
+  pointer-events:none;
+}
+.my-dossiers .dossier-plan:hover::after{
+  opacity:1;
+}
+.my-dossiers .dossier-plan--basic:hover{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -10px 10px -12px rgba(197,224,238,.92);
+}
+.my-dossiers .dossier-plan--full:hover{
+  box-shadow:inset 0 1px 0 rgba(189,255,225,.12),inset 0 -10px 10px -12px rgba(52,211,153,.78);
+}
+
+
+/* dossier-card-selection-removed-v1 */
+/* Test cards intentionally have no selected state: production click navigates to the report. */
+
+
+/* zelscan-real-dossier-display-fixes-v1 */
+.my-dossiers .dossier-score-max{
+  color:#737378!important;
+}

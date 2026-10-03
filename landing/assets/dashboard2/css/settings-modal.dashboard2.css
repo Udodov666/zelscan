@@ -1,0 +1,45 @@
+/* Zelscan settings modal — извлечено из прототипа zelscan_settings_modal_test.html.
+   Использует общие классы .zs-modal*, .zs-sw, .zs-btn из order-modals.css. */
+
+.zs-settings-modal{max-height:calc(100vh - 48px);overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+.zs-settings-modal::-webkit-scrollbar{width:6px}
+.zs-settings-modal::-webkit-scrollbar-track{background:transparent}
+.zs-settings-modal::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:999px}
+.zs-settings-modal::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.26)}
+.zs-settings-body{gap:32px}
+.zs-settings-section{width:100%;display:flex;flex-direction:column;gap:12px}
+.zs-settings-card{width:100%;padding:0 16px;background:rgba(255,255,255,.03);border-radius:24px}
+.zs-settings-row{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.zs-settings-row+.zs-settings-row{border-top:1px solid rgba(255,255,255,.04)}
+.zs-settings-copy{min-width:0;color:#d9d9dd;font-size:14px;line-height:18px}
+.zs-settings-copy small{display:block;margin-top:4px;color:#68696f;font-size:11.5px;line-height:16px}
+.zs-settings-switch{border:0;padding:0}
+.zs-settings-switch:disabled{opacity:.32;cursor:not-allowed}
+.zs-settings-switch.is-busy{opacity:.6;pointer-events:none}
+.zs-settings-danger{width:100%;height:52px;padding:0 20px;border:0;border-radius:666px;background:rgba(245,33,33,.11);color:#ff777d;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15px;font-weight:500;cursor:pointer}
+.zs-settings-danger:hover{background:rgba(245,33,33,.15);color:#ff858a}
+.zs-settings-danger:focus-visible{outline-color:#ff777d;background:rgba(245,33,33,.16)}
+.zs-settings-confirm-bg{z-index:13000;background:rgba(0,0,0,.42)}
+.zs-settings-confirm{width:434px;padding:24px 26px 26px;border:0;border-radius:28px;background:rgba(18,19,22,.96);box-shadow:0 24px 70px rgba(0,0,0,.58);transform:translateY(10px) scale(.97);transition:transform .32s cubic-bezier(.32,.72,0,1)}
+.zs-settings-confirm-bg.open .zs-settings-confirm{transform:none}
+.zs-settings-confirm-inner{width:100%;display:flex;flex-direction:column;gap:22px}
+.zs-settings-confirm-copy{margin-top:-16px}
+.zs-settings-confirm-copy p{margin:0;color:#85868c;font-size:13px;line-height:19px}
+.zs-settings-confirm-label{display:block;color:rgba(255,255,255,.86);font-size:13px;font-weight:400}
+.zs-settings-confirm-label strong{color:inherit;font-weight:400}
+.zs-settings-input{width:100%;height:50px;margin-top:10px;padding:0 16px;border:0;border-radius:16px;outline:0;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);color:#f3f3f5}
+.zs-settings-input:focus{box-shadow:inset 0 0 0 1px rgba(43,173,114,.65),0 0 0 3px rgba(43,173,114,.12)}
+.zs-settings-confirm-actions{display:flex;gap:10px}
+.zs-settings-confirm-actions .zs-btn{height:50px;padding:0 18px}
+.zs-settings-delete{background:rgba(245,33,33,.16);color:#ff777d}
+.zs-settings-delete:hover{background:rgba(245,33,33,.23)}
+.zs-settings-delete:disabled{opacity:.35;cursor:not-allowed}
+
+@media(max-width:640px){
+  .zs-settings-modal{max-width:calc(100vw - 24px);padding:22px 18px 24px;border-radius:24px}
+  .zs-settings-modal .zs-modal-inner{gap:28px}
+  .zs-settings-card{border-radius:20px;padding:0 14px}
+  .zs-settings-row{min-height:56px}
+  .zs-settings-confirm{width:100%;padding:22px 18px 20px;border-radius:24px}
+  .zs-settings-confirm-actions{flex-direction:column-reverse}
+}

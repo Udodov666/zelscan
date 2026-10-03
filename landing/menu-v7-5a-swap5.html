@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zelscan — Balance Rays</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --card-top: #f85a18;
+            --card-mid: #a92c07;
+            --card-bottom: #35100c;
+
+            --edge: rgba(255, 128, 69, 0.68);
+            --inner-edge: rgba(255, 220, 202, 0.28);
+            --halo: rgba(255, 101, 41, 0.76);
+
+            --ray-1: rgba(255, 229, 216, 0.92);
+            --ray-2: rgba(255, 157, 109, 0.72);
+            --ray-3: rgba(255, 194, 161, 0.78);
+            --ray-dark: rgba(99, 13, 0, 0.78);
+            --ray-line: rgba(255, 238, 229, 0.48);
+
+            --switch-dot: #f5aa87;
+            --switch-dot-text: #fff2eb;
+        }
+
+        /* 01 — наиболее близкий к оранжевому референсу */
+        body[data-theme="orange-01"] {
+            --card-top: #f85a18;
+            --card-mid: #a92c07;
+            --card-bottom: #35100c;
+            --edge: rgba(255, 128, 69, 0.68);
+            --inner-edge: rgba(255, 220, 202, 0.28);
+            --halo: rgba(255, 101, 41, 0.76);
+            --ray-1: rgba(255, 229, 216, 0.92);
+            --ray-2: rgba(255, 157, 109, 0.72);
+            --ray-3: rgba(255, 194, 161, 0.78);
+            --ray-dark: rgba(99, 13, 0, 0.78);
+            --ray-line: rgba(255, 238, 229, 0.48);
+            --switch-dot: #f5aa87;
+            --switch-dot-text: #fff2eb;
+        }
+
+        /* 02 — более мягкий coral */
+        body[data-theme="orange-02"] {
+            --card-top: #ff6841;
+            --card-mid: #bf3515;
+            --card-bottom: #43120e;
+            --edge: rgba(255, 146, 103, 0.7);
+            --inner-edge: rgba(255, 227, 214, 0.3);
+            --halo: rgba(255, 117, 74, 0.78);
+            --ray-1: rgba(255, 235, 226, 0.94);
+            --ray-2: rgba(255, 169, 133, 0.74);
+            --ray-3: rgba(255, 205, 181, 0.82);
+            --ray-dark: rgba(119, 23, 7, 0.76);
+            --ray-line: rgba(255, 242, 236, 0.5);
+            --switch-dot: #f8b59a;
+            --switch-dot-text: #fff4ef;
+        }
+
+        /* 03 — более яркий tangerine */
+        body[data-theme="orange-03"] {
+            --card-top: #ff781b;
+            --card-mid: #c74704;
+            --card-bottom: #431704;
+            --edge: rgba(255, 165, 72, 0.72);
+            --inner-edge: rgba(255, 230, 190, 0.31);
+            --halo: rgba(255, 133, 30, 0.8);
+            --ray-1: rgba(255, 239, 209, 0.94);
+            --ray-2: rgba(255, 182, 91, 0.76);
+            --ray-3: rgba(255, 213, 154, 0.82);
+            --ray-dark: rgba(118, 37, 0, 0.78);
+            --ray-line: rgba(255, 242, 216, 0.52);
+            --switch-dot: #f7b36c;
+            --switch-dot-text: #fff8e9;
+        }
+
+        /* 04 — основной зелёный #34D399 */
+        body[data-theme="green-01"] {
+            --card-top: #34d399;
+            --card-mid: #087b5b;
+            --card-bottom: #05251e;
+            --edge: rgba(52, 211, 153, 0.76);
+            --inner-edge: rgba(209, 250, 229, 0.3);
+            --halo: rgba(52, 211, 153, 0.78);
+            --ray-1: rgba(220, 252, 231, 0.94);
+            --ray-2: rgba(110, 231, 183, 0.78);
+            --ray-3: rgba(167, 243, 208, 0.84);
+            --ray-dark: rgba(0, 67, 48, 0.8);
+            --ray-line: rgba(226, 255, 242, 0.52);
+            --switch-dot: #6ee7b7;
+            --switch-dot-text: #effff8;
+        }
+
+        /* 05 — bright mint */
+        body[data-theme="green-02"] {
+            --card-top: #2ee6a6;
+            --card-mid: #0c9670;
+            --card-bottom: #032c23;
+            --edge: rgba(74, 255, 191, 0.74);
+            --inner-edge: rgba(220, 255, 242, 0.31);
+            --halo: rgba(45, 239, 172, 0.8);
+            --ray-1: rgba(224, 255, 244, 0.96);
+            --ray-2: rgba(116, 255, 208, 0.78);
+            --ray-3: rgba(155, 251, 217, 0.86);
+            --ray-dark: rgba(0, 76, 56, 0.8);
+            --ray-line: rgba(232, 255, 247, 0.54);
+            --switch-dot: #75efc4;
+            --switch-dot-text: #effff9;
+        }
+
+        /* 06 — neon emerald/lime */
+        body[data-theme="green-03"] {
+            --card-top: #22c55e;
+            --card-mid: #0b893f;
+            --card-bottom: #052916;
+            --edge: rgba(83, 255, 133, 0.72);
+            --inner-edge: rgba(220, 252, 231, 0.3);
+            --halo: rgba(34, 197, 94, 0.84);
+            --ray-1: rgba(236, 253, 245, 0.96);
+            --ray-2: rgba(134, 239, 172, 0.8);
+            --ray-3: rgba(187, 247, 208, 0.87);
+            --ray-dark: rgba(4, 78, 38, 0.82);
+            --ray-line: rgba(235, 255, 241, 0.55);
+            --switch-dot: #79e99e;
+            --switch-dot-text: #f0fff5;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            overflow: hidden;
+            background: #090a0b;
+            color: #ebebeb;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        button,
+        a {
+            font-family: inherit;
+        }
+
+        .num {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bbadge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.55em;
+            min-width: 1.55em;
+            margin-left: 0.45em;
+            padding: 0 0.3em;
+            border-radius: 0.42em;
+            background: rgba(94, 224, 168, 0.17);
+            color: #70efb8;
+            font-size: 0.58em;
+            font-weight: 600;
+            line-height: 1;
+            vertical-align: 0.28em;
+        }
+
+        /* ===== КРУТОЙ ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ===== */
+        .theme-switcher {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .theme-btn {
+            padding: 6px 14px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #999;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .theme-btn.active {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Цветные индикаторы на кнопках */
+        .theme-btn .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 6px;
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        .theme-btn .dot.orange-01 { background: #f85a18; }
+        .theme-btn .dot.orange-02 { background: #ff6841; }
+        .theme-btn .dot.orange-03 { background: #ff781b; }
+        .theme-btn .dot.green-01 { background: #34d399; }
+        .theme-btn .dot.green-02 { background: #2ee6a6; }
+        .theme-btn .dot.green-03 { background: #22c55e; }
+
+        /* ===== КАРТОЧКА (без изменений) ===== */
+        .acc-menu {
+            position: relative;
+            width: 274px;
+            padding: 11px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: rgba(26, 27, 29, 0.68);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
+            backdrop-filter: blur(24px) saturate(120%);
+            -webkit-backdrop-filter: blur(24px) saturate(120%);
+        }
+
+        .acc-menu-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 8px 11px;
+        }
+
+        .acc-menu-av {
+            position: relative;
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: none;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 13px;
+            background: linear-gradient(145deg, #67dbff 2%, #268df1 58%, #174a7c);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .acc-menu-av::after {
+            position: absolute;
+            top: -11px;
+            right: -9px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.19);
+            content: "";
+            filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .acc-menu-who {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .acc-menu-name {
+            color: #f2f2f0;
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 18px;
+        }
+
+        .acc-menu-id {
+            display: inline-flex;
+            align-items: center;
+            height: 17px;
+            margin-top: 3px;
+            padding: 0 6px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, #b38a16, #8b6300);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            color: #ffda58;
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 17px;
+            letter-spacing: 0.01em;
+        }
+
+        .bal {
+            margin: 6px 2px 10px;
+        }
+
+        .bal-card {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: 4px 14px;
+            border: 1px solid var(--edge);
+            border-radius: 16px;
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--card-top) 0%,
+                    var(--card-mid) 54%,
+                    var(--card-bottom) 100%
+                );
+            box-shadow:
+                inset 0 1px 0 var(--inner-edge),
+                inset 0 -26px 40px rgba(0, 0, 0, 0.23),
+                inset 0 0 28px rgba(255, 255, 255, 0.035),
+                0 11px 28px rgba(0, 0, 0, 0.24);
+        }
+
+        .bal-card::before {
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            background:
+                radial-gradient(circle at 8% 24%, rgba(255,255,255,.48) 0 1px, transparent 1.35px),
+                radial-gradient(circle at 27% 76%, rgba(255,255,255,.26) 0 .8px, transparent 1.2px),
+                radial-gradient(circle at 53% 38%, rgba(255,255,255,.34) 0 .8px, transparent 1.2px),
+                radial-gradient(circle at 79% 68%, rgba(255,255,255,.24) 0 .8px, transparent 1.2px),
+                radial-gradient(circle at 93% 21%, rgba(255,255,255,.38) 0 .8px, transparent 1.2px);
+            content: "";
+            opacity: 0.44;
+            pointer-events: none;
+        }
+
+        .bal-card::after {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 12%;
+            width: 76%;
+            height: 1px;
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--ray-line) 22%,
+                    rgba(255,255,255,.9) 50%,
+                    var(--ray-line) 78%,
+                    transparent
+                );
+            box-shadow:
+                0 0 9px var(--halo),
+                0 0 18px var(--halo);
+            content: "";
+            pointer-events: none;
+        }
+
+        .bal-rays {
+            position: absolute;
+            z-index: 0;
+            top: -55px;
+            right: -46px;
+            left: -46px;
+            height: 168px;
+            pointer-events: none;
+            filter: blur(8px) saturate(1.18);
+            transform: scale(1.08);
+            transform-origin: 50% 0;
+        }
+
+        body[data-theme="orange-01"] .bal-rays,
+        body[data-theme="green-01"] .bal-rays {
+            background:
+                linear-gradient(
+                    106deg,
+                    transparent 0 10%,
+                    var(--ray-dark) 16%,
+                    var(--ray-1) 22%,
+                    var(--ray-2) 29%,
+                    transparent 36%
+                ),
+                linear-gradient(
+                    83deg,
+                    transparent 0 34%,
+                    var(--ray-dark) 42%,
+                    var(--ray-1) 49%,
+                    var(--ray-2) 56%,
+                    transparent 63%
+                ),
+                linear-gradient(
+                    102deg,
+                    transparent 0 58%,
+                    var(--ray-dark) 64%,
+                    var(--ray-3) 71%,
+                    transparent 79%
+                ),
+                linear-gradient(
+                    77deg,
+                    transparent 0 75%,
+                    var(--ray-2) 82%,
+                    transparent 90%
+                ),
+                radial-gradient(
+                    ellipse at 53% 0%,
+                    var(--halo),
+                    transparent 68%
+                );
+        }
+
+        body[data-theme="orange-02"] .bal-rays,
+        body[data-theme="green-02"] .bal-rays {
+            background:
+                linear-gradient(
+                    112deg,
+                    transparent 0 7%,
+                    var(--ray-dark) 14%,
+                    var(--ray-1) 20%,
+                    var(--ray-2) 27%,
+                    transparent 34%
+                ),
+                linear-gradient(
+                    88deg,
+                    transparent 0 31%,
+                    var(--ray-dark) 38%,
+                    var(--ray-1) 46%,
+                    var(--ray-2) 53%,
+                    transparent 61%
+                ),
+                linear-gradient(
+                    97deg,
+                    transparent 0 55%,
+                    var(--ray-dark) 62%,
+                    var(--ray-3) 69%,
+                    transparent 77%
+                ),
+                linear-gradient(
+                    73deg,
+                    transparent 0 72%,
+                    var(--ray-2) 80%,
+                    transparent 90%
+                ),
+                radial-gradient(
+                    ellipse at 47% -2%,
+                    var(--halo),
+                    transparent 70%
+                );
+        }
+
+        body[data-theme="orange-03"] .bal-rays,
+        body[data-theme="green-03"] .bal-rays {
+            background:
+                linear-gradient(
+                    99deg,
+                    transparent 0 11%,
+                    var(--ray-dark) 17%,
+                    var(--ray-1) 24%,
+                    var(--ray-2) 31%,
+                    transparent 38%
+                ),
+                linear-gradient(
+                    79deg,
+                    transparent 0 35%,
+                    var(--ray-dark) 42%,
+                    var(--ray-1) 50%,
+                    transparent 59%
+                ),
+                linear-gradient(
+                    108deg,
+                    transparent 0 57%,
+                    var(--ray-dark) 64%,
+                    var(--ray-3) 72%,
+                    transparent 80%
+                ),
+                linear-gradient(
+                    83deg,
+                    transparent 0 76%,
+                    var(--ray-2) 84%,
+                    transparent 92%
+                ),
+                radial-gradient(
+                    ellipse at 58% -4%,
+                    var(--halo),
+                    transparent 67%
+                );
+        }
+
+        .bal-rays::before {
+            position: absolute;
+            inset: -12px 10% 24px;
+            border-radius: 50%;
+            background:
+                radial-gradient(
+                    ellipse at 50% 0,
+                    rgba(255, 255, 255, 0.34),
+                    transparent 62%
+                );
+            content: "";
+            filter: blur(12px);
+            opacity: 0.9;
+        }
+
+        .bal-rays::after {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    105deg,
+                    transparent 0 23.1%,
+                    var(--ray-line) 23.35%,
+                    transparent 23.7%
+                ),
+                linear-gradient(
+                    84deg,
+                    transparent 0 49.9%,
+                    var(--ray-line) 50.2%,
+                    transparent 50.55%
+                ),
+                linear-gradient(
+                    101deg,
+                    transparent 0 71.8%,
+                    var(--ray-line) 72.1%,
+                    transparent 72.45%
+                );
+            content: "";
+            opacity: 0.6;
+        }
+
+        .bal-card .sec {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px 0;
+        }
+
+        .bal-card .krow {
+            display: flex;
+            min-height: 28px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .bal-card .k {
+            color: rgba(255, 255, 255, 0.64);
+            font-size: 12px;
+            font-weight: 500;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.22);
+        }
+
+        .account-switch {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.13),
+                0 5px 14px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .account-btn {
+            display: grid;
+            width: 22px;
+            height: 22px;
+            flex: none;
+            place-items: center;
+            border: 0;
+            border-radius: 50%;
+            background: var(--switch-dot);
+            color: var(--switch-dot-text);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            transition:
+                transform 150ms ease,
+                color 150ms ease,
+                background 150ms ease,
+                box-shadow 150ms ease;
+        }
+
+        .account-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .account-btn:active {
+            transform: scale(0.92);
+        }
+
+        .account-btn.active {
+            background: #070809;
+            color: #fff;
+            box-shadow:
+                0 0 0 2px rgba(255, 255, 255, 0.96),
+                0 4px 11px rgba(0, 0, 0, 0.38);
+        }
+
+        .bal-card .vline {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bal-card .v {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 24px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+        }
+
+        .bal-card .v .bbadge {
+            font-size: 0.62em;
+        }
+
+        .bal-card button.v {
+            border: 0;
+            background: none;
+        }
+
+        .bal-card .v.inactive {
+            color: rgba(255, 255, 255, 0.43);
+            cursor: pointer;
+            font-weight: 500;
+            transition:
+                color 150ms ease,
+                transform 150ms ease;
+        }
+
+        .bal-card .v.inactive:hover {
+            color: rgba(255, 255, 255, 0.72);
+            transform: translateY(-1px);
+        }
+
+        .bal-card .v.inactive .bbadge {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .bal-card .sep {
+            color: rgba(255, 255, 255, 0.28);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .bal-card .topup {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 32px;
+            margin-top: 10px;
+            gap: 6px;
+            border: 0;
+            border-radius: 10px;
+            background: #f7f7f8;
+            box-shadow:
+                0 6px 18px rgba(0, 0, 0, 0.18),
+                inset 0 1px 0 #fff;
+            color: #0a0a0a;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition:
+                transform 160ms ease,
+                background 160ms ease,
+                box-shadow 160ms ease;
+        }
+
+        .bal-card .topup:hover {
+            background: #fff;
+            box-shadow:
+                0 8px 22px rgba(0, 0, 0, 0.22),
+                inset 0 1px 0 #fff;
+        }
+
+        .bal-card .topup:active {
+            transform: scale(0.97);
+        }
+
+        .bal-card .topup svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+        }
+
+        .bal-card .topup svg circle {
+            stroke-width: 1.8;
+        }
+
+        .bal-card .topup svg path {
+            stroke-width: 2.6;
+        }
+
+        .menu-list {
+            display: grid;
+            margin-top: 4px;
+        }
+
+        .menu-item {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 6px;
+            border: 0;
+            border-radius: 11px;
+            background: transparent;
+            color: #d0d1d4;
+            cursor: pointer;
+            text-align: left;
+            text-decoration: none;
+            transition:
+                background 140ms ease,
+                color 140ms ease;
+            font-size: 13.5px;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .menu-item .mi {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            flex: none;
+            place-items: center;
+            color: #989a9e;
+            transition: color 140ms ease;
+        }
+
+        .menu-item:hover .mi {
+            color: currentColor;
+        }
+
+        .menu-item .mi i {
+            font-size: 15px;
+        }
+
+        .menu-sep {
+            height: 1px;
+            margin: 8px;
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        .menu-item.danger {
+            color: #f06d72;
+        }
+
+        .menu-item.danger .mi {
+            color: currentColor;
+        }
+
+        .menu-item.danger:hover {
+            background: rgba(240, 109, 114, 0.07);
+            color: #ff8186;
+        }
+    </style>
+</head>
+
+<body data-theme="orange-01">
+
+    <!-- ===== ПЕРЕКЛЮЧАТЕЛЬ ТЕМ ===== -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="orange-01">
+            <span class="dot orange-01"></span> Orange 1
+        </button>
+        <button class="theme-btn" data-theme="orange-02">
+            <span class="dot orange-02"></span> Orange 2
+        </button>
+        <button class="theme-btn" data-theme="orange-03">
+            <span class="dot orange-03"></span> Orange 3
+        </button>
+        <button class="theme-btn" data-theme="green-01">
+            <span class="dot green-01"></span> Green 1
+        </button>
+        <button class="theme-btn" data-theme="green-02">
+            <span class="dot green-02"></span> Green 2
+        </button>
+        <button class="theme-btn" data-theme="green-03">
+            <span class="dot green-03"></span> Green 3
+        </button>
+    </div>
+
+    <!-- ===== КАРТОЧКА ===== -->
+    <div class="acc-menu">
+        <div class="acc-menu-user">
+            <div class="acc-menu-av">U</div>
+
+            <div class="acc-menu-who">
+                <div class="acc-menu-name">Udodov</div>
+                <div class="acc-menu-id">#638074 ✦</div>
+            </div>
+        </div>
+
+        <div class="bal">
+            <div class="bal-card" id="balCard" data-account="rub">
+                <span class="bal-rays" aria-hidden="true"></span>
+
+                <div class="sec">
+                    <div class="krow">
+                        <span class="k" id="accountLabel">Основной счёт</span>
+
+                        <div class="account-switch" role="group" aria-label="Выбор счёта">
+                            <button
+                                class="account-btn active"
+                                type="button"
+                                data-account-button="rub"
+                                aria-label="Рублёвый счёт"
+                                aria-pressed="true"
+                                title="Рублёвый счёт"
+                            >₽</button>
+
+                            <button
+                                class="account-btn"
+                                type="button"
+                                data-account-button="bonus"
+                                aria-label="Бонусный счёт"
+                                aria-pressed="false"
+                                title="Бонусный счёт"
+                            >Б</button>
+                        </div>
+                    </div>
+
+                    <span class="vline">
+                        <span class="v main num" id="mainBalance">466 ₽</span>
+                        <span class="sep">/</span>
+
+                        <button
+                            class="v inactive num"
+                            id="otherBalance"
+                            type="button"
+                            aria-label="Открыть бонусный счёт"
+                        >
+                            110<span class="bbadge">Б</span>
+                        </button>
+                    </span>
+
+                    <button class="topup" id="topupBtn" type="button">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="8.5"></circle>
+                            <path d="M12 8.5v7M8.5 12h7"></path>
+                        </svg>
+
+                        <span id="topupLabel">Пополнить</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-list">
+            <a class="menu-item">
+                <span class="mi"><i class="fa-solid fa-folder-open"></i></span>
+                Мои досье
+            </a>
+
+            <a class="menu-item">
+                <span class="mi"><i class="fa-solid fa-gear"></i></span>
+                Настройки
+            </a>
+
+            <a
+                class="menu-item"
+                href="https://t.me/udodov228"
+                target="_blank"
+                rel="noopener"
+            >
+                <span class="mi"><i class="fa-solid fa-bullhorn"></i></span>
+                Поддержка
+            </a>
+
+            <a class="menu-item">
+                <span class="mi"><i class="fa-solid fa-receipt"></i></span>
+                Транзакции
+            </a>
+
+            <div class="menu-sep"></div>
+
+            <a class="menu-item danger">
+                <span class="mi">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </span>
+                Выйти
+            </a>
+        </div>
+    </div>
+
+<script>
+    (() => {
+        // ===== ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ТЕМ =====
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        function setTheme(themeName) {
+            body.dataset.theme = themeName;
+            themeButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeName);
+            });
+            localStorage.setItem('preferred-theme', themeName);
+        }
+
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setTheme(btn.dataset.theme);
+            });
+        });
+
+        const savedTheme = localStorage.getItem('preferred-theme');
+        if (savedTheme) {
+            const exists = Array.from(themeButtons).some(
+                btn => btn.dataset.theme === savedTheme
+            );
+            if (exists) {
+                setTheme(savedTheme);
+            }
+        }
+
+        // ===== ЛОГИКА СЧЁТОВ =====
+        const accounts = {
+            rub: {
+                label: "Основной счёт",
+                main: "466 ₽",
+                other: '110<span class="bbadge">Б</span>',
+                otherAccount: "bonus",
+                otherLabel: "Открыть бонусный счёт",
+                action: "Пополнить"
+            },
+
+            bonus: {
+                label: "Бонусный счёт",
+                main: '110<span class="bbadge">Б</span>',
+                other: "466 ₽",
+                otherAccount: "rub",
+                otherLabel: "Открыть рублёвый счёт",
+                action: "Ввести промокод"
+            }
+        };
+
+        const card = document.getElementById("balCard");
+        const label = document.getElementById("accountLabel");
+        const mainBalance = document.getElementById("mainBalance");
+        const otherBalance = document.getElementById("otherBalance");
+        const topupLabel = document.getElementById("topupLabel");
+        const accountButtons = document.querySelectorAll(
+            "[data-account-button]"
+        );
+
+        function selectAccount(accountName) {
+            const account = accounts[accountName];
+
+            if (!account) {
+                return;
+            }
+
+            card.dataset.account = accountName;
+            label.textContent = account.label;
+            mainBalance.innerHTML = account.main;
+            otherBalance.innerHTML = account.other;
+            otherBalance.dataset.targetAccount = account.otherAccount;
+            otherBalance.setAttribute("aria-label", account.otherLabel);
+            topupLabel.textContent = account.action;
+
+            accountButtons.forEach((button) => {
+                const isActive =
+                    button.dataset.accountButton === accountName;
+
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-pressed", String(isActive));
+            });
+        }
+
+        accountButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                selectAccount(button.dataset.accountButton);
+            });
+        });
+
+        otherBalance.addEventListener("click", () => {
+            selectAccount(otherBalance.dataset.targetAccount);
+        });
+
+        selectAccount("rub");
+    })();
+</script>

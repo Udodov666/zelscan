@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zelscan — 6 вариантов меню</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome 6 Solid -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <!-- Material Symbols Rounded -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0" rel="stylesheet" />
+
+    <!-- Phosphor Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 36px 20px 56px;
+            background: #090a0b;
+            color: #ebebeb;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #ececed;
+            font-size: 22px;
+            font-weight: 650;
+            letter-spacing: -0.025em;
+        }
+
+        .page-header p {
+            margin-top: 8px;
+            color: #77797e;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .variants-grid {
+            display: flex;
+            max-width: 1000px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 38px 42px;
+        }
+
+        .variant {
+            width: max-content;
+        }
+
+        .variant-label {
+            height: 24px;
+            margin-bottom: 10px;
+            color: #797b80;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 24px;
+            letter-spacing: 0.055em;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        /* ─────────────────────────────
+           Общая оболочка
+           ───────────────────────────── */
+
+        .acc-menu {
+            position: relative;
+            padding: 11px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(25, 26, 28, 0.86);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.36);
+            backdrop-filter: blur(24px) saturate(120%);
+            -webkit-backdrop-filter: blur(24px) saturate(120%);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        /* ── Разные ширины ── */
+        .acc-menu.v1 {
+            width: 274px;
+            border-radius: 24px;
+            background: rgba(26, 27, 29, 0.65);
+        }
+        .acc-menu.v2 {
+            width: 280px;
+        }
+        .acc-menu.v3 {
+            width: 268px;
+        }
+        .acc-menu.v4 {
+            width: 288px;
+        }
+        .acc-menu.v5 {
+            width: 304px;
+        }
+        .acc-menu.v6 {
+            width: 244px;
+        }
+
+        @media (max-width: 340px) {
+            .acc-menu.v1,
+            .acc-menu.v2,
+            .acc-menu.v3,
+            .acc-menu.v4,
+            .acc-menu.v5,
+            .acc-menu.v6 {
+                width: calc(100vw - 24px);
+            }
+        }
+
+        /* Карточка пользователя */
+
+        .acc-menu-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 8px 11px;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .acc-menu-av {
+            position: relative;
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: none;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 13px;
+            background: linear-gradient(145deg, #67dbff 2%, #268df1 58%, #174a7c);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .acc-menu-av::after {
+            position: absolute;
+            top: -11px;
+            right: -9px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.19);
+            content: "";
+            filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .acc-menu-who {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .acc-menu-name {
+            color: #f2f2f0;
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 18px;
+        }
+
+        .acc-menu-id {
+            display: inline-flex;
+            align-items: center;
+            height: 17px;
+            margin-top: 3px;
+            padding: 0 6px;
+            border-radius: 6px;
+            background: linear-gradient(180deg, #b38a16, #8b6300);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            color: #ffda58;
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 17px;
+            letter-spacing: 0.01em;
+        }
+
+        /* ─────────────────────────────
+           Баланс — сохранён как в исходнике
+           ───────────────────────────── */
+
+        .num {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bbadge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.55em;
+            min-width: 1.55em;
+            margin-left: 0.45em;
+            padding: 0 0.3em;
+            border-radius: 0.42em;
+            background: rgba(94, 224, 168, 0.16);
+            color: #5ee0a8;
+            font-size: 0.58em;
+            font-weight: 600;
+            line-height: 1;
+            vertical-align: 0.28em;
+        }
+
+        .bal {
+            margin: 6px 2px 10px;
+        }
+
+        .bal-card {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: 4px 14px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.045);
+        }
+
+        .bal-card::before {
+            position: absolute;
+            z-index: 0;
+            inset: -22px -14px -16px 32%;
+            background:
+                radial-gradient(circle at 78% 4%,
+                    rgba(255, 255, 255, 0.9) 0,
+                    rgba(255, 255, 255, 0.3) 10%,
+                    rgba(226, 232, 236, 0.1) 20%,
+                    transparent 56%);
+            content: "";
+            filter: blur(5px);
+            mix-blend-mode: screen;
+            pointer-events: none;
+            transition: background 0.25s ease-out;
+        }
+
+        .bal-card::after {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            right: 12px;
+            width: 118px;
+            height: 1px;
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.08),
+                    rgba(255, 255, 255, 0.35),
+                    transparent);
+            box-shadow: 0 0 11px rgba(255, 255, 255, 0.24);
+            content: "";
+            pointer-events: none;
+            transition:
+                background 0.25s ease-out,
+                box-shadow 0.25s ease-out;
+        }
+
+        .bal-card .sec {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px 0;
+        }
+
+        .bal-card .krow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bal-card .k {
+            color: #77787d;
+            font: 400 12px Inter, sans-serif;
+            transition: color 0.2s ease-out;
+        }
+
+        .bal-card .vline {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bal-card .v {
+            color: #f4f4f3;
+            font: 500 18px Inter, sans-serif;
+            transition:
+                color 0.2s ease-out,
+                opacity 0.18s ease-out,
+                transform 0.18s ease-out;
+        }
+
+        .bal-card .v .bbadge {
+            font-size: 0.62em;
+        }
+
+        .bal-card .v.inactive {
+            color: rgba(255, 255, 255, 0.35);
+            cursor: pointer;
+        }
+
+        .bal-card .v.inactive:hover {
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        .bal-card .v.inactive .bbadge {
+            background: rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .bal-card .sep {
+            color: #4c4d52;
+            font: 400 14px Inter, sans-serif;
+        }
+
+        .bal-card .swap {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            width: auto;
+            height: auto;
+            margin: -4px;
+            padding: 4px;
+            flex: none;
+            place-items: center;
+            border: 0;
+            border-radius: 50%;
+            background: none;
+            color: #c8c8cd;
+            cursor: pointer;
+            transition:
+                transform 0.2s ease-out,
+                color 0.15s;
+        }
+
+        .bal-card .swap:hover {
+            color: #fff;
+            transform: rotate(180deg);
+        }
+
+        .bal-card .swap:active {
+            transform: rotate(180deg) scale(0.9);
+        }
+
+        .bal-card .swap svg {
+            width: 13px;
+            height: 13px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 2.2;
+        }
+
+        .bal-card .topup {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 32px;
+            margin-top: 10px;
+            gap: 6px;
+            border: 0;
+            border-radius: 10px;
+            background: #f5f5f7;
+            color: #0a0a0a;
+            cursor: pointer;
+            font: 500 12px Inter, sans-serif;
+            transition:
+                transform 160ms ease-out,
+                background 160ms ease-out;
+        }
+
+        .bal-card .topup:hover {
+            background: #fff;
+        }
+
+        .bal-card .topup:active {
+            transform: scale(0.97);
+        }
+
+        .bal-card .topup svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+        }
+
+        .bal-card .topup svg circle {
+            stroke-width: 1.8;
+        }
+
+        .bal-card .topup svg path {
+            stroke-width: 2.6;
+        }
+
+        .bal-card.swapped {
+            background: rgba(94, 224, 168, 0.08);
+        }
+
+        .bal-card.swapped::before {
+            background:
+                radial-gradient(circle at 82% 4%,
+                    rgba(60, 255, 127, 0.3) 0,
+                    rgba(48, 236, 111, 0.13) 12%,
+                    rgba(41, 190, 91, 0.05) 26%,
+                    transparent 56%);
+        }
+
+        .bal-card.swapped::after {
+            background:
+                linear-gradient(90deg,
+                    transparent,
+                    rgba(94, 255, 150, 0.2),
+                    rgba(120, 255, 170, 0.42),
+                    transparent);
+            box-shadow: 0 0 9px rgba(60, 255, 127, 0.24);
+        }
+
+        .bal-card.swapped .k {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        .bal-card.swapped .vline .v:first-child {
+            color: #5ee0a8;
+        }
+
+        /* ─────────────────────────────
+           Общие пункты меню
+           ───────────────────────────── */
+
+        .menu-list {
+            display: grid;
+            margin-top: 4px;
+        }
+
+        .menu-item {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 6px;
+            padding: 0 6px;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: #d0d1d4;
+            cursor: pointer;
+            text-align: left;
+            text-decoration: none;
+            transition:
+                background 140ms ease,
+                color 140ms ease;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .menu-item .mi {
+            display: grid;
+            flex: none;
+            place-items: center;
+            color: #989a9e;
+            transition: color 140ms ease;
+        }
+
+        .menu-item:hover .mi {
+            color: currentColor;
+        }
+
+        .menu-item .mi svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .menu-sep {
+            height: 1px;
+            margin: 8px;
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        .menu-item.danger {
+            color: #f06d72;
+        }
+
+        .menu-item.danger .mi {
+            color: currentColor;
+        }
+
+        .menu-item.danger:hover {
+            background: rgba(240, 109, 114, 0.07);
+            color: #ff8186;
+        }
+
+        /* ─────────────────────────────
+           1. FA6 Solid + Inter 600
+           ───────────────────────────── */
+
+        .acc-menu.v1 {
+            border-radius: 24px;
+            background: rgba(26, 27, 29, 0.65);
+        }
+
+        .v1 .menu-item {
+            height: 40px;
+            border-radius: 11px;
+            font: 600 13.5px Inter, sans-serif;
+            letter-spacing: -0.015em;
+        }
+
+        .v1 .menu-item .mi {
+            width: 30px;
+            height: 30px;
+        }
+
+        .v1 .menu-item .mi i {
+            font-size: 15px;
+        }
+
+        /* ─────────────────────────────
+           2. Material + Inter 500
+           ───────────────────────────── */
+
+        .acc-menu.v2 {
+            border-radius: 20px;
+            background: rgba(24, 25, 27, 0.88);
+        }
+
+        .v2 .menu-item {
+            height: 44px;
+            border-radius: 13px;
+            font: 500 14px Inter, sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .v2 .menu-item .mi {
+            width: 32px;
+            height: 32px;
+        }
+
+        .v2 .material-symbols-rounded {
+            font-size: 20px;
+            font-variation-settings:
+                "FILL" 0,
+                "wght" 400,
+                "GRAD" 0,
+                "opsz" 20;
+        }
+
+        /* ─────────────────────────────
+           3. Phosphor + Inter 600
+           ───────────────────────────── */
+
+        .acc-menu.v3 {
+            border-radius: 16px;
+            background: rgba(27, 28, 30, 0.84);
+        }
+
+        .v3 .menu-item {
+            height: 42px;
+            border-radius: 10px;
+            font: 600 14px Inter, sans-serif;
+            letter-spacing: -0.012em;
+        }
+
+        .v3 .menu-item .mi {
+            width: 31px;
+            height: 31px;
+        }
+
+        .v3 .menu-item .mi i {
+            font-size: 18px;
+        }
+
+        /* ─────────────────────────────
+           4. Свои SVG + Inter 500
+           ───────────────────────────── */
+
+        .acc-menu.v4 {
+            border-radius: 21px;
+            background: rgba(23, 24, 26, 0.88);
+        }
+
+        .v4 .menu-item {
+            height: 46px;
+            border-radius: 14px;
+            font: 500 14px Inter, sans-serif;
+            letter-spacing: -0.018em;
+        }
+
+        .v4 .menu-item .mi {
+            width: 33px;
+            height: 33px;
+        }
+
+        .v4 .menu-item .mi svg {
+            width: 19px;
+            height: 19px;
+            stroke-width: 1.75;
+        }
+
+        /* ─────────────────────────────
+           5. Референс 2
+           ───────────────────────────── */
+
+        .acc-menu.v5 {
+            padding: 11px 10px 12px;
+            border-color: rgba(255, 255, 255, 0.035);
+            border-radius: 19px;
+            background: rgba(19, 19, 20, 0.93);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .v5 .acc-menu-user {
+            margin: 0 2px;
+            padding-right: 7px;
+            padding-left: 7px;
+        }
+
+        .v5 .menu-list {
+            margin-top: 6px;
+        }
+
+        .v5 .menu-item {
+            height: 43px;
+            padding: 0 8px;
+            gap: 7px;
+            border-radius: 11px;
+            color: #a39b9e;
+            font: 600 14px Inter, sans-serif;
+            letter-spacing: -0.018em;
+        }
+
+        .v5 .menu-item:hover {
+            background: rgba(255, 255, 255, 0.035);
+            color: #bab3b5;
+        }
+
+        .v5 .menu-item .mi {
+            width: 27px;
+            height: 27px;
+            color: #9c9497;
+        }
+
+        .v5 .menu-item .mi svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 1.8;
+        }
+
+        .v5 .menu-sep {
+            margin: 7px 8px;
+            background: #2b292a;
+        }
+
+        .v5 .menu-item.danger {
+            color: #d9676c;
+        }
+
+        .v5 .menu-item.danger:hover {
+            background: rgba(217, 103, 108, 0.07);
+            color: #ed777c;
+        }
+
+        /* ─────────────────────────────
+           6. Референс 1
+           ───────────────────────────── */
+
+        .acc-menu.v6 {
+            padding: 10px;
+            border-color: rgba(255, 255, 255, 0.04);
+            border-radius: 9px;
+            background: rgba(24, 25, 27, 0.95);
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.38);
+        }
+
+        .v6 .menu-list {
+            margin-top: 8px;
+            padding-top: 7px;
+            border-top: 1px solid rgba(255, 255, 255, 0.055);
+        }
+
+        .v6 .menu-item {
+            height: 41px;
+            padding: 0 5px;
+            gap: 5px;
+            border-radius: 6px;
+            color: #d4d4d6;
+            font: 600 13.5px Inter, sans-serif;
+            letter-spacing: -0.025em;
+        }
+
+        .v6 .menu-item:hover {
+            background: rgba(255, 255, 255, 0.035);
+            color: #ededee;
+        }
+
+        .v6 .menu-item .mi {
+            width: 29px;
+            height: 29px;
+            color: #9b9b9d;
+        }
+
+        .v6 .menu-item .mi i {
+            font-size: 16px;
+        }
+
+        .v6 .menu-sep {
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        .v6 .menu-item.danger {
+            color: #ff686d;
+        }
+
+        .v6 .menu-item.danger:hover {
+            background: rgba(255, 104, 109, 0.06);
+            color: #ff797e;
+        }
+
+        @media (max-width: 900px) {
+            .variants-grid {
+                gap: 30px 20px;
+            }
+        }
+
+        @media (max-width: 590px) {
+            body {
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <header class="page-header">
+            <h1>Zelscan — 6 вариантов меню</h1>
+            <p>Без дополнительных цветных эффектов. Ширина каждого меню своя.</p>
+        </header>
+
+        <div class="variants-grid" id="menus"></div>
+    </main>
+
+    <script>
+        const MENU_ITEMS = [
+            { key: "dossiers", label: "Мои досье" },
+            { key: "settings", label: "Настройки" },
+            { key: "support", label: "Поддержка" },
+            { key: "transactions", label: "Транзакции" },
+            { key: "logout", label: "Выйти", danger: true }
+        ];
+
+        const svg = (content) => `
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                ${content}
+              </svg>
+            `;
+
+        const ICONS = {
+            v1: {
+                dossiers: '<i class="fa-solid fa-folder-open" aria-hidden="true"></i>',
+                settings: '<i class="fa-solid fa-gear" aria-hidden="true"></i>',
+                support: '<i class="fa-solid fa-bullhorn" aria-hidden="true"></i>',
+                transactions: '<i class="fa-solid fa-receipt" aria-hidden="true"></i>',
+                logout: '<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>'
+            },
+
+            v2: {
+                dossiers: '<span class="material-symbols-rounded" aria-hidden="true">folder_open</span>',
+                settings: '<span class="material-symbols-rounded" aria-hidden="true">settings</span>',
+                support: '<span class="material-symbols-rounded" aria-hidden="true">campaign</span>',
+                transactions: '<span class="material-symbols-rounded" aria-hidden="true">receipt_long</span>',
+                logout: '<span class="material-symbols-rounded" aria-hidden="true">logout</span>'
+            },
+
+            v3: {
+                dossiers: '<i class="ph ph-folder-open" aria-hidden="true"></i>',
+                settings: '<i class="ph ph-gear-six" aria-hidden="true"></i>',
+                support: '<i class="ph ph-megaphone" aria-hidden="true"></i>',
+                transactions: '<i class="ph ph-receipt" aria-hidden="true"></i>',
+                logout: '<i class="ph ph-sign-out" aria-hidden="true"></i>'
+            },
+
+            v4: {
+                dossiers: svg(`
+                      <path d="M3.5 7.5V6a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v1.5"/>
+                      <path d="M4.5 10h15l-1.35 8a2 2 0 0 1-1.98 1.67H7a2 2 0 0 1-1.98-1.67L3.7 10.4"/>
+                    `),
+                settings: svg(`
+                      <circle cx="12" cy="12" r="3"/>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15Z"/>
+                    `),
+                support: svg(`
+                      <path d="M4 13.5V10l11-4.5v12L4 13.5Z"/>
+                      <path d="M15 9.2c2 .55 3 1.48 3 2.55s-1 2-3 2.55"/>
+                      <path d="m6.5 14.4 1.3 4.1h3.1l-1.7-3"/>
+                    `),
+                transactions: svg(`
+                      <path d="M6 2.8h12a2 2 0 0 1 2 2V21l-3-1.8-3 1.8-2-1.8-2 1.8-3-1.8L4 21V4.8a2 2 0 0 1 2-2Z"/>
+                      <path d="M8 8h8M8 12h8M8 16h5"/>
+                    `),
+                logout: svg(`
+                      <path d="M10 17l5-5-5-5M15 12H3"/>
+                      <path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"/>
+                    `)
+            },
+
+            v5: {
+                dossiers: svg(`
+                      <path d="M4 6.5h5l2 2h9v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-11Z"/>
+                      <path d="M4 10h16"/>
+                    `),
+                settings: svg(`
+                      <path d="M4 7h10M18 7h2M4 17h2M10 17h10"/>
+                      <circle cx="16" cy="7" r="2"/>
+                      <circle cx="8" cy="17" r="2"/>
+                    `),
+                support: svg(`
+                      <path d="M5 15V9l12-4v14L5 15Z"/>
+                      <path d="M17 9.5c1.8.5 2.7 1.33 2.7 2.5s-.9 2-2.7 2.5"/>
+                      <path d="m7.2 15.7 1.2 3.3h3"/>
+                    `),
+                transactions: svg(`
+                      <path d="M6.5 3h11A1.5 1.5 0 0 1 19 4.5V21l-3-1.8-2 1.8-2-1.8-2 1.8-2-1.8L5 21V4.5A1.5 1.5 0 0 1 6.5 3Z"/>
+                      <path d="M8.5 8h7M8.5 12h7M8.5 16h4"/>
+                    `),
+                logout: svg(`
+                      <path d="M10 17l5-5-5-5M15 12H3.5"/>
+                      <path d="M14 4h4.5A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5H14"/>
+                    `)
+            },
+
+            v6: {
+                dossiers: '<i class="fa-solid fa-folder" aria-hidden="true"></i>',
+                settings: '<i class="fa-solid fa-gear" aria-hidden="true"></i>',
+                support: '<i class="fa-solid fa-bullhorn" aria-hidden="true"></i>',
+                transactions: '<i class="fa-solid fa-receipt" aria-hidden="true"></i>',
+                logout: '<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>'
+            }
+        };
+
+        const VARIANTS = [
+            { className: "v1", label: "01 · FA6 Solid / Inter 600" },
+            { className: "v2", label: "02 · Material / Inter 500" },
+            { className: "v3", label: "03 · Phosphor / Inter 600" },
+            { className: "v4", label: "04 · Свои SVG / Inter 500" },
+            { className: "v5", label: "05 · Референс 2", middleSeparatorAfter: 1 },
+            { className: "v6", label: "06 · Референс 1" }
+        ];
+
+        function createUserCard() {
+            return `
+                <div class="acc-menu-user">
+                  <div class="acc-menu-av" aria-hidden="true">U</div>
+                  <div class="acc-menu-who">
+                    <div class="acc-menu-name">Udodov</div>
+                    <div class="acc-menu-id">#638074</div>
+                  </div>
+                </div>
+              `;
+        }
+
+        function createBalanceCard() {
+            return `
+                <div class="bal">
+                  <div class="bal-card">
+                    <div class="sec">
+                      <div class="krow">
+                        <span class="k">Основной счёт</span>
+                        <button class="swap" type="button" data-swap aria-label="Сменить активный счёт" title="Сменить счёт">
+                          <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8 3 4 7l4 4"/>
+                            <path d="M4 7h16"/>
+                            <path d="m16 21 4-4-4-4"/>
+                            <path d="M20 17H4"/>
+                          </svg>
+                        </button>
+                      </div>
+                      <span class="vline">
+                        <span class="v num">466 ₽</span>
+                        <span class="sep">/</span>
+                        <span class="v inactive num" data-swap role="button" tabindex="0" aria-label="Переключиться на бонусный счёт">
+                          110<span class="bbadge">Б</span>
+                        </span>
+                      </span>
+                      <button class="topup" type="button">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <circle cx="12" cy="12" r="8.5"/>
+                          <path d="M12 8.5v7M8.5 12h7"/>
+                        </svg>
+                        <span>Пополнить</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `;
+        }
+
+        function createMenuList(variant) {
+            const items = MENU_ITEMS.map((item, index) => {
+                const separatorBefore = item.danger ?
+                    '<div class="menu-sep" aria-hidden="true"></div>' :
+                    '';
+
+                const separatorAfter = variant.middleSeparatorAfter === index ?
+                    '<div class="menu-sep middle" aria-hidden="true"></div>' :
+                    '';
+
+                const href = item.key === "support" ?
+                    "https://t.me/udodov228" :
+                    "#";
+
+                const externalAttributes = item.key === "support" ?
+                    'target="_blank" rel="noopener noreferrer"' :
+                    '';
+
+                return `
+                    ${separatorBefore}
+                    <a class="menu-item${item.danger ? " danger" : ""}" href="${href}" ${externalAttributes}>
+                      <span class="mi">${ICONS[variant.className][item.key]}</span>
+                      <span>${item.label}</span>
+                    </a>
+                    ${separatorAfter}
+                  `;
+            }).join("");
+
+            return `<div class="menu-list">${items}</div>`;
+        }
+
+        function createVariant(variant) {
+            return `
+                <section class="variant">
+                  <div class="variant-label">${variant.label}</div>
+                  <nav class="acc-menu ${variant.className}" aria-label="${variant.label}">
+                    ${createUserCard()}
+                    ${createBalanceCard()}
+                    ${createMenuList(variant)}
+                  </nav>
+                </section>
+              `;
+        }
+
+        document.getElementById("menus").innerHTML = VARIANTS.map(createVariant).join("");
+
+        function swapBalance(trigger) {
+            const card = trigger.closest(".bal-card");
+            if (!card) return;
+
+            const label = card.querySelector(".k");
+            const values = card.querySelectorAll(".vline .v");
+            const buttonLabel = card.querySelector(".topup span");
+
+            if (values.length < 2) return;
+
+            const first = values[0];
+            const second = values[1];
+            const temporaryContent = first.innerHTML;
+
+            first.innerHTML = second.innerHTML;
+            second.innerHTML = temporaryContent;
+
+            first.classList.remove("inactive");
+            first.removeAttribute("data-swap");
+            first.removeAttribute("role");
+            first.removeAttribute("tabindex");
+            first.removeAttribute("aria-label");
+
+            second.classList.add("inactive");
+            second.setAttribute("data-swap", "");
+            second.setAttribute("role", "button");
+            second.setAttribute("tabindex", "0");
+
+            const bonusIsActive = label.textContent.trim() === "Основной счёт";
+
+            label.textContent = bonusIsActive ?
+                "Бонусный счёт" :
+                "Основной счёт";
+
+            second.setAttribute("aria-label", bonusIsActive ?
+                "Переключиться на основной счёт" :
+                "Переключиться на бонусный счёт");
+
+            if (buttonLabel) {
+                buttonLabel.textContent = bonusIsActive ?
+                    "Ввести промокод" :
+                    "Пополнить";
+            }
+
+            card.classList.toggle("swapped");
+        }
+
+        document.addEventListener("click", (event) => {
+            const swapTrigger = event.target.closest("[data-swap]");
+
+            if (swapTrigger) {
+                swapBalance(swapTrigger);
+                return;
+            }
+
+            const emptyLink = event.target.closest('a[href="#"]');
+
+            if (emptyLink) {
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            const target = event.target;
+
+            if (target.matches(".v[data-swap]") && (event.key === "Enter" || event.key === " ")) {
+                event.preventDefault();
+                swapBalance(target);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* ═══════════════════════════════════════
+   ЛОАДЕР — фирменный знак из 4 лепестков.
+   Фаза 1: лепестки тускло-серым, по ним пробегает шимер-блик.
+   Фаза 2 (.is-ready): лепестки становятся окнами — сквозь них
+   видна реальная страница; затем чёрное растворяется.
+   ═══════════════════════════════════════ */
+.loader{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:100000;pointer-events:none;display:block;
+}
+.loader-dim{transition:opacity .65s ease .15s;}
+/* фаза 1: шимер-блик по лепесткам (как в скелетонах) */
+.loader-shine{animation:loader-shine 1.8s cubic-bezier(.45,0,.25,1) infinite;}
+@keyframes loader-shine{
+  0%{transform:translateX(0)}
+  60%,100%{transform:translateX(36px)}
+}
+/* фаза 2: лепестки-окна */
+.loader-holes{
+  opacity:0;transform-box:fill-box;transform-origin:center;
+  transition:opacity .32s ease;
+}
+.loader.is-ready .loader-mark path{
+  transition:opacity .32s ease;opacity:0;
+}
+.loader.is-ready .loader-shine{opacity:0;transition:opacity .3s ease;}
+.loader.is-ready .loader-holes{
+  opacity:1;transform:scale(1.4);
+  transition:opacity .32s ease,transform .8s cubic-bezier(.22,.61,.36,1);
+}
+.loader.is-ready .loader-dim{opacity:0;}

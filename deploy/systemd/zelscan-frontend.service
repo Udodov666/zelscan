@@ -1,0 +1,25 @@
+[Unit]
+Description=Zelscan frontend
+After=network-online.target zelscan-backend.service
+Wants=network-online.target
+Requires=zelscan-backend.service
+
+[Service]
+Type=simple
+User=zelscan
+Group=zelscan
+WorkingDirectory=/opt/zelscan
+EnvironmentFile=/etc/zelscan/zelscan.env
+ExecStart=/opt/zelscan/.venv/bin/waitress-serve --host=127.0.0.1 --port=8080 --threads=8 --call app.front_server:app
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/zelscan
+
+[Install]
+WantedBy=multi-user.target

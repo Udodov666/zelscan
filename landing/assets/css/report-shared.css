@@ -1,0 +1,64 @@
+/* Zelscan report shared controls — Lucide + restrained Liquid Glass */
+.report-h{display:flex!important;align-items:center!important;justify-content:space-between!important;width:1080px!important;height:44px!important;margin-bottom:20px!important}
+.report-left{display:flex;align-items:center;gap:20px;min-width:0}.report-h .t{font-size:24px;font-weight:500;color:#ebebeb}.report-h .d{font-size:13px;color:#626267;white-space:nowrap}
+.report-h .report-back{display:grid!important;place-items:center!important;width:38px!important;height:38px!important;flex:none!important;padding:0!important;border:0!important;outline:0!important;border-radius:66px!important;background:rgba(255,255,255,.045)!important;box-shadow:none!important;color:#b5b6bb!important;cursor:pointer;transform:none!important;transition:background .18s ease,color .18s ease!important}.report-h .report-back:hover,.report-h .report-back:focus,.report-h .report-back:active{background:rgba(255,255,255,.075)!important;color:#ececee!important;transform:none!important}.report-h .report-back:before,.report-h .report-back:after{display:none!important}.report-h .report-back i{font-size:13px!important;line-height:1!important;transform:none!important}.report-h .report-back svg{display:none!important}
+.sample-note{width:1080px;margin:18px 4px 4px!important;font-size:11.5px;line-height:1.55;color:#505055}.sample-note b{color:#74747a;font-weight:500}
+.hero-dots{cursor:pointer;min-width:40px!important;min-height:40px!important;display:flex!important;align-items:center;justify-content:center;border-radius:50%!important;transition:background .16s}.hero-dots:hover,.hero-dots[aria-expanded="true"]{background:rgba(255,255,255,.065)}
+.report-menu{position:fixed!important;z-index:14000!important;box-sizing:border-box!important;width:230px!important;padding:10px!important;border:0!important;border-radius:22px!important;background:rgba(255,255,255,.045);box-shadow:0 24px 62px rgba(0,0,0,.46),inset 0 1px 0 rgba(255,255,255,.025)!important;backdrop-filter:blur(28px) saturate(145%)!important;-webkit-backdrop-filter:blur(28px) saturate(145%)!important;opacity:0;visibility:hidden;transform:translateY(-5px) scale(.985);transform-origin:top right;transition:opacity .15s,transform .15s,visibility .15s}.report-menu.open{opacity:1;visibility:visible;transform:none}.report-menu button{box-sizing:border-box!important;display:flex!important;align-items:center!important;width:100%!important;height:40px!important;padding:0 6px!important;gap:6px!important;border:0!important;border-radius:14px!important;background:transparent!important;color:#d2d3d6!important;text-align:left!important;font:500 13.5px/1 Inter,system-ui,sans-serif!important;cursor:pointer;transition:background .14s ease,color .14s ease}.report-menu button:hover,.report-menu button:focus-visible{outline:none;background:rgba(255,255,255,.05)!important;color:#fff!important}.report-menu button>i{display:grid!important;place-items:center!important;width:30px!important;height:30px!important;flex:0 0 30px!important;color:#989a9e!important;font-size:14px!important;transition:color .14s ease}.report-menu button:hover>i{color:currentColor!important}.report-menu button svg{display:none!important}.report-menu .menu-sep{display:block!important;width:auto!important;height:1px!important;min-height:1px!important;margin:8px!important;padding:0!important;border:0!important;background:rgba(255,255,255,.055)!important}.report-menu button.danger{color:#f06d72!important}.report-menu button.danger>i{color:currentColor!important}.report-menu button.danger:hover{background:rgba(240,109,114,.07)!important;color:#ff8186!important}
+@media(prefers-reduced-transparency:reduce){.report-menu{background:#1b1b1e;backdrop-filter:none}}
+
+/* ── report skeleton + status overlay ── */
+.main{position:relative}
+.main.zs-loading>.report-h,.main.zs-loading>.hero,.main.zs-loading>.tabs,.main.zs-loading>.metrics,.main.zs-loading>.sample-note{opacity:.34;filter:saturate(.55);pointer-events:none;transition:opacity .28s ease,filter .28s ease}
+.zs-report-wait{position:absolute;z-index:120;inset:0;width:100%;min-height:520px;display:grid;place-items:center;padding:32px;border-radius:28px;background:rgba(2,2,2,.58);opacity:1;visibility:visible;transition:opacity .28s ease,visibility .28s ease,backdrop-filter .28s ease}
+.zs-report-wait.zsk-fade-out{opacity:0;visibility:hidden;pointer-events:none;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.zr-w-inner{display:flex;min-width:220px;flex-direction:column;align-items:center;gap:12px;padding:24px 28px;backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);border-radius:22px;background:rgba(12,12,13,.72);box-shadow:0 24px 70px rgba(0,0,0,.34);text-align:center}
+.zr-w-core{height:28px;display:grid;place-items:center}
+.zr-w-lab{font:500 15px/19px Inter;color:#ebebeb}
+.zr-w-stage{font:400 13px/17px Inter;color:#8a8a90;min-height:17px}
+.zr-w-pos{font:400 12px/16px Inter;color:#5a5a60;min-height:16px}
+.main.zs-render-ready>.report-h,.main.zs-render-ready>.hero,.main.zs-render-ready>.tabs,.main.zs-render-ready>.metrics,.main.zs-render-ready>.sample-note{opacity:0}
+.main.zs-rendered>.report-h,.main.zs-rendered>.hero,.main.zs-rendered>.tabs,.main.zs-rendered>.metrics,.main.zs-rendered>.sample-note{opacity:1;filter:none;transition:opacity .28s ease,filter .28s ease}
+@media(max-width:1120px){.zs-report-wait{width:100%;border-radius:20px}}
+@media(prefers-reduced-transparency:reduce){.zs-report-wait{background:#09090a;backdrop-filter:none;-webkit-backdrop-filter:none}.zr-w-inner{background:#111113}}
+.hero-share{height:40px;padding:0 14px;display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.055);color:#e8e8eb;font:500 14px/1 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;transition:background .16s,color .16s}.hero-share:hover{background:rgba(255,255,255,.1);color:#fff}.hero-share svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.report-vis{position:relative;display:flex;gap:4px;padding:4px;width:100%;border-radius:16px;background:rgba(255,255,255,.03)}.report-vis button{position:relative;z-index:1;flex:1;height:40px;border:0;border-radius:12px;background:transparent;color:#6b6b6b;font:400 14px/1 Inter;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:color .15s}.report-vis button:hover{color:#a8a8a8}.report-vis button.on{color:#ebebeb}.report-vis button svg{width:14px;height:14px;flex:none;display:block;opacity:.9}.report-vis button>i{width:14px;height:14px;flex:none;display:grid;place-items:center;font-size:14px;line-height:1;opacity:.9}.report-vis button.on svg,.report-vis button.on>i{opacity:1}.report-vis .zs-vis-ind{position:absolute;top:4px;bottom:4px;border-radius:12px;background:rgba(255,255,255,.08);transition:left .2s ease,width .2s ease}.report-share-panel{display:flex;flex-direction:column;gap:10px;width:100%}.report-share-panel.hidden{display:none}.report-share-row{position:relative;display:flex;width:100%;min-width:0;height:48px;border-radius:14px;background:rgba(255,255,255,.04)}.report-share-row input{min-width:0;width:100%;height:48px;padding:0 54px 0 14px;border:0;outline:0;border-radius:14px;background:transparent;color:#c9c9ce;font:400 14px/1 Inter;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}.report-share-row button{position:absolute;right:4px;top:4px;width:40px;height:40px;padding:0;border:0;border-radius:11px;background:transparent;color:#a8a8ad;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.report-share-row button:hover{background:rgba(255,255,255,.08);color:#fff}.report-share-row button svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(prefers-reduced-motion:reduce){.report-menu,.report-back,.hero-share{transition:none}}
+@media(max-width:900px){.report-h,.sample-note{width:100%!important}.report-h .d{font-size:11px}.report-left{gap:16px}.report-back{width:40px;height:40px}}
+
+/* ── История досье (табы: История · Автографы) ── */
+.zs-hist-loading,.zs-hist-empty{padding:28px 8px;text-align:center;color:#5B5C62;font:400 13px/1.5 Inter}
+.zs-hist-status{font:400 12px/1.5 Inter;color:#74747a;margin-bottom:12px}
+.zs-hist-tabs{display:flex;gap:6px;padding:4px;border-radius:14px;background:rgba(255,255,255,.04);margin-bottom:14px}
+.zs-hist-tabs button{flex:1;height:34px;border:0;border-radius:10px;background:transparent;color:#9a9aa0;font:500 13px/1 Inter;cursor:pointer;transition:background .14s,color .14s}
+.zs-hist-tabs button.on{background:rgba(255,255,255,.08);color:#fff}
+.zs-hist-tabs button:hover:not(.on){color:#e2e2e6}
+.zs-hist-pane{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.zs-timeline{display:flex;flex-direction:column;gap:2px}
+.zs-tl-item{display:flex;gap:12px;padding:12px 4px;position:relative}
+.zs-tl-item:not(:last-child)::before{content:'';position:absolute;left:19px;top:44px;bottom:-2px;width:1px;background:rgba(255,255,255,.06)}
+.zs-tl-av{width:32px;height:32px;flex:none;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.06);display:grid;place-items:center;color:#c9c9ce;font:500 13px/1 Inter}
+.zs-tl-av img{width:100%;height:100%;object-fit:cover}
+.zs-tl-body{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.zs-tl-top{display:flex;align-items:center;gap:8px}
+.zs-tl-name{font:500 13px/1.2 Inter;color:#ebebeb}
+.zs-tl-role{font:400 11px/1 Inter;color:#8a8a90;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.05)}
+.zs-tl-meta{font:400 12px/1.4 Inter;color:#626267}
+.zs-tl-actions{display:flex;align-items:center;gap:10px;margin-top:4px}
+.zs-hist-badge{font:500 11px/1 Inter;color:#2BAD72;padding:3px 8px;border-radius:999px;background:rgba(43,173,114,.1)}
+.zs-hist-open{font:500 12px/1 Inter;color:#8fb3ff;text-decoration:none}
+.zs-hist-open:hover{text-decoration:underline}
+.zs-hist-open.disabled{color:#5a5a60;cursor:not-allowed;text-decoration:none}
+.zs-hist-inline{display:inline-flex;align-items:center;gap:8px;font:400 12px/1.4 Inter;color:#626267}
+.zs-hist-inline a{color:#8fb3ff;text-decoration:none;cursor:pointer}
+.zs-hist-inline a:hover{text-decoration:underline}
+
+/* Zelscan compact report hero actions v1 */
+/* Share and the overflow menu are sibling actions: keep them together. */
+.report-h{
+  justify-content:flex-end!important;
+  gap:10px!important;
+}
+.report-h .report-left{
+  margin-right:auto;
+}
+

@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Тест — Radial glow варианты для Rep-Score</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/pages/zelscan_behavior.css">
+<link rel="stylesheet" href="assets/css/account-ui.css?v=28">
+<link rel="stylesheet" href="assets/css/responsive.css?v=9">
+<link rel="stylesheet" href="assets/css/report-shared.css?v=4">
+<style>
+body{background:#0a0a0a;font-family:Inter,sans-serif;color:#EBEBEB;margin:0;padding:24px;}
+.wrap{max-width:1100px;margin:0 auto;}
+h1{font-size:22px;font-weight:500;margin:0 0 8px;}
+.hint{color:#8a8a8a;font-size:13px;margin:0 0 28px;font-weight:400;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px;}
+.group-title{font-size:13px;color:#8a8a8a;margin:0 0 12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;}
+.cell{background:#131313;border-radius:14px;padding:18px;border:1px solid #1f1f1f;}
+.vmark{font-size:11px;color:#6b6b6b;font-weight:500;letter-spacing:0.06em;margin-bottom:10px;}
+.rep-score{position:relative;padding:20px 26px;border-radius:12px;overflow:hidden;background:#181818;display:inline-flex;flex-direction:column;align-items:flex-start;gap:8px;}
+.rep-score::before{content:"";position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:0;}
+.rep-score>*{position:relative;z-index:1;}
+.rep-score .num{font-size:48px;line-height:1;font-weight:500;letter-spacing:-0.02em;}
+.rep-score .lvl{font-size:12px;font-weight:500;border-radius:8px;padding:5px 10px;background:rgba(52,211,153,0.15);color:#34D399;}
+.rep-score.green .num{color:#34D399;}
+.rep-score.amber .num{color:#F59E0B;}
+.rep-score.red .num{color:#EF4444;}
+.rep-score.amber .lvl{color:#F59E0B;background:rgba(245,158,11,0.15);}
+.rep-score.red .lvl{color:#EF4444;background:rgba(239,68,68,0.15);}
+
+/* A — Centered symmetric radial, dense */
+.A.green::before{background:radial-gradient(ellipse 80% 70% at 50% 55%,rgba(52,211,153,0.65) 0%,rgba(52,211,153,0.30) 28%,rgba(52,211,153,0.08) 55%,transparent 78%);}
+.A.amber::before{background:radial-gradient(ellipse 80% 70% at 50% 55%,rgba(245,158,11,0.62) 0%,rgba(245,158,11,0.28) 28%,rgba(245,158,11,0.08) 55%,transparent 78%);}
+.A.red::before{background:radial-gradient(ellipse 85% 75% at 50% 55%,rgba(239,68,68,0.70) 0%,rgba(239,68,68,0.32) 28%,rgba(239,68,68,0.10) 55%,transparent 80%);}
+
+/* B — Bottom-up radial (intense) */
+.B.green::before{background:radial-gradient(ellipse 95% 85% at 50% 100%,rgba(52,211,153,0.75) 0%,rgba(52,211,153,0.35) 22%,rgba(52,211,153,0.10) 50%,transparent 72%);}
+.B.amber::before{background:radial-gradient(ellipse 95% 85% at 50% 100%,rgba(245,158,11,0.72) 0%,rgba(245,158,11,0.32) 22%,rgba(245,158,11,0.10) 50%,transparent 72%);}
+.B.red::before{background:radial-gradient(ellipse 100% 90% at 50% 100%,rgba(239,68,68,0.80) 0%,rgba(239,68,68,0.38) 22%,rgba(239,68,68,0.12) 50%,transparent 74%);}
+
+/* C — Top-down radial (intense) */
+.C.green::before{background:radial-gradient(ellipse 95% 85% at 50% 0%,rgba(52,211,153,0.75) 0%,rgba(52,211,153,0.35) 22%,rgba(52,211,153,0.10) 50%,transparent 72%);}
+.C.amber::before{background:radial-gradient(ellipse 95% 85% at 50% 0%,rgba(245,158,11,0.72) 0%,rgba(245,158,11,0.32) 22%,rgba(245,158,11,0.10) 50%,transparent 72%);}
+.C.red::before{background:radial-gradient(ellipse 100% 90% at 50% 0%,rgba(239,68,68,0.80) 0%,rgba(239,68,68,0.38) 22%,rgba(239,68,68,0.12) 50%,transparent 74%);}
+
+/* D — Diagonal from top-left, oversaturated */
+.D.green::before{background:radial-gradient(ellipse 85% 85% at 18% 22%,rgba(52,211,153,0.70) 0%,rgba(52,211,153,0.32) 30%,rgba(52,211,153,0.08) 55%,transparent 78%);}
+.D.amber::before{background:radial-gradient(ellipse 85% 85% at 18% 22%,rgba(245,158,11,0.68) 0%,rgba(245,158,11,0.30) 30%,rgba(245,158,11,0.08) 55%,transparent 78%);}
+.D.red::before{background:radial-gradient(ellipse 90% 90% at 18% 22%,rgba(239,68,68,0.75) 0%,rgba(239,68,68,0.34) 30%,rgba(239,68,68,0.10) 55%,transparent 82%);}
+
+/* E — Wide flat radial (oversaturated horizontal burn) */
+.E.green::before{background:radial-gradient(ellipse 120% 55% at 50% 55%,rgba(52,211,153,0.60) 0%,rgba(52,211,153,0.28) 28%,rgba(52,211,153,0.08) 55%,transparent 82%);}
+.E.amber::before{background:radial-gradient(ellipse 120% 55% at 50% 55%,rgba(245,158,11,0.58) 0%,rgba(245,158,11,0.26) 28%,rgba(245,158,11,0.08) 55%,transparent 82%);}
+.E.red::before{background:radial-gradient(ellipse 125% 60% at 50% 55%,rgba(239,68,68,0.65) 0%,rgba(239,68,68,0.30) 28%,rgba(239,68,68,0.10) 55%,transparent 84%);}
+
+/* F — Tight bright oversaturated core */
+.F.green::before{background:radial-gradient(circle at 50% 55%,rgba(52,211,153,0.95) 0%,rgba(52,211,153,0.45) 22%,rgba(52,211,153,0.15) 50%,rgba(52,211,153,0.04) 75%,transparent 92%);}
+.F.amber::before{background:radial-gradient(circle at 50% 55%,rgba(245,158,11,0.92) 0%,rgba(245,158,11,0.42) 22%,rgba(245,158,11,0.14) 50%,rgba(245,158,11,0.04) 75%,transparent 92%);}
+.F.red::before{background:radial-gradient(circle at 50% 55%,rgba(239,68,68,1) 0%,rgba(239,68,68,0.50) 22%,rgba(239,68,68,0.16) 50%,rgba(239,68,68,0.05) 75%,transparent 94%);}
+
+/* G — Layered: radial center + linear fade (bright) */
+.G.green::before{background:radial-gradient(ellipse 80% 75% at 50% 50%,rgba(52,211,153,0.60) 0%,rgba(52,211,153,0.20) 40%,transparent 72%),linear-gradient(180deg,rgba(52,211,153,0.18) 0%,transparent 60%);}
+.G.amber::before{background:radial-gradient(ellipse 80% 75% at 50% 50%,rgba(245,158,11,0.58) 0%,rgba(245,158,11,0.20) 40%,transparent 72%),linear-gradient(180deg,rgba(245,158,11,0.18) 0%,transparent 60%);}
+.G.red::before{background:radial-gradient(ellipse 85% 80% at 50% 50%,rgba(239,68,68,0.65) 0%,rgba(239,68,68,0.22) 40%,transparent 74%),linear-gradient(180deg,rgba(239,68,68,0.22) 0%,transparent 60%);}
+
+/* H — Bottom burn (доминантный пересвет снизу) */
+.H.green::before{background:radial-gradient(ellipse 110% 110% at 50% 100%,rgba(52,211,153,0.85) 0%,rgba(52,211,153,0.50) 25%,rgba(52,211,153,0.18) 50%,rgba(52,211,153,0.04) 75%,transparent 92%);}
+.H.amber::before{background:radial-gradient(ellipse 110% 110% at 50% 100%,rgba(245,158,11,0.82) 0%,rgba(245,158,11,0.48) 25%,rgba(245,158,11,0.16) 50%,rgba(245,158,11,0.04) 75%,transparent 92%);}
+.H.red::before{background:radial-gradient(ellipse 120% 115% at 50% 100%,rgba(239,68,68,0.92) 0%,rgba(239,68,68,0.55) 25%,rgba(239,68,68,0.20) 50%,rgba(239,68,68,0.05) 75%,transparent 94%);}
+
+/* I — Top burn */
+.I.green::before{background:radial-gradient(ellipse 110% 110% at 50% 0%,rgba(52,211,153,0.85) 0%,rgba(52,211,153,0.50) 25%,rgba(52,211,153,0.18) 50%,rgba(52,211,153,0.04) 75%,transparent 92%);}
+.I.amber::before{background:radial-gradient(ellipse 110% 110% at 50% 0%,rgba(245,158,11,0.82) 0%,rgba(245,158,11,0.48) 25%,rgba(245,158,11,0.16) 50%,rgba(245,158,11,0.04) 75%,transparent 92%);}
+.I.red::before{background:radial-gradient(ellipse 120% 115% at 50% 0%,rgba(239,68,68,0.92) 0%,rgba(239,68,68,0.55) 25%,rgba(239,68,68,0.20) 50%,rgba(239,68,68,0.05) 75%,transparent 94%);}
+
+/* J — Two-color radial: tone + white hot spot */
+.J.green::before{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.12) 0%,transparent 35%),radial-gradient(ellipse 85% 75% at 50% 60%,rgba(52,211,153,0.65) 0%,rgba(52,211,153,0.25) 35%,rgba(52,211,153,0.06) 60%,transparent 80%);}
+.J.amber::before{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.12) 0%,transparent 35%),radial-gradient(ellipse 85% 75% at 50% 60%,rgba(245,158,11,0.62) 0%,rgba(245,158,11,0.24) 35%,rgba(245,158,11,0.06) 60%,transparent 80%);}
+.J.red::before{background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.15) 0%,transparent 35%),radial-gradient(ellipse 90% 80% at 50% 60%,rgba(239,68,68,0.70) 0%,rgba(239,68,68,0.28) 35%,rgba(239,68,68,0.08) 60%,transparent 82%);}
+
+/* K — Side glow: left burn */
+.K.green::before{background:radial-gradient(ellipse 80% 100% at 0% 50%,rgba(52,211,153,0.72) 0%,rgba(52,211,153,0.30) 30%,rgba(52,211,153,0.08) 60%,transparent 82%);}
+.K.amber::before{background:radial-gradient(ellipse 80% 100% at 0% 50%,rgba(245,158,11,0.70) 0%,rgba(245,158,11,0.28) 30%,rgba(245,158,11,0.08) 60%,transparent 82%);}
+.K.red::before{background:radial-gradient(ellipse 85% 100% at 0% 50%,rgba(239,68,68,0.78) 0%,rgba(239,68,68,0.32) 30%,rgba(239,68,68,0.10) 60%,transparent 84%);}
+
+/* L — Side glow: right burn */
+.L.green::before{background:radial-gradient(ellipse 80% 100% at 100% 50%,rgba(52,211,153,0.72) 0%,rgba(52,211,153,0.30) 30%,rgba(52,211,153,0.08) 60%,transparent 82%);}
+.L.amber::before{background:radial-gradient(ellipse 80% 100% at 100% 50%,rgba(245,158,11,0.70) 0%,rgba(245,158,11,0.28) 30%,rgba(245,158,11,0.08) 60%,transparent 82%);}
+.L.red::before{background:radial-gradient(ellipse 85% 100% at 100% 50%,rgba(239,68,68,0.78) 0%,rgba(239,68,68,0.32) 30%,rgba(239,68,68,0.10) 60%,transparent 84%);}
+
+/* M — Triple layered: main + edges */
+.M.green::before{background:radial-gradient(ellipse 90% 80% at 50% 50%,rgba(52,211,153,0.55) 0%,rgba(52,211,153,0.22) 35%,transparent 65%),radial-gradient(ellipse 60% 40% at 50% 0%,rgba(52,211,153,0.35) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(52,211,153,0.30) 0%,transparent 70%);}
+.M.amber::before{background:radial-gradient(ellipse 90% 80% at 50% 50%,rgba(245,158,11,0.52) 0%,rgba(245,158,11,0.20) 35%,transparent 65%),radial-gradient(ellipse 60% 40% at 50% 0%,rgba(245,158,11,0.32) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(245,158,11,0.28) 0%,transparent 70%);}
+.M.red::before{background:radial-gradient(ellipse 95% 85% at 50% 50%,rgba(239,68,68,0.62) 0%,rgba(239,68,68,0.25) 35%,transparent 66%),radial-gradient(ellipse 60% 40% at 50% 0%,rgba(239,68,68,0.38) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(239,68,68,0.34) 0%,transparent 70%);}
+
+/* N — Hot bottom corner (bottom-left burn like ref) */
+.N.green::before{background:radial-gradient(ellipse 70% 70% at 0% 100%,rgba(52,211,153,0.85) 0%,rgba(52,211,153,0.40) 28%,rgba(52,211,153,0.10) 55%,transparent 80%);}
+.N.amber::before{background:radial-gradient(ellipse 70% 70% at 0% 100%,rgba(245,158,11,0.82) 0%,rgba(245,158,11,0.38) 28%,rgba(245,158,11,0.10) 55%,transparent 80%);}
+.N.red::before{background:radial-gradient(ellipse 75% 75% at 0% 100%,rgba(239,68,68,0.92) 0%,rgba(239,68,68,0.45) 28%,rgba(239,68,68,0.12) 55%,transparent 82%);}
+
+/* H2 — H burn + blur(16px), glow внутри контура, центр смещён вниз на 16px */
+.H2.green::before{
+  background:radial-gradient(ellipse 110% 110% at 50% calc(100% + 16px),rgba(52,211,153,1) 0%,rgba(52,211,153,0.75) 22%,rgba(52,211,153,0.32) 50%,rgba(52,211,153,0.08) 75%,transparent 92%);
+  inset:0;
+  filter:blur(16px);
+}
+.H2.amber::before{
+  background:radial-gradient(ellipse 110% 110% at 50% calc(100% + 16px),rgba(245,158,11,1) 0%,rgba(245,158,11,0.72) 22%,rgba(245,158,11,0.30) 50%,rgba(245,158,11,0.08) 75%,transparent 92%);
+  inset:0;filter:blur(16px);
+}
+.H2.red::before{
+  background:radial-gradient(ellipse 120% 115% at 50% calc(100% + 16px),rgba(239,68,68,1) 0%,rgba(239,68,68,0.80) 22%,rgba(239,68,68,0.35) 50%,rgba(239,68,68,0.10) 75%,transparent 94%);
+  inset:0;filter:blur(16px);
+}
+</style>
+</head><body>
+<div class="wrap">
+<h1>Radial glow варианты для rep-score</h1>
+<p class="hint">Каждая строка — отдельная "система" градиента. Колонки — green / amber / red тон. Выбери систему, которая нравится.</p>
+
+<div class="group-title">A — Centered symmetric radial</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">A · GREEN</div><div class="rep-score A green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">A · AMBER</div><div class="rep-score A amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">A · RED</div><div class="rep-score A red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">B — Bottom-up radial</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">B · GREEN</div><div class="rep-score B green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">B · AMBER</div><div class="rep-score B amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">B · RED</div><div class="rep-score B red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">C — Top-down radial</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">C · GREEN</div><div class="rep-score C green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">C · AMBER</div><div class="rep-score C amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">C · RED</div><div class="rep-score C red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">D — Diagonal (top-left corner)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">D · GREEN</div><div class="rep-score D green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">D · AMBER</div><div class="rep-score D amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">D · RED</div><div class="rep-score D red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">E — Wide flat radial (horizontal)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">E · GREEN</div><div class="rep-score E green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">E · AMBER</div><div class="rep-score E amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">E · RED</div><div class="rep-score E red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">F — Tight bright core (intense)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">F · GREEN</div><div class="rep-score F green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">F · AMBER</div><div class="rep-score F amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">F · RED</div><div class="rep-score F red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">G — Layered (radial + linear)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">G · GREEN</div><div class="rep-score G green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">G · AMBER</div><div class="rep-score G amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">G · RED</div><div class="rep-score G red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">H — Bottom burn (интенсивный пересвет снизу)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">H · GREEN</div><div class="rep-score H green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">H · AMBER</div><div class="rep-score H amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">H · RED</div><div class="rep-score H red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">H2 — Bottom burn + blur(16px), glow внутри контура</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">H2 · GREEN</div><div class="rep-score H2 green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">H2 · AMBER</div><div class="rep-score H2 amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">H2 · RED</div><div class="rep-score H2 red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">I — Top burn (интенсивный пересвет сверху)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">I · GREEN</div><div class="rep-score I green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">I · AMBER</div><div class="rep-score I amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">I · RED</div><div class="rep-score I red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">J — Tone + white hot spot (двойной слой)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">J · GREEN</div><div class="rep-score J green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">J · AMBER</div><div class="rep-score J amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">J · RED</div><div class="rep-score J red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">K — Left side burn</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">K · GREEN</div><div class="rep-score K green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">K · AMBER</div><div class="rep-score K amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">K · RED</div><div class="rep-score K red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">L — Right side burn</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">L · GREEN</div><div class="rep-score L green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">L · AMBER</div><div class="rep-score L amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">L · RED</div><div class="rep-score L red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">M — Triple layered (main + top + bottom)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">M · GREEN</div><div class="rep-score M green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">M · AMBER</div><div class="rep-score M amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">M · RED</div><div class="rep-score M red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+<div class="group-title">N — Hot bottom-left corner (как реф)</div>
+<div class="grid">
+  <div class="cell"><div class="vmark">N · GREEN</div><div class="rep-score N green"><div class="num">12</div><div class="lvl">Чисто</div></div></div>
+  <div class="cell"><div class="vmark">N · AMBER</div><div class="rep-score N amber"><div class="num">47</div><div class="lvl">Есть вопросы</div></div></div>
+  <div class="cell"><div class="vmark">N · RED</div><div class="rep-score N red"><div class="num">81</div><div class="lvl">Высокий риск</div></div></div>
+</div>
+
+</div>
+</body></html>

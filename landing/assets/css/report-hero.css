@@ -1,0 +1,163 @@
+/* report-hero.css — SINGLE SOURCE OF TRUTH for the report hero block.
+   Extracted from pages/zelscan.css so every report tab (overview,
+   activity, behavior, psychology, analysis) renders an identical hero.
+   Do not duplicate hero rules in per-page CSS. */
+
+.hero {box-sizing:border-box;display:flex;flex-direction:column;gap:24px;width:1080px;padding:24px;border:1px solid #090909;border-radius:32px;
+ background:radial-gradient(32% 87% at 6% -7%,rgba(255,255,255,0.056) 17%,rgba(255,255,255,0) 58%),linear-gradient(360deg,rgba(255,255,255,0) 50%,rgba(27,29,26,0.08) 100%),rgba(255,255,255,0.03);}
+
+.hero-top {display:flex;justify-content:space-between;align-items:flex-start;width:1030px;}
+
+.hero-id {display:flex;align-items:center;gap:24px;}
+
+.hero-ava {width:124px;height:124px;border-radius:24px;background:linear-gradient(145deg,#343941 0%,#16191e 100%);display:flex;align-items:center;justify-content:center;font-size:62px;border:3px solid rgba(255,255,255,.06);box-sizing:border-box;overflow:hidden;flex:0 0 auto;}
+
+.hero-tags {display:flex;gap:8px;margin-bottom:6px;}
+
+.tag {display:flex;align-items:center;padding:3px 9px;border-radius:100px;background:rgba(255,255,255,0.06);font-size:13px;font-weight:500;letter-spacing:0.1px;color:rgba(255,255,255,0.9);}
+
+.tag.y {box-shadow:inset 0 -10px 10px -12px rgba(213,222,88,0.4);}
+
+.tag.r {box-shadow:inset 0 -10px 10px -12px rgba(222,88,88,0.4);}
+
+.tag.b {box-shadow:inset 0 -10px 10px -12px rgba(88,166,222,0.4);}
+
+.hero-name {font-size:42px;font-weight:500;letter-spacing:-0.01em;line-height:49px;color:#EBEBEB;margin-top:2px;}
+
+.hero-meta {display:flex;align-items:center;font-size:13.5px;font-weight:400;letter-spacing:0.1px;color:#6B6B6B;margin-top:10px;}
+
+.hero-meta .fa-calendar-days {margin-right:8px;}
+
+.hero-meta-separator {display:inline-block;margin:0 8px;color:#6B6B6B;}
+
+.hero-view-count {display:inline-flex;align-items:center;gap:6px;color:#6B6B6B;font-size:13.5px;font-weight:400;white-space:nowrap}
+
+.hero-view-count i {font-size:13px}
+
+.hero-view-count b {font-weight:400;color:inherit}
+
+.hero-view-count span {color:#6B6B6B}
+
+.hero-dots {display:flex;gap:3.5px;padding:4px;}
+
+.hero-dots i {width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.8);}
+
+.hero-desc .lbl {font-size:13px;color:#6B6B6B;}
+
+.hero-desc p {font-size:16px;line-height:22px;color:#EBEBEB;margin-top:6px;}
+
+.hero-div {height:1px;width:1032px;background:rgba(255,255,255,0.04);}
+
+.tiles {display:flex;gap:12px;width:1030px;}
+
+.tile {box-sizing:border-box;display:flex;align-items:center;gap:16px;flex:1;height:60.81px;padding:14px 18px 16px;border-radius:20px;
+ background:linear-gradient(360deg,rgba(255,255,255,0) 50%,rgba(255,255,255,0.01) 100%),rgba(255,255,255,0.05);}
+
+.tile .tl {flex:1;display:flex;flex-direction:column;gap:8px;}
+
+.tile .tl .lab {font-size:13.5px;color:#A8A8A8;line-height:17px;}
+
+.tile .tl .track {position:relative;height:5px;background:rgba(0,0,0,0.5);border-radius:3px;}
+
+.tile .tl .track i {position:absolute;left:0;top:0;height:5px;width:var(--tile-value,0%);max-width:100%;border-radius:3px;background:linear-gradient(90deg,var(--tile-color,#34D399) 73%,#FFFFFF 100%);transition:width .65s cubic-bezier(.2,.8,.2,1);}
+
+.tile .val {font-size:20px;font-weight:400;letter-spacing:-0.52px;color:#EBEBEB;}
+
+.tiles {overflow:visible;position:relative;}
+
+.tile {position:relative;overflow:visible;padding:0;background:none;border-radius:0;}
+
+.tile:hover {z-index:10;}
+
+.tile-ghost {box-sizing:border-box;display:flex;align-items:center;gap:16px;width:100%;height:100%;padding:14px 18px 16px;border-radius:20px;background:linear-gradient(360deg,rgba(255,255,255,0) 50%,rgba(255,255,255,0.01) 100%),rgba(255,255,255,0.05);visibility:hidden;}
+
+.tile-card {position:absolute;top:0;left:0;right:0;border-radius:20px;background:linear-gradient(360deg,rgba(255,255,255,0) 50%,rgba(255,255,255,0.01) 100%),rgba(255,255,255,0.05);overflow:hidden;max-height:62px;transition:max-height .32s cubic-bezier(.4,0,.2,1),box-shadow .25s ease,background .2s ease;z-index:2;}
+
+.tile:hover .tile-card {max-height:260px;box-shadow:0 16px 48px rgba(0,0,0,.55),0 0 0 .5px rgba(255,255,255,.07);background:linear-gradient(360deg,rgba(255,255,255,0) 50%,rgba(255,255,255,0.01) 100%),rgba(255,255,255,0.09);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+
+.tile-head {display:flex;align-items:center;gap:16px;padding:14px 18px 22px;}
+
+.tile-tl {flex:1;display:flex;flex-direction:column;gap:8px;}
+
+.tile-lab {font-size:13.5px;color:#A8A8A8;line-height:17px;}
+
+.tile-track {position:relative;height:5px;background:rgba(0,0,0,0.5);border-radius:3px;}
+
+.tile-track i {position:absolute;left:0;top:0;height:5px;width:var(--tile-value,0%);max-width:100%;border-radius:3px;background:linear-gradient(90deg,var(--tile-color,#34D399) 73%,#FFFFFF 100%);transition:width .65s cubic-bezier(.2,.8,.2,1);}
+
+.tile-val {font-size:20px;font-weight:400;letter-spacing:-0.52px;color:#EBEBEB;white-space:nowrap;}
+
+.tile-sep {height:1px;margin:0 18px;background:rgba(255,255,255,0.06);}
+
+.tile-body {padding:16px 18px 20px;opacity:0;transform:translateY(4px);transition:opacity .2s ease .12s,transform .2s ease .12s;}
+
+.tile:hover .tile-body {opacity:1;transform:translateY(0);}
+
+.tile-why {font-size:13px;font-weight:500;color:#424242;margin-bottom:12px;}
+
+.tile-rows {display:flex;flex-direction:column;gap:10px;}
+
+.tile-row {display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#A8A8A8;line-height:17px;}
+
+.tile-dot {width:4px;height:4px;border-radius:50%;margin-top:6px;flex:0 0 auto;}
+
+.tiles {overflow:visible!important;position:relative}
+
+.tile {position:relative!important;overflow:visible!important;padding:0!important;background:none!important;border-radius:0!important}
+
+.tile:hover,.tile:focus {z-index:20;outline:none}
+
+.tile-ghost {box-sizing:border-box;display:flex;align-items:center;gap:16px;width:100%;height:100%;padding:14px 18px 16px;border-radius:20px;background:rgba(255,255,255,.05);visibility:hidden}
+
+.tile-card {position:absolute;inset:0 0 auto;border-radius:20px;background:rgba(255,255,255,.05);overflow:hidden;max-height:61px;transition:max-height .28s ease,background .2s,box-shadow .2s;z-index:2}
+
+.tile:hover .tile-card,.tile:focus .tile-card {max-height:250px;background:rgba(255,255,255,.09);box-shadow:0 18px 54px rgba(0,0,0,.62);backdrop-filter:blur(22px)}
+
+.tile-head {display:flex;align-items:center;gap:16px;padding:14px 18px 22px}
+
+.tile-tl {flex:1;display:flex;flex-direction:column;gap:8px}
+
+.tile-lab {font-size:13.5px;color:#a8a8a8}
+
+.tile-track {height:5px;background:rgba(0,0,0,.5);border-radius:3px;position:relative}
+
+.tile-track i {position:absolute;inset:0 auto 0 0;width:var(--tile-value);background:linear-gradient(90deg,var(--tile-color,#34D399) 73%,#FFFFFF 100%);border-radius:3px}
+
+.tile-val {font-size:20px;color:#ebebeb;white-space:nowrap}
+
+.tile-sep {height:1px;margin:0 18px;background:rgba(255,255,255,.06)}
+
+.tile-body {padding:15px 18px 19px;opacity:0;transition:.18s}
+
+.tile:hover .tile-body,.tile:focus .tile-body {opacity:1}
+
+.tile-why {font-size:12px;color:#555;margin-bottom:11px}
+
+.tile-rows {display:flex;flex-direction:column;gap:9px}
+
+.tile-row {display:flex;gap:8px;font-size:12.5px;line-height:1.4;color:#aaa}
+
+.tile-dot {width:4px;height:4px;border-radius:50%;margin-top:6px;flex:none}
+
+.hero-dots {cursor:pointer;min-width:44px;min-height:44px;align-items:center;justify-content:center;border-radius:14px}
+
+.hero-dots:hover {background:rgba(255,255,255,.06)}
+
+.share-output {font-size:12px;color:#888;margin-top:14px;display:flex;justify-content:space-between;align-items:center}
+
+@media(max-width:700px) {
+  .tiles {overflow-x:auto!important}
+  .tile {min-width:220px}
+  .tile:hover .tile-card {max-height:61px}
+  .tile:focus .tile-card {max-height:250px}
+}
+
+.hero-top {justify-content:flex-start!important;gap:10px!important}
+
+.hero-top > .hero-id {margin-right:auto!important;flex:1 1 auto!important}
+
+.hero-top > :not(.hero-id) {margin-left:0!important;margin-right:0!important;flex:0 0 auto!important}
+
+.hero-top > button {border:0!important;outline:0!important;box-shadow:none!important}
+
+.hero-top > button:hover,.hero-top > button:focus {border:0!important;outline:0!important;box-shadow:none!important}

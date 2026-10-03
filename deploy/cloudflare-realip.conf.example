@@ -1,0 +1,6 @@
+# Replace these documentation-only ranges with the complete current official
+# Cloudflare IPv4 and IPv6 ranges before enabling Nginx. Do not trust all IPs.
+# set_real_ip_from CLOUDFLARE_IPV4_CIDR_PLACEHOLDER;
+# set_real_ip_from CLOUDFLARE_IPV6_CIDR_PLACEHOLDER;
+real_ip_header CF-Connecting-IP;
+real_ip_recursive on;

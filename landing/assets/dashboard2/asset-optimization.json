@@ -1,0 +1,86 @@
+[
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\base-left.png",
+    "before": 742579,
+    "after": 702059,
+    "saved": 40520,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\base-right.png",
+    "before": 703842,
+    "after": 664650,
+    "saved": 39192,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s1-left.png",
+    "before": 531125,
+    "after": 502272,
+    "saved": 28853,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s1-right.png",
+    "before": 781500,
+    "after": 735620,
+    "saved": 45880,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s2-left.png",
+    "before": 526736,
+    "after": 500146,
+    "saved": 26590,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s2-right.png",
+    "before": 776254,
+    "after": 733212,
+    "saved": 43042,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s3-left.png",
+    "before": 534660,
+    "after": 506318,
+    "saved": 28342,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s3-right.png",
+    "before": 786866,
+    "after": 742295,
+    "saved": 44571,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s4-left.png",
+    "before": 557313,
+    "after": 530548,
+    "saved": 26765,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\logo-anim\\s4-right.png",
+    "before": 849539,
+    "after": 809154,
+    "saved": 40385,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\img\\gotovo1.png",
+    "before": 2047901,
+    "after": 1994792,
+    "saved": 53109,
+    "pixelIdentical": true
+  },
+  {
+    "file": "landing\\assets\\dashboard2\\img\\gotovo2.png",
+    "before": 2932569,
+    "after": 2805747,
+    "saved": 126822,
+    "pixelIdentical": true
+  }
+]

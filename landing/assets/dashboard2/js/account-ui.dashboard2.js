@@ -1,0 +1,510 @@
+(() => {
+/* zelscan-settings-modal-loader-v1: подтягиваем ассеты модалки настроек,
+   чтобы фича работала на всех страницах, где подключён account-ui.js. */
+(function loadSettingsAssets(){
+  try{
+    // Resolve companion assets from account-ui.js itself, not from the current page URL.
+    // This keeps the loader working when a page is served from a nested route.
+    const loaderScript=document.currentScript || document.querySelector('script[src*="assets/dashboard2/js/account-ui.dashboard2.js"]');
+    const assetUrl=(relativePath)=>loaderScript
+      ? new URL(relativePath, loaderScript.src).href
+      : new URL(`assets/${relativePath}`, document.baseURI).href;
+
+    if(!document.querySelector('link[data-zs-settings-css]')){
+      const l=document.createElement('link');l.rel='stylesheet';
+      l.href=assetUrl('../css/settings-modal.dashboard2.css');l.setAttribute('data-zs-settings-css','1');
+      document.head.appendChild(l);
+    }
+    if(!window.ZSSettings && !document.querySelector('script[data-zs-settings-js]')){
+      const s=document.createElement('script');
+      s.src=assetUrl('settings.dashboard2.js');s.setAttribute('data-zs-settings-js','1');s.defer=true;
+      document.head.appendChild(s);
+    }
+    // Центр уведомлений (колокольчик + popover)
+    var notiCss = document.querySelector('link[data-zs-noti-css]');
+    if(!notiCss){
+      notiCss=document.createElement('link');notiCss.rel='stylesheet';
+      notiCss.href=assetUrl('../css/notifications-center.dashboard2.css?v=6');notiCss.setAttribute('data-zs-noti-css','1');
+      document.head.appendChild(notiCss);
+    }
+    // Колокольчик показываем только после загрузки его CSS, иначе он мелькает
+    // голой кнопкой на белом фоне (Anti-FOUC). Класс снимает маску в account-ui.css.
+    (function markNotiReady(){
+      var done=false;
+      function ready(){if(done)return;done=true;try{document.documentElement.classList.add('zs-noti-ready')}catch(_){}}
+      notiCss.addEventListener('load',ready);
+      notiCss.addEventListener('error',ready);
+      try{if(notiCss.sheet&&notiCss.sheet.cssRules&&notiCss.sheet.cssRules.length)ready()}catch(_){}
+      setTimeout(ready,1200); // страховка: не прячем колокольчик вечно при сбое CSS
+    })();
+    if(!window.ZSNotifications && !document.querySelector('script[data-zs-noti-js]')){
+      const s2=document.createElement('script');
+      s2.src=assetUrl('zs-notifications.dashboard2.js?v=5');s2.setAttribute('data-zs-noti-js','1');s2.defer=true;
+      document.head.appendChild(s2);
+    }
+  }catch(_){}
+})();
+const API=window.ZSDashboard2.apiBase,$=(s,r=document)=>r.querySelector(s),clearAuthState=()=>{['lzt_token','lzt_token_expires','lzt_user_id','lzt_user','lzt_user_ts'].forEach(k=>localStorage.removeItem(k))};
+/* Cookie session is the source of truth; legacy storage is never required. */
+let accountUser=null;
+const user=()=>accountUser||(window.ZSAuthGuard&&window.ZSAuthGuard.getSession())||null;
+const headers=()=>({'Content-Type':'application/json'});
+function showLoggedOutUI(){if(window.ZSAuthGuard&&window.ZSAuthGuard.isAuthenticated())return;menu.classList.remove('open');document.querySelectorAll('.acc-pill,.bal-pill').forEach(p=>p.style.setProperty('display','none','important'));document.querySelectorAll('.btn-login').forEach(b=>b.style.setProperty('display','flex','important'));settleProfileSkeletons()}
+function requireAuth(e){if(window.ZSAuthGuard&&window.ZSAuthGuard.isAuthenticated())return true;if(e){e.preventDefault();e.stopPropagation()}clearAuthState();showLoggedOutUI();notify({type:'warning',title:'Сессия истекла',detail:'Войдите снова, чтобы продолжить.'});window.openOAuth();return false}
+window.zsAccountApi=API;window.zsAuthHeaders=headers;
+
+const starsHTML=`
+<div class="stars-container">
+<span class="star size-05" style="top:5%;right:6%;--base-opacity:0.62;--duration:5.5s;--delay:.2s;--fall-y:22px;--drift-x:8px"></span>
+<span class="star size-1"  style="top:2%;right:26%;--base-opacity:0.65;--duration:6.8s;--delay:.6s;--fall-y:18px;--drift-x:-5px"></span>
+<span class="star size-05" style="top:8%;right:39%;--base-opacity:0.59;--duration:4.9s;--delay:.1s;--fall-y:20px;--drift-x:12px"></span>
+<span class="star size-1"  style="top:4%;right:16%;--base-opacity:0.65;--duration:7.2s;--delay:.9s;--fall-y:15px;--drift-x:-3px"></span>
+<span class="star size-05" style="top:1%;right:49%;--base-opacity:0.62;--duration:6.1s;--delay:.4s;--fall-y:24px;--drift-x:6px"></span>
+<span class="star size-1"  style="top:18%;right:9%;--base-opacity:0.52;--duration:4.8s;--delay:1.2s;--fall-y:20px;--drift-x:10px"></span>
+<span class="star size-05" style="top:25%;right:29%;--base-opacity:0.45;--duration:6.4s;--delay:.3s;--fall-y:14px;--drift-x:-7px"></span>
+<span class="star size-1"  style="top:30%;right:2%;--base-opacity:0.49;--duration:5.2s;--delay:.8s;--fall-y:16px;--drift-x:5px"></span>
+<span class="star size-05" style="top:15%;right:44%;--base-opacity:0.55;--duration:7.5s;--delay:.5s;--fall-y:12px;--drift-x:-4px"></span>
+<span class="star size-1"  style="top:22%;right:22%;--base-opacity:0.52;--duration:4.2s;--delay:1.0s;--fall-y:24px;--drift-x:8px"></span>
+<span class="star size-05" style="top:35%;right:14%;--base-opacity:0.42;--duration:5.9s;--delay:.7s;--fall-y:17px;--drift-x:-2px"></span>
+<span class="star size-1"  style="top:12%;right:34%;--base-opacity:0.59;--duration:6.6s;--delay:.2s;--fall-y:19px;--drift-x:6px"></span>
+<span class="star size-05" style="top:45%;right:4%;--base-opacity:0.33;--duration:5.3s;--delay:.4s;--fall-y:22px;--drift-x:9px"></span>
+<span class="star size-1"  style="top:52%;right:24%;--base-opacity:0.29;--duration:6.9s;--delay:.9s;--fall-y:15px;--drift-x:-6px"></span>
+<span class="star size-05" style="top:60%;right:12%;--base-opacity:0.26;--duration:4.5s;--delay:.1s;--fall-y:18px;--drift-x:4px"></span>
+<span class="star size-1"  style="top:42%;right:36%;--base-opacity:0.36;--duration:7.1s;--delay:.6s;--fall-y:20px;--drift-x:-8px"></span>
+<span class="star size-05" style="top:70%;right:19%;--base-opacity:0.23;--duration:5.7s;--delay:.3s;--fall-y:14px;--drift-x:7px"></span>
+<span class="star size-1"  style="top:55%;right:44%;--base-opacity:0.26;--duration:6.2s;--delay:.8s;--fall-y:16px;--drift-x:-5px"></span>
+<span class="star size-05" style="top:80%;right:6%;--base-opacity:0.20;--duration:4.1s;--delay:.5s;--fall-y:24px;--drift-x:10px"></span>
+<span class="star size-1"  style="top:65%;right:29%;--base-opacity:0.23;--duration:5.0s;--delay:.2s;--fall-y:19px;--drift-x:-3px"></span>
+<span class="star size-05" style="top:90%;right:14%;--base-opacity:0.13;--duration:6.5s;--delay:.7s;--fall-y:17px;--drift-x:5px"></span>
+</div>`;
+
+const topupIcon=`<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 8.5v7M8.5 12h7"></path></svg>`;
+
+const menu=document.createElement('div');menu.className='acc-menu';
+menu.innerHTML=`
+<div class="acc-menu-user"><div class="acc-menu-av"></div><div class="acc-menu-who"><div class="acc-menu-name">Аккаунт</div></div></div>
+<div class="bal">
+  <div class="bal-card variant-4" data-account="rub" id="zsBalCard"><span class="bal-card-fx" aria-hidden="true"></span>
+    <span class="bal-rays" aria-hidden="true"></span>
+    <div class="glow-layer"></div>
+    ${starsHTML}
+    <div class="sec">
+      <div class="krow">
+        <span class="k" id="zsAccountLabel">Основной счёт</span>
+        <div class="account-switch" role="group" aria-label="Выбор счёта">
+          <button class="account-btn active" type="button" data-account-button="rub" aria-label="Рублёвый счёт" aria-pressed="true" title="Рублёвый счёт">₽</button>
+          <button class="account-btn" type="button" data-account-button="bonus" aria-label="Бонусный счёт" aria-pressed="false" title="Бонусный счёт">Б</button>
+        </div>
+      </div>
+      <div class="balance-row">
+        <span class="v main num" id="zsMainBalance"></span>
+        <span class="sep">/</span>
+        <button class="v inactive num" id="zsOtherBalance" type="button"></button>
+      </div>
+      <button class="topup" id="zsTopupBtn" type="button">
+        ${topupIcon}
+        <span id="zsTopupLabel">Пополнить</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="acc-menu-list">
+  <a class="menu-item" href="/dossiers"><span class="mi"><i class="fa-solid fa-folder-open"></i></span>Мои досье</a>
+  <button class="menu-item" type="button" data-open-settings><span class="mi"><i class="fa-solid fa-gear"></i></span>Настройки</button>
+  <a class="menu-item" href="https://t.me/udodov228" target="_blank" rel="noopener noreferrer"><span class="mi"><i class="fa-solid fa-bullhorn"></i></span>Поддержка</a>
+  <a class="menu-item" href="/billing"><span class="mi"><i class="fa-solid fa-receipt"></i></span>Транзакции</a>
+  <div class="menu-sep"></div>
+  <a class="menu-item danger" data-logout><span class="mi"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>Выйти</a>
+</div>`;
+document.body.append(menu);
+
+// Открытие модалки настроек (ассеты подгружаются лоадером выше).
+function openSettingsModal(){
+  menu.classList.remove('open');
+  const tryOpen=(n)=>{
+    if(window.ZSSettings&&typeof window.ZSSettings.open==='function'){window.ZSSettings.open();return;}
+    if(n<=0)return;
+    setTimeout(()=>tryOpen(n-1),120); // ждём догрузку settings.js
+  };
+  tryOpen(20);
+}
+const settingsBtn=menu.querySelector('[data-open-settings]');
+if(settingsBtn)settingsBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openSettingsModal();});
+window.zsOpenSettings=openSettingsModal;
+
+// Единый центр уведомлений подключается отдельно через zs-notice.js.
+// Не переопределяем глобальные ZSNotice/zsNotify: старый локальный toast больше не используется.
+const notify = (options) => window.ZSNotice && typeof window.ZSNotice.show === 'function'
+  ? window.ZSNotice.show(typeof options === 'string' ? { type: 'info', title: options } : options)
+  : null;
+
+// ── popover balance ──
+const POP_HTML=`<div class="bpop bpop2"><div class="bpop-title">Баланс</div><div class="bp2-card lit"><div class="bp2-copy"><span class="k">Основной счёт</span><span class="v"><span class="bp-main">0</span><span class="u">₽</span></span></div><button class="bp2-act" type="button" data-act="topup"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Пополнить</button></div><div class="bp2-card bonus"><div class="bp2-copy"><span class="k">Бонусный счёт<span class="bp2-help">?<span class="bp2-tip">Бонусами можно оплачивать досье, как рублями. Начисляются за промокоды и бонус регистрации. Их нельзя объединить с рублями в одной покупке — валюта выбирается при оплате.</span></span></span><span class="v"><span class="bp-bonus">0</span><span class="b-badge">Б</span></span></div><button class="bp2-act" type="button" data-act="promo"><svg viewBox="0 0 24 24"><path d="M3 8.5a1.5 1.5 0 0 0 1.5-1.5h15A1.5 1.5 0 0 0 21 8.5v2a1.5 1.5 0 0 0 0 3v2a1.5 1.5 0 0 0-1.5 1.5h-15A1.5 1.5 0 0 0 3 15.5v-2a1.5 1.5 0 0 0 0-3Z"/><path d="M9.5 8.5v7" stroke-dasharray="1.5 2"/></svg>Промокод</button></div></div>`;
+function buildPopovers(){document.querySelectorAll('.bal-pill').forEach(p=>{if(p.parentElement&&p.parentElement.classList.contains('bal-wrap'))return;const w=document.createElement('div');w.className='bal-wrap';p.parentNode.insertBefore(w,p);w.appendChild(p);w.insertAdjacentHTML('beforeend',POP_HTML);const pop=w.querySelector('.bpop');pop.querySelector('[data-act="topup"]').onclick=e=>{e.stopPropagation();openTopup()};pop.querySelector('[data-act="promo"]').onclick=e=>{e.stopPropagation();openPromo(e)}})}
+function fillPop(u){const rub=Number(u&&u.credits||0).toLocaleString('ru'),bon=Number(u&&u.bonus_credits||0).toLocaleString('ru');document.querySelectorAll('.bpop .bp-main').forEach(el=>el.textContent=rub);document.querySelectorAll('.bpop .bp-bonus').forEach(el=>el.textContent=bon)}
+buildPopovers();
+
+// ── Колокольчик уведомлений: вставляем слева от аватарки (.acc-pill) ──
+const BELL_HTML=`<button class="zs-noti-trigger" type="button" data-zs-noti-trigger aria-label="Уведомления" aria-haspopup="dialog" aria-expanded="false" style="background:transparent!important;border:0!important;color:#62646a!important;transition:none!important"><i class="fa-solid fa-bell"></i><span class="t-badge" data-open="false"><span class="t-badge-dot" style="transform:scale(0)!important;opacity:0!important;filter:blur(2px)!important;transition:none!important">0</span></span></button>`;
+function mountBells(){
+  document.querySelectorAll('.acc-pill').forEach(p=>{
+    // не дублируем: колокольчик ставится один раз перед каждой pill
+    const prev=p.previousElementSibling;
+    if(prev&&prev.classList&&prev.classList.contains('zs-noti-trigger'))return;
+    p.insertAdjacentHTML('beforebegin',BELL_HTML);
+    const bell=p.previousElementSibling;
+    // ВАЖНО: сам toggle() вешает zs-notifications.js (ensureTrigger по [data-zs-noti-trigger]).
+    // Здесь обработчик toggle НЕ вешаем — иначе клик срабатывал бы дважды
+    // (открыть -> сразу закрыть). Для невалидной сессии перехватываем клик
+    // до обработчика центра уведомлений и запускаем единый OAuth-flow.
+    if(bell)bell.addEventListener('click',e=>{requireAuth(e)},true);
+  });
+}
+mountBells();
+
+// ── account promo uses the shared ZSModals shell ──
+function openPromo(trigger){
+  const source=trigger&&trigger.currentTarget instanceof HTMLElement?trigger.currentTarget:(trigger instanceof HTMLElement?trigger:document.activeElement);
+  if(trigger&&trigger.stopPropagation)trigger.stopPropagation();
+  if(typeof requireAuth==='function'&&!requireAuth(trigger&&trigger.preventDefault?trigger:null))return;
+  if(typeof isAuthed==='function'&&!isAuthed())return location.href='/app';
+  let attempts=0;
+  const tryOpen=()=>{
+    const modals=window.ZSModals;
+    if(modals&&typeof modals.openAccountPromo==='function'){modals.openAccountPromo(source);return;}
+    if(attempts++<20){setTimeout(tryOpen,100);return;}
+    console.error('[account-ui] ZSModals.openAccountPromo is unavailable after waiting for order-modals.js');
+    if(window.ZSNotice&&typeof window.ZSNotice.show==='function')window.ZSNotice.show({type:'error',title:'Не удалось открыть промокод',message:'Обновите страницу и попробуйте ещё раз.'});
+    else alert('Не удалось открыть промокод. Обновите страницу и попробуйте ещё раз.');
+  };
+  tryOpen();
+}
+window.openPromo=openPromo;
+
+const avatar=u=>{const src=window.ZSDashboard2.safeUrl(u?.avatar);return src?`<img src="${src.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" alt="">`:(String(u?.username||'?')[0]||'?').toUpperCase();};
+const profileSkeletonHTML='<span class="zs-profile-skeleton" aria-hidden="true"><span class="zsk zsk-circle zs-profile-skeleton-av"></span><span class="zsk zsk-line zs-profile-skeleton-name"></span></span>';
+function mountProfileSkeletons(){document.querySelectorAll('.acc-pill').forEach(p=>{p.querySelectorAll('.zs-profile-skeleton').forEach(s=>s.remove());p.classList.remove('zs-profile-loading')});document.querySelectorAll('.sb-user').forEach(p=>{if(!p.querySelector('.zs-profile-skeleton'))p.insertAdjacentHTML('afterbegin',profileSkeletonHTML);p.classList.add('zs-profile-loading')});if(!menu.querySelector('.zs-profile-skeleton'))menu.querySelector('.acc-menu-user')?.insertAdjacentHTML('beforeend',profileSkeletonHTML);menu.querySelector('.acc-menu-user')?.classList.add('zs-profile-loading')}
+function settleProfileSkeletons(){document.querySelectorAll('.zs-profile-loading').forEach(p=>p.classList.remove('zs-profile-loading'));document.querySelectorAll('.zs-profile-skeleton').forEach(s=>{s.classList.add('zsk-fade-out');setTimeout(()=>s.remove(),240)})}
+mountProfileSkeletons();
+
+// ── V8 account switch accounts ──
+const accounts={
+  rub:{label:"Основной счёт",other:"Бонусный счёт",main:"rub"},bonus:{label:"Бонусный счёт",other:"Рублёвый счёт",main:"bonus"}
+};
+
+window.zsCurrentAccount='rub';
+function zsSelectAccount(name,force){
+  const card=$('#zsBalCard');if(!card)return;
+  const applyAccount=()=>{
+  const labelEl=$('#zsAccountLabel'),mainEl=$('#zsMainBalance'),otherEl=$('#zsOtherBalance'),topupEl=$('#zsTopupLabel');
+  const rub=Number(user()?.credits||0).toLocaleString('ru'),bon=Number(user()?.bonus_credits||0).toLocaleString('ru');
+  if(name==='rub'){
+    window.zsCurrentAccount='rub';
+    card.dataset.account='rub';
+    labelEl.textContent='Основной счёт';
+    mainEl.innerHTML=`${rub} ₽`;
+    otherEl.innerHTML=`${bon}<span class="bbadge">Б</span>`;
+    otherEl.setAttribute('aria-label','Открыть бонусный счёт');
+    topupEl.textContent='Пополнить';
+  }else{
+    zsCurrentAccount='bonus';
+    card.dataset.account='bonus';
+    labelEl.textContent='Бонусный счёт';
+    mainEl.innerHTML=`${bon}<span class="bbadge">Б</span>`;
+    otherEl.innerHTML=`${rub} ₽`;
+    otherEl.setAttribute('aria-label','Открыть рублёвый счёт');
+    topupEl.textContent='Ввести промокод';
+  }
+  };
+  const buttons=menu.querySelectorAll('[data-account-button]');
+  buttons.forEach(b=>{const is=b.dataset.accountButton===name;b.classList.toggle('active',is);b.setAttribute('aria-pressed',String(is))});
+  // первый вызов — мгновенно; дальше — Apple-style кроссфейд текста
+  if(!card.dataset.accReady){applyAccount();card.dataset.accReady='1';return}
+  // force=true => обновление данных (профиль подгрузился): переписываем цифры без анимации,
+  // даже если выбранный счёт не менялся. Иначе баланс залипал на 0 до ручного переключения таба.
+  if(force){applyAccount();return}
+  if(card.dataset.account===name)return;
+  card.classList.add('is-switching');
+  setTimeout(()=>{applyAccount();card.classList.remove('is-switching')},170);
+}
+window.zsSelectAccount=zsSelectAccount;
+
+// V8 account switch event listeners (deferred until menu is in DOM)
+setTimeout(()=>{
+  const card=$('#zsBalCard');if(!card)return;
+  const otherEl=$('#zsOtherBalance');
+  const buttons=menu.querySelectorAll('[data-account-button]');
+  buttons.forEach(b=>{b.addEventListener('click',()=>zsSelectAccount(b.dataset.accountButton))});
+  if(otherEl)otherEl.addEventListener('click',()=>zsSelectAccount(zsCurrentAccount==='rub'?'bonus':'rub'));
+  zsSelectAccount('rub');
+},0);
+
+function render(u){
+  if(!u){settleProfileSkeletons();return;}
+  accountUser=u;
+  try{localStorage.setItem('lzt_user',JSON.stringify(u));}catch(_){}
+  document.querySelectorAll('.btn-login').forEach(b=>b.style.setProperty('display','none','important'));
+  document.querySelectorAll('.acc-pill').forEach(p=>{p.style.setProperty('display','flex','important');const a=$('.av',p);if(a)a.innerHTML=avatar(u)});
+  // applyNick — top-level const, инициализируется НИЖЕ по файлу. Если render() вызван
+  // синхронно из initializeAuthUI/applyAuthState (сессия уже готова у ZSAuthGuard) ДО
+  // инициализации applyNick — прямой вызов кидал ReferenceError (TDZ) и обрывал render:
+  // аватар уже проставлен, а ник (#accNm) оставался пустым до F5. Гардируем вызов и
+  // ставим plain-text ник как фолбэк; богатый ник дорисует applyNick по событию zs:profile.
+  try{
+    applyNick(u);
+  }catch(_){
+    document.querySelectorAll('.acc-pill .nm,.acc-menu-name').forEach(el=>{el.textContent=(u&&u.username)||'Аккаунт';});
+  }
+  document.querySelectorAll('.bal-pill').forEach(p=>{p.style.display='';const el=p.querySelector('.amt');if(el)el.textContent=Number(u.credits||0).toLocaleString('ru')});
+  // Настройка «Показывать баланс в шапке» имеет приоритет: заново применяем скрытие
+  // после того как render() показал pill (иначе балланс возвращается при обновлении профиля).
+  try{if(window.ZSSettings&&typeof window.ZSSettings.applyBalancePill==='function')window.ZSSettings.applyBalancePill();}catch(_){}
+  const sb=$('.sb-user');if(sb){const a=$('.av',sb),n=$('.who .n',sb),c=$('.who .c',sb);if(a)a.innerHTML=avatar(u);if(n)n.textContent=(u.username||'Аккаунт').slice(0,10);if(c)c.textContent=`${Number(u.credits||0).toLocaleString('ru')} кредитов`}
+  $('.acc-menu-av',menu).innerHTML=avatar(u);
+  $('.acc-menu-name',menu).textContent=u.username||'Аккаунт';
+  // V8 balance update — force=true: профиль подгрузился, обязательно переписать цифры
+  // (иначе баланс залипал на 0 до ручного переключения таба).
+  setTimeout(()=>zsSelectAccount(zsCurrentAccount,true),0);
+  if(+u.user_id===638074&&!menu.querySelector('.admin-link')){const a=document.createElement('a');a.className='menu-item admin-link';a.href='/admin/';a.innerHTML='<span class="mi"><i class="fa-solid fa-shield-halved"></i></span>Control Center';menu.querySelector('.acc-menu-list').insertBefore(a,menu.querySelector('.menu-sep'))}
+  fillPop(u);
+  settleProfileSkeletons();
+}
+window.zsRenderAccount=render;
+let profilePromise=null;
+async function refreshCookieProfile(){
+  if(profilePromise)return profilePromise;
+  profilePromise=fetch(`${API}/api/my/profile`,{headers:headers(),credentials:'same-origin',cache:'no-store'}).then(async r=>{
+    if(r.status===401){accountUser=null;showLoggedOutUI();document.dispatchEvent(new CustomEvent('zs:auth-401'));return null;}
+    if(!r.ok)return null;
+    const u=await r.json();render(u);document.dispatchEvent(new CustomEvent('zs:profile',{detail:u}));return u;
+  }).catch(()=>null).finally(()=>{profilePromise=null;settleProfileSkeletons()});
+  return profilePromise;
+}
+function eventSession(detail){return detail&&(detail.session||detail.user)||(detail&&detail.user_id?detail:null)}
+function applyAuthState(state,session){
+  const guard=window.ZSAuthGuard;
+  const guardAuthenticated=guard&&guard.isAuthenticated();
+  if(state==='authenticated'||guardAuthenticated){
+    const current=eventSession(session)||(guard&&guard.getSession());
+    if(current){render(current);document.dispatchEvent(new CustomEvent('zs:profile',{detail:current}));}
+    refreshCookieProfile();
+  }else if(state==='guest'){
+    accountUser=null;showLoggedOutUI();
+  }
+}
+document.addEventListener('zs:auth-ok',e=>applyAuthState('authenticated',e&&e.detail));
+document.addEventListener('zs:auth-state',e=>applyAuthState(e.detail&&e.detail.state,e.detail));
+document.addEventListener('zs:auth-401',()=>applyAuthState('guest'));
+async function initializeAuthUI(){
+  const guard=window.ZSAuthGuard;
+  if(guard){
+    const current=guard.getSession();
+    if(current||guard.isAuthenticated()){applyAuthState('authenticated',current);return;}
+    if(guard.getState()==='pending'){const checked=await guard.check();if(checked){applyAuthState('authenticated',checked);return;}}
+    if(guard.getState()==='guest'){showLoggedOutUI();return;}
+  }
+  try{
+    const response=await fetch('/api/auth/session',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+    if(response.ok){const data=await response.json();applyAuthState('authenticated',data&&data.user?data.user:data);return;}
+  }catch(_){}
+  showLoggedOutUI();
+}
+initializeAuthUI();
+// Anti-FOUC: состояние баланса/бейджа определено выше (render + applyBalancePill).
+// Снимаем маскировку из CSS (html:not(.zs-ui-ready)), чтобы элементы больше не мигали.
+try{requestAnimationFrame(()=>document.documentElement.classList.add('zs-ui-ready'));}catch(_){document.documentElement.classList.add('zs-ui-ready');}
+
+// ── Позиционирование дропдауна: якорь под .acc-pill, живое обновление, флип вверх ──
+let posScheduled=0;
+function pos(p){
+  const r=p.getBoundingClientRect();
+  const w=menu.offsetWidth||280,h=menu.offsetHeight||380,gap=9,margin=16;
+  let left=Math.min(innerWidth-w-margin,Math.max(margin,r.right-w));
+  let top=r.bottom+gap;
+  const flip=top+h>innerHeight-12&&r.top-h-gap>12;
+  if(flip)top=Math.max(margin,r.top-h-gap);
+  menu.style.left=`${Math.round(left)}px`;
+  menu.style.top=`${Math.round(top)}px`;
+  menu.classList.toggle('flip',flip);
+}
+function posLive(){
+  if(!menu.classList.contains('open'))return;
+  cancelAnimationFrame(posScheduled);
+  posScheduled=requestAnimationFrame(()=>{const pill=document.querySelector('.acc-pill');if(pill)pos(pill)});
+}
+['scroll','resize'].forEach(ev=>addEventListener(ev,posLive,{capture:true,passive:true}));
+document.querySelectorAll('.acc-pill').forEach(p=>{p.removeAttribute('onclick');p.onclick=e=>{e.preventDefault();if(!requireAuth(e))return;pos(p);menu.classList.toggle('open');if(menu.classList.contains('open')){window.ZSPopovers&&ZSPopovers.open('acc',()=>menu.classList.remove('open'))}else{window.ZSPopovers&&ZSPopovers.close('acc')}}});document.onclick=e=>{if(menu.contains(e.target))return;if(e.target.closest&&e.target.closest('.acc-pill'))return;menu.classList.remove('open')};
+
+function openTopup(v,e){if(!requireAuth(e))return;ZSModals.openTopup(v)}window.openTopup=openTopup;
+document.querySelectorAll('.bal-pill').forEach(p=>{p.onclick=e=>{e.stopPropagation();openTopup()}});
+function close(){ZSModals.close()}
+
+// V8 topup button click
+setTimeout(()=>{
+  const topupBtn=$('#zsTopupBtn');if(topupBtn)topupBtn.onclick=e=>{menu.classList.remove('open');if(window.zsCurrentAccount==='bonus')openPromo(e);else openTopup()};
+},0);
+
+$('[data-logout]',menu).onclick=async()=>{try{await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'})}catch(_){}['lzt_token','lzt_token_expires','lzt_user_id','lzt_user','lzt_user_ts'].forEach(k=>localStorage.removeItem(k));location.href='/'};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){close();menu.classList.remove('open')}});
+if(typeof window.focusSearch!=='function')window.focusSearch=()=>location.href='zelscan_dashboard.html';
+
+// First/last-touch analytics
+(()=>{let vid=localStorage.getItem('zs_visitor_id');if(!vid){vid=crypto.randomUUID?.()||Math.random().toString(36).slice(2);localStorage.setItem('zs_visitor_id',vid)}let q=new URLSearchParams(location.search),sid=sessionStorage.getItem('zs_session_id')||vid;sessionStorage.setItem('zs_session_id',sid);let order=q.get('order');fetch(`${API}/api/events`,{method:'POST',headers:headers(),body:JSON.stringify({event:order?'report_viewed':'page_view',visitor_id:vid,session_id:sid,object_type:order?'report':'page',object_id:order||location.pathname.split('/').pop(),utm_source:q.get('utm_source')||'',utm_medium:q.get('utm_medium')||'',utm_campaign:q.get('utm_campaign')||'',referrer:document.referrer||''})}).catch(()=>{})})();
+})();
+
+
+/* zelscan-topup-reconcile-v1: брошенные инвойсы — догасить при загрузке страницы */
+(function () {
+  const t = localStorage.getItem('lzt_token') || '';
+  if (!t) return;
+  const base = (window.__ZS_API__ || (window.ZSDashboard2 && window.ZSDashboard2.apiBase) || '');
+  fetch(base + '/api/my/topup-pending', { headers: { 'Authorization': 'Bearer ' + t } })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (d) {
+      if (!d || !(d.credited > 0)) return;
+      return fetch(base + '/api/my/profile', { headers: { 'Authorization': 'Bearer ' + t } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (u) {
+          if (u && u.user_id) {
+            localStorage.setItem('lzt_user', JSON.stringify(u));
+            document.dispatchEvent(new CustomEvent('zs:profile', { detail: u }));
+          }
+          window.ZSNotice && window.ZSNotice.show({
+            type: 'success',
+            title: 'Баланс пополнен',
+            detail: '+' + Math.round(d.credited) + ' ₽ зачислены на счёт'
+          });
+        });
+    })
+    .catch(function () {});
+})();
+/* zelscan-session-recovery-v1 */(()=>{const t=localStorage.getItem('lzt_token')||'';if(!t||localStorage.getItem('lzt_user'))return;fetch(window.ZSDashboard2.apiBase + '/api/me', {headers:{Authorization:'Bearer '+t}}).then(r=>r.ok?r.json():null).then(d=>{const u=d&&d.user?d.user:d;if(!u||!(u.user_id||u.id))return;localStorage.setItem('lzt_user',JSON.stringify(u));try{render(u);finishAccountBoot&&finishAccountBoot()}catch(_){try{render(u)}catch(__){}}document.dispatchEvent(new CustomEvent('zs:profile',{detail:u}))}).catch(()=>{})})();
+
+/* zelscan-rich-nickname-observer-v1 */
+const applyNick = (()=>{
+  const esc = value => String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const renderNick = current => {
+    const raw = String(current && current.username_html || '');
+    if (!raw) return esc(current && current.username || 'Аккаунт');
+    const template = document.createElement('template');
+    template.innerHTML = raw;
+    const node = template.content.querySelector('.styleUserNickname,span');
+    if (!node) return esc(current && current.username || 'Аккаунт');
+    const allowed = ['color','background','-webkit-background-clip','-webkit-text-fill-color','text-shadow','font-weight','font-style','text-decoration'];
+    const blocked = /(?:url\s*\(|expression\s*\(|@import|javascript\s*:|data\s*:|behavior\s*:|-moz-binding|\bvar\s*\()/i;
+    const style = allowed.map(key => { const value=node.style.getPropertyValue(key).trim(); return value&&!blocked.test(value)?key+':'+value:''; }).filter(Boolean).join(';');
+    return '<span class="account-forum-nick" style="' + esc(style) + '">' + esc(node.textContent || current.username || 'Аккаунт') + '</span>';
+  };
+  let _nickObs = null;
+  const applyNick = user => {
+    const paint = () => {
+      document.querySelectorAll('.acc-pill .nm,.acc-menu-name').forEach(element => { const h = renderNick(user); if (element.innerHTML !== h) element.innerHTML = h; });
+    };
+    if (_nickObs) _nickObs.disconnect();
+    paint();
+    _nickObs = new MutationObserver(paint);
+    _nickObs.observe(document.body, {childList:true,subtree:true});
+  };
+  const run = user => { if (user) applyNick(user); };
+  document.addEventListener('zs:profile', e => { if (e && e.detail) run(e.detail); });
+  return applyNick;
+})();
+
+
+
+/* zelscan-forum-status-badge-v2 */
+(()=>{
+  let user = null;
+  try { user = JSON.parse(localStorage.getItem('lzt_user') || 'null'); } catch (e) {}
+  const userId = Number(user && (user.user_id || user.id) || 0);
+  const statusMap = {'Новичок':'novice','Местный':'local','Постоялец':'resident','Знаток':'knower','Эксперт':'expert','Гуру':'guru','Уник':'unique','Легенда':'legend','Суприм':'supreme','Продавец на форуме':'seller','Команда форума':'staff'};
+  const escapeHtml = v => String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const installStyles = () => {
+    if (document.getElementById('zs-forum-status-badge-css-v2')) return;
+    const style = document.createElement('style'); style.id = 'zs-forum-status-badge-css-v2';
+    style.textContent = '.zs-forum-status{position:relative;display:inline-flex;align-items:center;min-height:12px;overflow:hidden;padding:1px 6px;border:0;border-radius:7px;color:var(--zs-status-text,var(--zs-status));background:linear-gradient(110deg,color-mix(in srgb,var(--zs-status) 18%,#191a1d),color-mix(in srgb,var(--zs-status) 8%,#191a1d));box-shadow:inset 0 1px rgba(255,255,255,.065),inset 0 -1px rgba(0,0,0,.14);font:500 11px/14px Inter,system-ui,sans-serif}.zs-forum-status:after{position:absolute;inset:0 49% 0 0;content:"";pointer-events:none;background:linear-gradient(110deg,rgba(255,255,255,.095),transparent 73%);opacity:.42}.zs-forum-status>span{position:relative;z-index:1}.zs-status-novice,.zs-status-local,.zs-status-resident,.zs-status-knower,.zs-status-expert,.zs-status-guru,.zs-status-unique,.zs-status-legend,.zs-status-supreme,.zs-status-seller,.zs-status-staff{--zs-status:#85878e}';
+    document.head.append(style);
+  };
+  let _obs = null;
+  const showBadge = title => {
+    if (!title) return;
+    installStyles();
+    const key = statusMap[title] || 'novice';
+    const markup = '<span class="zs-forum-status zs-status-' + key + '"><span>' + escapeHtml(title) + '</span></span>';
+    const paint = () => {
+      const m = document.querySelector('.acc-menu');
+      if (!m) return;
+      const ex = m.querySelector('.zs-forum-status');
+      if (ex && ex.textContent.trim() === title) return;
+      if (ex) ex.remove();
+      const nameEl = m.querySelector('.acc-menu-name');
+      if (nameEl) nameEl.insertAdjacentHTML('afterend', markup);
+    };
+    if (_obs) _obs.disconnect();
+    paint();
+    _obs = new MutationObserver(paint);
+    _obs.observe(document.body, {childList:true, subtree:true});
+  };
+  const fetchAndShow = uid => {
+    fetch(window.ZSDashboard2.apiBase + '/api/me/forum-status?user_id=' + encodeURIComponent(String(uid)))
+      .then(r => r.ok ? r.json() : null)
+      .then(profile => {
+        const title = String(profile && profile.user_title || '').trim();
+        if (!title) return;
+        let stored = null;
+        try { stored = JSON.parse(localStorage.getItem('lzt_user') || 'null'); } catch(e) {}
+        if (stored && stored.user_title !== title) {
+          stored.user_title = title;
+          try { localStorage.setItem('lzt_user', JSON.stringify(stored)); } catch(e) {}
+        }
+        showBadge(title);
+      })
+      .catch(() => {});
+  };
+  // Слушатель логина регистрируем ВСЕГДА (даже если сейчас не залогинен)
+  document.addEventListener('zs:profile', e => {
+    const u = e && e.detail;
+    const uid = Number(u && (u.user_id || u.id) || 0);
+    if (!uid) return;
+    if (u.user_title) showBadge(u.user_title);
+    else fetchAndShow(uid);
+  });
+  // Если сейчас залогинен — показать из кеша и обновить с API
+  if (userId) {
+    if (user && user.user_title) showBadge(user.user_title);
+    fetchAndShow(userId);
+  }
+})();
+
+/* zelscan-forum-status-host-reset-v1 */
+(()=>{
+  const install = () => {
+    if (!document.getElementById('zs-forum-status-host-reset-css')) {
+      const style = document.createElement('style');
+      style.id = 'zs-forum-status-host-reset-css';
+      style.textContent = '.acc-menu-user.zs-forum-status-host{background:transparent!important;border-color:transparent!important;box-shadow:none!important}.acc-menu-user.zs-forum-status-host:before,.acc-menu-user.zs-forum-status-host:after{display:none!important}';
+      document.head.append(style);
+    }
+    document.querySelectorAll('.acc-menu-user').forEach(host => {
+      if (host.querySelector('.zs-forum-status')) host.classList.add('zs-forum-status-host');
+    });
+  };
+  install();
+  new MutationObserver(install).observe(document.body, {childList:true, subtree:true});
+})();
+
+/* zelscan-forum-status-wrapper-clean-v2 */
+(()=>{
+  const clean = () => document.querySelectorAll('.acc-menu-user').forEach(host => {
+    const badge = host.querySelector('.zs-forum-status');
+    const id = host.querySelector('.acc-menu-id');
+    if (!badge || !id) return;
+    host.classList.add('zs-forum-status-clean');
+    id.classList.add('zs-forum-status-clean');
+    ['background','backgroundImage','border','boxShadow'].forEach(key => host.style[key] = key === 'border' ? '0' : 'none');
+    ['background','backgroundImage','border','boxShadow'].forEach(key => id.style[key] = key === 'border' ? '0' : 'none');
+    id.style.padding = '0';
+  });
+  clean();
+  new MutationObserver(clean).observe(document.documentElement, {childList:true, subtree:true});
+})();

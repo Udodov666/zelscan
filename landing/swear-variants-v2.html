@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Варианты блока "Срывы и мат" — v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;font-weight:400;}
+body{background:#020202;color:#EBEBEB;padding:60px;}
+h1{font-size:28px;font-weight:500;margin-bottom:60px;color:#fff;}
+.variants{display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:40px;}
+.variant{background:rgba(15,15,15,0.5);border-radius:24px;padding:40px;border:1px solid #161616;}
+.variant-label{font-size:12px;color:#6B6B6B;margin-bottom:32px;text-transform:uppercase;letter-spacing:0.08em;}
+.mc-title{font-size:20px;font-weight:400;color:#EBEBEB;}
+.mc-sub{font-size:13px;color:#6B6B6B;margin-top:8px;}
+
+/* Вариант A: Hero number + word list */
+.va-hero{display:flex;align-items:baseline;gap:16px;margin-top:32px;}
+.va-num{font-size:56px;font-weight:400;color:#fff;line-height:1;}
+.va-label{font-size:14px;color:#6B6B6B;line-height:1.4;}
+.va-words{display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;}
+.va-word{padding:10px 16px;background:rgba(255,255,255,0.04);border-radius:12px;font-size:14px;color:#A8A8A8;}
+.va-word b{color:#EF4444;font-weight:500;margin-left:6px;}
+.va-context{margin-top:32px;padding-top:24px;border-top:1px solid #161616;}
+.va-context-label{font-size:12px;color:#6B6B6B;margin-bottom:12px;}
+.va-quote{font-size:14px;color:#6B6B6B;font-style:italic;line-height:1.5;}
+.va-quote .highlight{color:#EF4444;font-style:normal;}
+
+/* Вариант B: Compact stats row */
+.vb-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+.vb-stat{display:flex;flex-direction:column;gap:8px;}
+.vb-stat .num{font-size:32px;font-weight:400;color:#fff;}
+.vb-stat .lbl{font-size:12px;color:#6B6B6B;}
+.vb-words{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px;}
+.vb-word{padding:8px 14px;background:rgba(239,68,68,0.08);border-radius:10px;font-size:13px;color:#FCA5A5;}
+.vb-word b{font-weight:500;}
+
+/* Вариант C: Timeline focus */
+.vc-timeline{margin-top:32px;}
+.vc-row{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
+.vc-time{font-size:12px;color:#6B6B6B;width:48px;}
+.vc-bars{flex:1;display:flex;gap:3px;height:32px;align-items:flex-end;}
+.vc-bar{flex:1;border-radius:3px;background:rgba(239,68,68,0.2);}
+.vc-bar.peak{background:#EF4444;}
+.vc-summary{display:flex;gap:32px;margin-top:32px;padding-top:24px;border-top:1px solid #161616;}
+.vc-item .num{font-size:24px;font-weight:400;color:#fff;}
+.vc-item .lbl{font-size:12px;color:#6B6B6B;margin-top:4px;}
+
+/* Top words для варианта C */
+.vc-top-words{margin-top:32px;padding-top:24px;border-top:1px solid #161616;}
+.vc-top-label{font-size:12px;color:#6B6B6B;margin-bottom:16px;}
+.vc-top-list{display:flex;flex-wrap:wrap;gap:8px;}
+.vc-top-word{padding:8px 14px;background:rgba(239,68,68,0.1);border-radius:10px;font-size:13px;color:#FCA5A5;}
+</style>
+</head>
+<body>
+
+<h1>Варианты блока "Срывы и мат" — упрощённые</h1>
+
+<div class="variants">
+
+  <!-- Вариант A: Hero number + word list -->
+  <div class="variant">
+    <div class="variant-label">Вариант A</div>
+    <div class="mc-h"><div><div class="mc-title">Срывы и мат</div><div class="mc-sub">Где прорывается токсичность</div></div></div>
+    <div class="va-hero">
+      <div class="va-num">15</div>
+      <div class="va-label">постов с матом<br>из 5 241 (0.3%)</div>
+    </div>
+    <div class="va-words">
+      <div class="va-word">бля<b>9</b></div>
+      <div class="va-word">нахуй<b>7</b></div>
+      <div class="va-word">клоун<b>5</b></div>
+      <div class="va-word">дебил<b>4</b></div>
+      <div class="va-word">лох<b>3</b></div>
+    </div>
+    <div class="va-context">
+      <div class="va-context-label">Примеры:</div>
+      <div class="va-quote">«забань его <span class="highlight">нахуй</span> чтоб не мелькал больше»</div>
+    </div>
+  </div>
+
+  <!-- Вариант B: Compact stats row -->
+  <div class="variant">
+    <div class="variant-label">Вариант B</div>
+    <div class="mc-h"><div><div class="mc-title">Срывы и мат</div><div class="mc-sub">Где прорывается токсичность</div></div></div>
+    <div class="vb-stats">
+      <div class="vb-stat">
+        <div class="num">15</div>
+        <div class="lbl">постов с матом</div>
+      </div>
+      <div class="vb-stat">
+        <div class="num">22:00</div>
+        <div class="lbl">пик активности</div>
+      </div>
+      <div class="vb-stat">
+        <div class="num">5</div>
+        <div class="lbl">топ слов</div>
+      </div>
+    </div>
+    <div class="vb-words">
+      <div class="vb-word">бля <b>9</b></div>
+      <div class="vb-word">нахуй <b>7</b></div>
+      <div class="vb-word">клоун <b>5</b></div>
+      <div class="vb-word">дебил <b>4</b></div>
+      <div class="vb-word">лох <b>3</b></div>
+    </div>
+  </div>
+
+  <!-- Вариант C: Timeline focus -->
+  <div class="variant">
+    <div class="variant-label">Вариант C</div>
+    <div class="mc-h"><div><div class="mc-title">Срывы и мат</div><div class="mc-sub">Где прорывается токсичность</div></div></div>
+    <div class="vc-timeline">
+      <div class="vc-row">
+        <div class="vc-time">09:00</div>
+        <div class="vc-bars">
+          <div class="vc-bar" style="height:20%"></div>
+          <div class="vc-bar" style="height:35%"></div>
+          <div class="vc-bar" style="height:25%"></div>
+          <div class="vc-bar" style="height:40%"></div>
+          <div class="vc-bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="vc-row">
+        <div class="vc-time">15:00</div>
+        <div class="vc-bars">
+          <div class="vc-bar" style="height:50%"></div>
+          <div class="vc-bar" style="height:65%"></div>
+          <div class="vc-bar" style="height:55%"></div>
+          <div class="vc-bar" style="height:70%"></div>
+          <div class="vc-bar" style="height:60%"></div>
+        </div>
+      </div>
+      <div class="vc-row">
+        <div class="vc-time">22:00</div>
+        <div class="vc-bars">
+          <div class="vc-bar peak" style="height:85%"></div>
+          <div class="vc-bar peak" style="height:95%"></div>
+          <div class="vc-bar peak" style="height:90%"></div>
+          <div class="vc-bar peak" style="height:100%"></div>
+          <div class="vc-bar peak" style="height:80%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="vc-top-words">
+      <div class="vc-top-label">Топ слов</div>
+      <div class="vc-top-list">
+        <span class="vc-top-word">бля</span>
+        <span class="vc-top-word">нахуй</span>
+        <span class="vc-top-word">клоун</span>
+        <span class="vc-top-word">дебил</span>
+        <span class="vc-top-word">лох</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body></html>

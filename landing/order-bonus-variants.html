@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>zelscan · бонусы — варианты</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;padding:100px 40px 60px;}
+.tbar{position:fixed;left:16px;top:16px;z-index:50;display:flex;gap:18px;padding:12px 14px;border-radius:14px;border:1px dashed rgba(255,255,255,.14);background:rgba(10,10,11,.9);}
+.tbar .h{font:500 10.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:#666;}
+.tbar .row{display:flex;gap:6px;margin-top:6px;}
+.tbar button{height:30px;padding:0 12px;border-radius:9px;cursor:pointer;font:500 12px Inter;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#a9a9ae;}
+.tbar button.on{border-color:rgba(43,173,114,.5);background:rgba(43,173,114,.14);color:#5ee0a8;}
+
+.grid{display:grid;grid-template-columns:repeat(2,498px);gap:32px;justify-content:center;}
+.vlab{margin:0 0 12px 32px;font:500 12px/15px Inter;letter-spacing:.08em;text-transform:uppercase;color:#5B5C62;}
+.vnote{margin:10px 0 0 32px;font:400 12.5px/17px Inter;color:#5B5C62;max-width:434px;}
+
+.tp{display:flex;flex-direction:column;align-items:flex-start;padding:28px 32px 32px;gap:10px;width:498px;background:rgba(10,11,13,.8);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);border-radius:48px;}
+.tp-inner{display:flex;flex-direction:column;gap:28px;width:434px;}
+.tp-label{font:400 14px/17px Inter;color:#707177;}
+.tp-mini{display:flex;gap:12px;width:434px;}
+.tp-mini > div{flex:1;padding:14px 16px;background:#121316;border-radius:22px;}
+.tp-mini > div.on{background:#16171B;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);}
+.mn{font:500 14px/17px Inter;color:#EBEBEB;margin-bottom:6px;}
+.mp{font:400 24px/29px Inter;color:#F4F4F6;}
+.mp span{font:400 16px/19px Inter;color:#717278;}
+.tp-btn{display:flex;justify-content:center;align-items:center;width:434px;height:56px;background:#1E1F22;border-radius:666px;border:none;cursor:pointer;font:500 15px/18px Inter;color:#FFF;}
+.tp-btn .sub{font:400 15px/18px Inter;color:rgba(255,255,255,.55);}
+.sw{position:relative;flex:none;width:44px;height:26px;border-radius:666px;background:rgba(255,255,255,.08);cursor:pointer;transition:background .16s ease;}
+.sw i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:666px;background:#F4F4F6;transition:transform .18s cubic-bezier(.4,0,.2,1);}
+.on > .sw, .on .sw{background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);}
+.on .sw i{transform:translateX(18px);}
+.sw.sm{width:36px;height:21px;}
+.sw.sm i{width:15px;height:15px;}
+.on .sw.sm i{transform:translateX(15px);}
+
+/* ВАРИАНТ A — тихая строка без карточки */
+.vA{display:flex;align-items:center;justify-content:space-between;gap:14px;width:434px;height:26px;}
+.vA .l{display:flex;align-items:center;gap:11px;}
+.vA .t{font:400 14px/17px Inter;color:#9A9BA1;}
+.vA.on .t{color:#EBEBEB;}
+.vA .v{font:400 14px/17px Inter;color:#4A4B50;}
+.vA.on .v{color:#2BAD72;}
+
+/* ВАРИАНТ B — чек: строка итога над линией */
+.vB{display:flex;flex-direction:column;gap:14px;width:434px;}
+.vB .r{display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.vB .k{display:flex;align-items:center;gap:10px;font:400 14px/17px Inter;color:#9A9BA1;}
+.vB .v{font:400 14px/17px Inter;color:#4A4B50;}
+.vB.on .k{color:#EBEBEB;}
+.vB.on .v{color:#2BAD72;}
+.vB .line{position:relative;height:0;}
+.vB .line::after{content:'';position:absolute;left:0;right:0;top:0;border-top:1px solid rgba(255,255,255,.05);}
+.vB .tot{display:flex;align-items:baseline;justify-content:space-between;}
+.vB .tot .k2{font:400 14px/17px Inter;color:#707177;}
+.vB .tot .v2{display:flex;align-items:baseline;gap:5px;}
+.vB .tot .v2 .n{font:400 28px/34px Inter;color:#F4F4F6;}
+.vB .tot .v2 .c{font:400 19px/23px Inter;color:#66676D;}
+
+/* ВАРИАНТ C — зелёный баннер */
+.vC{display:flex;align-items:center;justify-content:space-between;gap:14px;width:434px;padding:0 18px;height:56px;border-radius:20px;background:rgba(43,173,114,.05);box-shadow:inset 0 0 0 1px rgba(43,173,114,.10);transition:background .16s ease,box-shadow .16s ease;}
+.vC:not(.on){background:rgba(255,255,255,.02);box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);}
+.vC .l{display:flex;align-items:center;gap:12px;}
+.vC .ic{width:22px;height:22px;flex:none;}
+.vC .t{font:400 14px/17px Inter;color:#EBEBEB;}
+.vC:not(.on) .t{color:#9A9BA1;}
+.vC .v{font:500 14px/17px Inter;color:#2BAD72;}
+.vC:not(.on) .v{display:none;}
+
+/* ВАРИАНТ D — чип в строке лейбла */
+.vD{display:flex;align-items:center;justify-content:space-between;gap:16px;width:434px;height:34px;}
+.vD .k{font:400 14px/17px Inter;color:#707177;}
+.vD .chip{display:inline-flex;align-items:center;gap:9px;height:34px;padding:0 6px 0 14px;border-radius:100px;background:rgba(255,255,255,.04);}
+.vD.on .chip{background:rgba(43,173,114,.10);}
+.vD .chip .t{font:400 13.5px/16px Inter;color:#9A9BA1;}
+.vD.on .chip .t{color:#7FDDB0;}
+</style></head><body>
+
+<div class="tbar">
+  <div><div class="h">Бонусы, ₽</div>
+    <div class="row" id="bonBtns">
+      <button data-x="50" class="on">50</button><button data-x="99">99</button><button data-x="300">300</button>
+    </div>
+  </div>
+  <div><div class="h">Списание</div>
+    <div class="row" id="swBtns"><button data-u="1" class="on">вкл</button><button data-u="0">выкл</button></div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- ===== A ===== -->
+  <div>
+    <div class="vlab">Вариант A · тихая строка</div>
+    <div class="tp"><div class="tp-inner">
+      <div class="tp-mini"><div><div class="mn">Базовый</div><div class="mp">69 <span>₽</span></div></div><div class="on"><div class="mn">Полный</div><div class="mp">99 <span>₽</span></div></div></div>
+      <div class="vA on" data-v="A">
+        <div class="l"><div class="sw"><i></i></div><span class="t">Списать бонусы</span></div>
+        <span class="v">−49 ₽</span>
+      </div>
+      <button class="tp-btn">Собрать досье <span class="sub">· 50 ₽</span></button>
+    </div></div>
+    <div class="vnote">Нет карточки вообще. Сумма скидки зелёным справа, сабтекста нет.</div>
+  </div>
+
+  <!-- ===== B ===== -->
+  <div>
+    <div class="vlab">Вариант B · чек с итогом</div>
+    <div class="tp"><div class="tp-inner">
+      <div class="tp-mini"><div><div class="mn">Базовый</div><div class="mp">69 <span>₽</span></div></div><div class="on"><div class="mn">Полный</div><div class="mp">99 <span>₽</span></div></div></div>
+      <div class="vB on" data-v="B">
+        <div class="r"><span class="k"><span class="sw sm"><i></i></span>Бонусы</span><span class="v">−49 ₽</span></div>
+        <div class="line"></div>
+        <div class="tot"><span class="k2">К оплате</span><span class="v2"><span class="n">50</span><span class="c">₽</span></span></div>
+      </div>
+      <button class="tp-btn">Собрать досье</button>
+    </div></div>
+    <div class="vnote">Логика чека: скидка → линия → итог. Цена уходит из кнопки в итог.</div>
+  </div>
+
+  <!-- ===== C ===== -->
+  <div>
+    <div class="vlab">Вариант C · зелёный баннер</div>
+    <div class="tp"><div class="tp-inner">
+      <div class="tp-mini"><div><div class="mn">Базовый</div><div class="mp">69 <span>₽</span></div></div><div class="on"><div class="mn">Полный</div><div class="mp">99 <span>₽</span></div></div></div>
+      <div class="vC on" data-v="C">
+        <div class="l">
+          <svg class="ic" viewBox="0 0 22 22" fill="none"><path d="M3.4 9.2h15.2v9.4H3.4V9.2Z" stroke="#2BAD72" stroke-width="1.5" stroke-linejoin="round"/><path d="M11 9.2v9.4M3.4 13.4h15.2" stroke="#2BAD72" stroke-width="1.5"/><path d="M11 9.2S9.6 4.4 7.4 5.1c-2 .6-1.3 4.1 3.6 4.1Zm0 0s1.4-4.8 3.6-4.1c2 .6 1.3 4.1-3.6 4.1Z" stroke="#2BAD72" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span class="t">Списать бонусы</span>
+        </div>
+        <div class="l"><span class="v">−49 ₽</span><div class="sw"><i></i></div></div>
+      </div>
+      <button class="tp-btn">Собрать досье <span class="sub">· 50 ₽</span></button>
+    </div></div>
+    <div class="vnote">Своя геометрия: 56px, radius 20, зелёный оттенок и обводка вместо карточки #121316.</div>
+  </div>
+
+  <!-- ===== D ===== -->
+  <div>
+    <div class="vlab">Вариант D · чип в строке лейбла</div>
+    <div class="tp"><div class="tp-inner">
+      <div class="vD on" data-v="D">
+        <span class="k">Выберите тариф</span>
+        <span class="chip"><span class="t">Бонусы −49 ₽</span><span class="sw sm"><i></i></span></span>
+      </div>
+      <div class="tp-mini"><div><div class="mn">Базовый</div><div class="mp">69 <span>₽</span></div></div><div class="on"><div class="mn">Полный</div><div class="mp">99 <span>₽</span></div></div></div>
+      <button class="tp-btn">Собрать досье <span class="sub">· 50 ₽</span></button>
+    </div></div>
+    <div class="vnote">Бонусы как модификатор цен: чип справа от «Выберите тариф», ни одного лишнего блока.</div>
+  </div>
+
+</div>
+
+<script>
+var bonus = 50, use = true, COST = 99;
+function nf(n){return Number(n).toLocaleString('ru');}
+function sync(){
+  var part = use ? Math.min(bonus, COST) : 0, rub = COST - part;
+  document.querySelectorAll('[data-v]').forEach(function(el){ el.classList.toggle('on', use); });
+  var disc = '\u2212' + nf(Math.min(bonus,COST)) + ' \u20bd';
+  document.querySelectorAll('.vA .v, .vB .r .v, .vC .v').forEach(function(el){ el.textContent = disc; });
+  document.querySelector('.vD .chip .t').textContent = '\u0411\u043e\u043d\u0443\u0441\u044b ' + disc;
+  document.querySelector('.vB .tot .n').textContent = nf(rub);
+  document.querySelectorAll('.tp-btn .sub').forEach(function(el){
+    el.textContent = rub === 0 ? '\u00b7 \u0431\u043e\u043d\u0443\u0441\u0430\u043c\u0438' : '\u00b7 ' + nf(rub) + ' \u20bd';
+  });
+}
+document.querySelectorAll('.sw').forEach(function(sw){ sw.addEventListener('click', function(){ use = !use; setSw(); sync(); }); });
+function setSw(){ document.querySelectorAll('#swBtns button').forEach(function(b){ b.classList.toggle('on', b.dataset.u === (use?'1':'0')); }); }
+document.getElementById('bonBtns').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return;
+  this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);}); bonus=+b.dataset.x; sync(); });
+document.getElementById('swBtns').addEventListener('click', function(e){ var b=e.target.closest('button'); if(!b) return;
+  use = b.dataset.u === '1'; setSw(); sync(); });
+sync();
+</script>
+</body></html>

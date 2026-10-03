@@ -1,0 +1,32 @@
+# секреты и локальный конфиг — никогда в репо
+.env
+.local_setup_done
+.lolz_token*
+.lolz_oauth_client_id
+.lolz_oauth_redirect_uri
+.deepseek_key
+.gigachat_key
+.fireworks_keys
+.turnstile_*
+.admin_*
+.secrets/
+secrets/
+.akio_key
+.openrouter_key
+
+# данные
+zelscan.db
+zelscan.db-shm
+zelscan.db-wal
+cache/
+data/
+logs/
+exports/
+*.log
+
+# мусор
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.srvcmp/

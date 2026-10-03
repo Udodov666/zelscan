@@ -1,0 +1,360 @@
+<!DOCTYPE html><html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>zelscan · модалка пополнения (Figma 1:1, v2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-height:100vh;}
+.tbar{position:fixed;left:16px;top:16px;z-index:50;display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:14px;border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.02);}
+.tbar .h{font:500 10.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:#666;}
+.tbar .row{display:flex;gap:6px;}
+.tbar button{height:30px;padding:0 12px;border-radius:9px;cursor:pointer;font:500 12px Inter;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#a9a9ae;}
+.tbar button.on{border-color:rgba(43,173,114,.5);background:rgba(43,173,114,.14);color:#5ee0a8;}
+
+.tp-bg{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.5);}
+
+/* МОДАЛКА — Frame 2136139289 */
+.tp{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;padding:28px 32px 32px;gap:10px;width:498px;background:rgba(10,11,13,.8);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);border-radius:48px;}
+/* Frame 2136139288 */
+.tp-inner{display:flex;flex-direction:column;align-items:center;gap:32px;width:434px;}
+/* Frame 2136139283 — шапка */
+.tp-head{display:flex;flex-direction:row;align-items:center;justify-content:space-between;width:434px;height:42px;align-self:stretch;}
+.tp-title{font:500 24px/29px Inter;color:#F3F3F5;}
+/* Frame 2147239078 */
+.tp-x{display:flex;flex-direction:row;justify-content:center;align-items:center;padding:12px;width:42px;height:42px;flex:none;background:#121316;border-radius:666px;border:none;cursor:pointer;}
+.tp-x svg{width:21px;height:21px;display:block;}
+/* Frame 2147239071 / 2147239077 / 2136139291 */
+.tp-body{display:flex;flex-direction:column;align-items:flex-start;gap:32px;width:434px;align-self:stretch;}
+.tp-top{display:flex;flex-direction:column;align-items:flex-start;gap:42px;width:434px;align-self:stretch;}
+.tp-methods-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:16px;width:434px;align-self:stretch;}
+.tp-label{width:434px;font:400 14px/17px Inter;color:#707177;align-self:stretch;}
+/* Frame 2147239069 */
+.tp-methods{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:center;width:434px;border-radius:24px;align-self:stretch;}
+/* Frame 2136139286 — верхний способ */
+.tp-m-top{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:4px;gap:10px;width:434px;height:70px;background:#121316;border-radius:24px 24px 0 0;align-self:stretch;}
+/* Frame 2136139287 — нижний способ (крипта, disabled) */
+.tp-m-bot{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:4px;gap:10px;width:434px;height:70px;background:#121316;border-radius:0 0 24px 24px;align-self:stretch;}
+/* Frame 2131328311 — плашка способа */
+.tp-m-sel{position:relative;flex:none;display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:10px;gap:10px;isolation:isolate;width:426px;height:62px;border-radius:20px;align-self:stretch;overflow:hidden;}
+.tp-m-sel.active{background:rgba(255,255,255,.05);}
+/* крипта: клика нет, только hover */
+.tp-m-sel.disabled{cursor:default;}
+.tp-m-sel.disabled .tp-m-row{opacity:.5;transition:opacity .16s ease;}
+.tp-m-sel.disabled{transition:background .16s ease;}
+.tp-m-sel.disabled:hover{background:rgba(255,255,255,.05);}
+.tp-m-sel.disabled:hover .tp-m-row{opacity:1;}
+/* Ellipse 27880 */
+.tp-glow{position:absolute;width:82px;height:82px;left:-11px;top:-41.62px;background:rgba(43,173,114,.2);filter:blur(50px);border-radius:50%;z-index:0;}
+/* Frame 2136139285 */
+.tp-m-row{display:flex;flex-direction:row;align-items:center;padding:0;gap:13px;height:42px;z-index:1;}
+/* Frame 2136139290 */
+.tp-m-ic{box-sizing:border-box;display:flex;flex-direction:row;justify-content:center;align-items:center;padding:12px;width:42px;height:42px;flex:none;background:radial-gradient(100.7% 100.7% at 50% -0.7%, #2BAD72 16.92%, #248E5E 91.23%);border:1px solid rgba(255,255,255,.05);border-radius:16px;}
+.tp-m-ic svg{width:24px;height:24px;display:block;}
+.tp-m-ic.crypto{flex-direction:column;justify-content:center;align-items:center;gap:1.5px;background:radial-gradient(100.7% 100.7% at 50% -0.7%, #3A3C41 16.92%, #282A2D 91.23%);}
+.tp-coins-svg{width:25.5px;height:25.5px;display:block;}
+/* Frame 2136139284 */
+.tp-m-txt{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.tp-m-name{font:500 14px/17px Inter;color:#EBEBEB;white-space:nowrap;}
+.tp-m-sub{font:400 13.5px/16px Inter;color:#717278;white-space:nowrap;}
+/* Overlay — «Скоро» */
+.tp-soon{display:flex;flex-direction:row;justify-content:center;align-items:center;padding:3px 9px;gap:6px;height:21px;flex:none;z-index:1;background:rgba(255,255,255,.06);opacity:.5;border-radius:100px;font:500 12.5px/15px Inter;letter-spacing:.1px;color:rgba(255,255,255,.9);}
+/* Frame 2147239076 — сумма */
+.tp-amount-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:434px;align-self:stretch;}
+.tp-amount-lab{display:flex;flex-direction:row;justify-content:center;align-items:flex-start;gap:24px;width:434px;height:17px;align-self:stretch;font:400 14px/17px Inter;color:#68696F;}
+/* Frame 2147239074 — поле суммы с линией */
+.tp-amount{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 0 8px;gap:16px;width:434px;height:81px;border-bottom:1px solid rgba(255,255,255,.05);align-self:stretch;}
+/* Frame 2147239072 */
+.tp-amount-in{display:flex;flex-direction:row;align-items:flex-end;padding:0;gap:6px;height:73px;}
+.tp-cur{font:400 31px/38px Inter;color:#66676D;padding-bottom:6px;}
+.tp-num{font:400 60px/73px Inter;color:#F4F4F6;background:none;border:none;outline:none;padding:0;height:73px;line-height:73px;caret-color:#F4F4F6;}
+/* текст ошибки */
+.tp-err{font:400 14px/17px Inter;color:#F52121;}
+/* Frame 2147239091 — кнопка + соглашение */
+.tp-actions{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;width:434px;align-self:stretch;}
+.tp-btn{display:flex;flex-direction:row;justify-content:center;align-items:center;padding:19px 24px;gap:10px;width:434px;height:56px;background:#1E1F22;border-radius:666px;border:none;cursor:pointer;font:500 15px/18px Inter;color:#FFFFFF;align-self:stretch;}
+.tp-btn.light{background:#F1F1F3;color:#0A0A0B;}
+.tp-btn svg{width:17px;height:17px;display:block;}
+.tp-terms{width:434px;text-align:center;font:400 12px/15px Inter;letter-spacing:-0.01em;color:#68696F;}
+.tp-terms a{color:#2BAD72;text-decoration:none;}
+/* Frame 2147239086 / 2131328312 */
+.tp-stat{display:flex;flex-direction:column;align-items:center;padding:0;gap:24px;}
+.tp-stat-ic{display:flex;flex-direction:row;justify-content:center;align-items:center;padding:20px;width:68px;height:68px;flex:none;background:#151619;border-radius:666px;}
+.tp-stat-ic svg{width:42px;height:42px;display:block;}
+.tp-stat-txt{display:flex;flex-direction:column;align-items:center;padding:0;gap:12px;}
+.tp-stat-lab{font:400 14px/17px Inter;color:#68696F;}
+.tp-stat-big{font:400 60px/73px Inter;color:#F3F3F5;}
+.tp-stat-big.sm{font:500 32px/39px Inter;color:#EBEBEB;}
+/* Frame 2147239087 */
+.tp-center{display:flex;flex-direction:column;align-items:center;padding:0;gap:42px;width:434px;align-self:stretch;}
+/* Frame 2147239084 */
+.tp-card{display:flex;flex-direction:column;align-items:flex-start;padding:16px 18px;gap:12px;width:434px;background:#121316;border-radius:24px;}
+.tp-card-row{display:flex;flex-direction:row;justify-content:space-between;align-items:center;padding:0;gap:24px;width:398px;align-self:stretch;}
+.tp-card-k{font:400 13.5px/16px Inter;color:#74757B;}
+.tp-card-v{display:flex;flex-direction:row;align-items:center;gap:6px;font:500 14px/17px Inter;color:#ECECEF;}
+.tp-card-v .av{width:18px;height:18px;border-radius:66px;background:radial-gradient(circle at 40% 30%,#F59E0B,#7C2D12 70%);}
+.tp-card-v svg{width:14px;height:14px;display:block;}
+.tp-card-sep{position:relative;width:398px;height:0;flex:none;align-self:stretch;}
+.tp-card-sep::after{content:'';position:absolute;left:0;right:0;top:0;border-top:1px solid rgba(255,255,255,.025);}
+/* Frame 2147239079 */
+.tp-row2{display:flex;flex-direction:row;align-items:flex-start;padding:0;gap:12px;width:434px;align-self:stretch;}
+.tp-row2 .tp-btn{width:auto;flex:1;}
+.hidden{display:none!important;}
+</style></head>
+<body>
+
+<div class="tbar">
+  <div class="h">Состояние модалки</div>
+  <div class="row" id="stateBtns">
+    <button data-s="1" class="on">1 · Пополнение</button>
+    <button data-s="1e">1б · Ошибка</button>
+    <button data-s="2">2 · Ожидание</button>
+    <button data-s="3">3 · Успех</button>
+  </div>
+</div>
+
+<div class="tp-bg">
+
+  <!-- 1. ПОПОЛНЕНИЕ (498×578 / 607 с ошибкой) -->
+  <div class="tp" id="s1">
+    <div class="tp-inner">
+      <div class="tp-head">
+        <div class="tp-title">Пополнить баланс</div>
+        <button class="tp-x" type="button"><svg viewBox="0 0 21 21" fill="none"><path d="M5.25 5.25l10.5 10.5M15.75 5.25l-10.5 10.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tp-body">
+        <div class="tp-top">
+          <div class="tp-methods-wrap">
+            <div class="tp-label">Выберите способ оплаты</div>
+            <div class="tp-methods">
+              <div class="tp-m-top">
+                <div class="tp-m-sel active">
+                  <div class="tp-glow"></div>
+                  <div class="tp-m-row">
+                    <div class="tp-m-ic">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.96826 17.5961C8.85268 19.127 11.0296 19.9994 13.3513 19.9994C16.8039 19.9994 19.938 18.0643 22.2638 14.9127C21.2818 13.5823 20.1561 12.4679 18.9219 11.6255L16.9403 12.6147C17.3662 13.2773 17.6143 14.0661 17.6143 14.9127C17.6143 17.2643 15.706 19.1704 13.3513 19.1704C11.5217 19.1704 9.96184 18.0188 9.35712 16.4022L6.96826 17.5951V17.5961ZM11.8845 15.1411C11.932 15.4501 12.0767 15.7375 12.3011 15.9619C12.5792 16.2399 12.9575 16.396 13.3513 16.3949C14.171 16.3949 14.8357 15.7313 14.8357 14.9127C14.8357 14.5105 14.6755 14.1457 14.4149 13.8779L11.8856 15.1411H11.8845Z" fill="white"/>
+<path d="M7.50365 14.8795L21.9474 7.93623L18.773 1.33301L17.1335 7.1682L15.1633 3.06857L13.5228 8.90377L11.5527 4.80414L9.91215 10.6393L7.94194 6.53971L6.30147 12.3749L4.33125 8.27532L1.68604 17.6767L5.29672 15.9411L7.50365 14.8806V14.8795Z" fill="white"/>
+</svg>
+                    </div>
+                    <div class="tp-m-txt">
+                      <div class="tp-m-name">Lolzteam</div>
+                      <div class="tp-m-sub">Перевод с баланса форума</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tp-m-bot">
+                <div class="tp-m-sel disabled" aria-disabled="true">
+                  <div class="tp-m-row">
+                    <div class="tp-m-ic crypto"><svg class="tp-coins-svg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="12" height="12">
+<path d="M12 6C12 2.68629 9.31371 0 6 0C2.68629 0 0 2.68629 0 6C0 9.31371 2.68629 12 6 12C9.31371 12 12 9.31371 12 6Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_774_309)">
+<mask id="mask1_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="12" height="12">
+<path d="M12 0H0V12H12V0Z" fill="white"/>
+</mask>
+<g mask="url(#mask1_774_309)">
+<path d="M6 12C9.31373 12 12 9.31373 12 6C12 2.68629 9.31373 0 6 0C2.68629 0 0 2.68629 0 6C0 9.31373 2.68629 12 6 12Z" fill="#F7931A"/>
+<path d="M8.69805 5.25799C8.81578 4.47199 8.21692 4.04936 7.39865 3.76736L7.66418 2.70236L7.01618 2.54111L6.75738 3.57799C6.58718 3.53523 6.41238 3.49549 6.23805 3.45573L6.49865 2.41212L5.85065 2.25049L5.58518 3.31511C5.44418 3.28286 5.30538 3.25136 5.17118 3.21761L5.17192 3.21423L4.27791 2.99111L4.10541 3.68336C4.10541 3.68336 4.58654 3.79361 4.57641 3.80036C4.83891 3.86599 4.88616 4.03961 4.87828 4.17761L4.57604 5.39075C4.59404 5.39522 4.61728 5.40195 4.64354 5.41209L4.57491 5.39522L4.15116 7.09475C4.11891 7.17422 4.03754 7.29389 3.85378 7.24849C3.86054 7.25789 3.38278 7.13109 3.38278 7.13109L3.06104 7.87289L3.90478 8.08322C4.06154 8.12262 4.21528 8.16389 4.36641 8.20249L4.09828 9.27949L4.74591 9.44075L5.01141 8.37575C5.18838 8.42335 5.36018 8.46762 5.52818 8.50962L5.26338 9.57009L5.91138 9.73135L6.17952 8.65662C7.28505 8.86589 8.11605 8.78149 8.46592 7.78175C8.74792 6.97695 8.45205 6.51235 7.87038 6.20975C8.29418 6.11222 8.61292 5.83362 8.69805 5.25799ZM7.21678 7.33475C7.01692 8.13989 5.66132 7.70449 5.22178 7.59535L5.57805 6.16849C6.01752 6.27835 7.42638 6.49549 7.21678 7.33475ZM7.41738 5.24636C7.23478 5.97875 6.10678 5.60635 5.74118 5.51522L6.06365 4.22149C6.42932 4.31261 7.60792 4.48249 7.41738 5.24636Z" fill="white"/>
+</g>
+</g>
+<mask id="mask2_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="13" y="0" width="13" height="12">
+<path d="M25.5 6C25.5 2.68629 22.8137 0 19.5 0C16.1863 0 13.5 2.68629 13.5 6C13.5 9.31371 16.1863 12 19.5 12C22.8137 12 25.5 9.31371 25.5 6Z" fill="white"/>
+</mask>
+<g mask="url(#mask2_774_309)">
+<mask id="mask3_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="13" y="0" width="13" height="12">
+<path d="M25.5 0H13.5V12H25.5V0Z" fill="white"/>
+</mask>
+<g mask="url(#mask3_774_309)">
+<path d="M19.5 12C22.8137 12 25.5 9.31373 25.5 6C25.5 2.68629 22.8137 0 19.5 0C16.1863 0 13.5 2.68629 13.5 6C13.5 9.31373 16.1863 12 19.5 12Z" fill="#627EEA"/>
+<path d="M19.6875 1.5V4.82625L22.4989 6.08247L19.6875 1.5Z" fill="white" fill-opacity="0.602"/>
+<path d="M19.6858 1.5L16.874 6.08247L19.6858 4.82625V1.5Z" fill="white"/>
+<path d="M19.6875 8.23747V10.4976L22.5008 6.60547L19.6875 8.23747Z" fill="white" fill-opacity="0.602"/>
+<path d="M19.6858 10.4976V8.23707L16.874 6.60547L19.6858 10.4976Z" fill="white"/>
+<path d="M19.6875 7.71499L22.4989 6.08266L19.6875 4.82715V7.71499Z" fill="white" fill-opacity="0.2"/>
+<path d="M16.874 6.08266L19.6858 7.71499V4.82715L16.874 6.08266Z" fill="white" fill-opacity="0.602"/>
+</g>
+</g>
+<mask id="mask4_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="13" width="12" height="13">
+<path d="M12 19.5C12 16.1863 9.31371 13.5 6 13.5C2.68629 13.5 0 16.1863 0 19.5C0 22.8137 2.68629 25.5 6 25.5C9.31371 25.5 12 22.8137 12 19.5Z" fill="white"/>
+</mask>
+<g mask="url(#mask4_774_309)">
+<mask id="mask5_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="13" width="12" height="13">
+<path d="M12 13.5H0V25.5H12V13.5Z" fill="white"/>
+</mask>
+<g mask="url(#mask5_774_309)">
+<path d="M6 25.5C9.31373 25.5 12 22.8137 12 19.5C12 16.1863 9.31373 13.5 6 13.5C2.68627 13.5 0 16.1863 0 19.5C0 22.8137 2.68627 25.5 6 25.5Z" fill="#26A17B"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.72008 20.0186V20.0179C6.67882 20.0209 6.46622 20.0336 5.99182 20.0336C5.61308 20.0336 5.34642 20.0224 5.25268 20.0179V20.019C3.79468 19.9549 2.70642 19.701 2.70642 19.3972C2.70642 19.0939 3.79468 18.84 5.25268 18.7747V19.7662C5.34795 19.773 5.62095 19.7891 5.99822 19.7891C6.45082 19.7891 6.67768 19.7704 6.72008 19.7666V18.7755C8.17508 18.8404 9.26068 19.0942 9.26068 19.3972C9.26068 19.701 8.17508 19.9541 6.72008 20.0186ZM6.72008 18.6724V17.7851H8.75035V16.4321H3.22241V17.7851H5.25268V18.672C3.60268 18.7477 2.36182 19.0748 2.36182 19.4662C2.36182 19.8578 3.60268 20.1844 5.25268 20.2605V23.1038H6.72008V20.2598C8.36742 20.184 9.60528 19.8574 9.60528 19.4662C9.60528 19.0751 8.36742 18.7485 6.72008 18.6724Z" fill="white"/>
+</g>
+</g>
+<mask id="mask6_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="13" y="13" width="13" height="13">
+<path d="M25.5 19.5C25.5 16.1863 22.8137 13.5 19.5 13.5C16.1863 13.5 13.5 16.1863 13.5 19.5C13.5 22.8137 16.1863 25.5 19.5 25.5C22.8137 25.5 25.5 22.8137 25.5 19.5Z" fill="white"/>
+</mask>
+<g mask="url(#mask6_774_309)">
+<mask id="mask7_774_309" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="13" y="13" width="13" height="13">
+<path d="M25.5 13.5H13.5V25.5H25.5V13.5Z" fill="white"/>
+</mask>
+<g mask="url(#mask7_774_309)">
+<path d="M19.5 25.5C22.8137 25.5 25.5 22.8137 25.5 19.5C25.5 16.1863 22.8137 13.5 19.5 13.5C16.1863 13.5 13.5 16.1863 13.5 19.5C13.5 22.8137 16.1863 25.5 19.5 25.5Z" fill="#F3BA2F"/>
+<path d="M18.04 18.902L19.4966 17.4455L20.9538 18.9028L21.8013 18.0552L19.4966 15.7505L17.1926 18.0545L18.04 18.902ZM15.7466 19.5005L16.5941 18.653L17.4416 19.5005L16.5941 20.348L15.7466 19.5005ZM18.04 20.099L19.4966 21.5555L20.9538 20.0982L21.8013 20.9454L19.4966 23.2505L17.1926 20.9465L17.1914 20.9454L18.04 20.099ZM21.5516 19.5005L22.399 18.653L23.2466 19.5005L22.399 20.348L21.5516 19.5005ZM20.3568 19.4998V19.5005L19.4966 20.3608L18.6374 19.502L18.636 19.5005L18.6374 19.4994L18.7878 19.3486L18.861 19.2755L19.4966 18.6402L20.3568 19.4998Z" fill="white"/>
+</g>
+</g>
+</svg></div>
+                    <div class="tp-m-txt">
+                      <div class="tp-m-name">Криптовалюта</div>
+                      <div class="tp-m-sub">Прямая оплата криптовалютой</div>
+                    </div>
+                  </div>
+                  <div class="tp-soon">Скоро</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp-amount-wrap">
+            <div class="tp-amount-lab">Сумма пополнения</div>
+            <div class="tp-amount">
+              <div class="tp-amount-in">
+                <span class="tp-cur">₽</span>
+                <input class="tp-num" id="amt" type="text" inputmode="numeric" value="990" style="width:113px">
+              </div>
+            </div>
+            <div class="tp-err hidden" id="amtErr">Минимальная сумма 10₽</div>
+          </div>
+        </div>
+
+        <div class="tp-actions">
+          <button class="tp-btn" type="button" id="payBtn">Оплатить 990 ₽</button>
+          <div class="tp-terms">Нажимая на кнопку, Вы соглашаетесь с <a href="#">условием оказания услуг</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ОЖИДАНИЕ ПЕРЕВОДА (498×580) -->
+  <div class="tp hidden" id="s2">
+    <div class="tp-inner">
+      <div class="tp-head">
+        <div class="tp-title">Пополнить баланс</div>
+        <button class="tp-x" type="button"><svg viewBox="0 0 21 21" fill="none"><path d="M5.25 5.25l10.5 10.5M15.75 5.25l-10.5 10.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tp-stat">
+        <div class="tp-stat-ic">
+          <svg viewBox="0 0 42 42" fill="none" style="transform:rotate(-10deg)">
+            <circle cx="21" cy="21" r="15.75" fill="url(#clockg)"/>
+            <path d="M21 15.5v6.1l4.2 2.4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+            <defs><radialGradient id="clockg" cx=".5" cy="-.007" r="1.007"><stop offset=".169" stop-color="#3A3C41"/><stop offset=".912" stop-color="#282A2D"/></radialGradient></defs>
+          </svg>
+        </div>
+        <div class="tp-stat-txt">
+          <div class="tp-stat-lab">Ожидаем перевод</div>
+          <div class="tp-stat-big">08:43</div>
+        </div>
+      </div>
+
+      <div class="tp-center">
+        <div class="tp-body">
+          <div class="tp-card">
+            <div class="tp-card-row">
+              <div class="tp-card-k">Получатель</div>
+              <div class="tp-card-v"><span class="av"></span>Udodov_Bot</div>
+            </div>
+            <div class="tp-card-sep"></div>
+            <div class="tp-card-row">
+              <div class="tp-card-k">Сумма</div>
+              <div class="tp-card-v">99 ₽</div>
+            </div>
+            <div class="tp-card-sep"></div>
+            <div class="tp-card-row">
+              <div class="tp-card-k">Комментарий</div>
+              <div class="tp-card-v">ZS-8F4K2M
+                <svg viewBox="0 0 14 14" fill="none"><path d="M5.83 1.75h6.42v6.42" stroke="#FFFFFF" stroke-width=".82" stroke-linecap="round"/><path d="M1.75 3.5h8.75v8.75H1.75z" stroke="#FFFFFF" stroke-width=".82" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp-row2">
+            <button class="tp-btn light" type="button">Я перевёл</button>
+            <button class="tp-btn" type="button">Открыть перевод
+              <svg viewBox="0 0 17 17" fill="none"><path d="M7.08 2.13h7.79v7.79" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round"/><path d="M2.13 4.25h10.62v10.62H2.13z" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. УСПЕШНОЕ ПОПОЛНЕНИЕ (498×392) -->
+  <div class="tp hidden" id="s3">
+    <div class="tp-inner">
+      <div class="tp-head">
+        <div class="tp-title">Пополнить баланс</div>
+        <button class="tp-x" type="button"><svg viewBox="0 0 21 21" fill="none"><path d="M5.25 5.25l10.5 10.5M15.75 5.25l-10.5 10.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tp-center">
+        <div class="tp-stat">
+          <div class="tp-stat-ic">
+            <svg viewBox="0 0 42 42" fill="none" style="transform:rotate(-10deg)">
+              <circle cx="21" cy="21" r="15.75" fill="url(#okg)"/>
+              <path d="M15.5 21.3l3.9 3.8 7-7.4" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(10deg);transform-origin:21px 21px"/>
+              <defs><radialGradient id="okg" cx=".5" cy="-.007" r="1.007"><stop offset=".169" stop-color="#36D38F"/><stop offset=".644" stop-color="#32B97F"/><stop offset=".912" stop-color="#30AA75"/></radialGradient></defs>
+            </svg>
+          </div>
+          <div class="tp-stat-txt">
+            <div class="tp-stat-lab">Успешное пополнение</div>
+            <div class="tp-stat-big sm">+99 кредитов</div>
+          </div>
+        </div>
+
+        <div class="tp-body">
+          <div class="tp-row2">
+            <button class="tp-btn light" type="button">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var MIN_AMOUNT = 10;
+var input = document.getElementById('amt');
+var err = document.getElementById('amtErr');
+var payBtn = document.getElementById('payBtn');
+var ruler = document.createElement('span');
+ruler.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;font:400 60px/73px Inter,sans-serif;';
+document.body.appendChild(ruler);
+
+function sync() {
+  input.value = input.value.replace(/[^0-9]/g, '');
+  ruler.textContent = input.value || '0';
+  input.style.width = Math.ceil(ruler.getBoundingClientRect().width) + 1 + 'px';
+  var v = parseInt(input.value || '0', 10);
+  var bad = !input.value || v < MIN_AMOUNT;
+  err.classList.toggle('hidden', !bad);
+  payBtn.textContent = 'Оплатить ' + (input.value || '0') + ' ₽';
+  payBtn.disabled = bad;
+}
+input.addEventListener('input', sync);
+if (document.fonts && document.fonts.ready) { document.fonts.ready.then(sync); }
+sync();
+
+document.getElementById('stateBtns').addEventListener('click', function (e) {
+  var b = e.target.closest('button'); if (!b) return;
+  [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+  var s = b.dataset.s;
+  document.getElementById('s1').classList.toggle('hidden', s !== '1' && s !== '1e');
+  document.getElementById('s2').classList.toggle('hidden', s !== '2');
+  document.getElementById('s3').classList.toggle('hidden', s !== '3');
+  if (s === '1e') { input.value = '5'; sync(); }
+  if (s === '1') { input.value = '990'; sync(); }
+});
+</script>
+</body></html>

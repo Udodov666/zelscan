@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru"><head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>zelscan - card variants v2</title>
+<style>
+:root{--bg:#0a0a0b;--line:rgba(255,255,255,.07);--mut:#62646b;--hi:#cfcfd3;--name:#ebebed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--hi);font-family:Inter,Arial,sans-serif;padding:32px 22px 56px}
+h1{max-width:1500px;margin:0 auto;font-size:20px;font-weight:600;color:#e8e8ea;letter-spacing:-.01em}
+h1 sub{display:block;margin-top:6px;font-size:12px;font-weight:400;color:#62646b;letter-spacing:0}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;max-width:1500px;margin:0 auto}
+.section{max-width:1500px;margin:38px auto 0}
+.section-t{margin:0 0 18px;font-size:10.5px;font-weight:700;color:#62646b;letter-spacing:.18em;text-transform:uppercase;text-align:center}
+@media(max-width:1100px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.strip{grid-template-columns:1fr}body{padding:20px 14px 30px}}
+.lbl{font-size:11.5px;font-weight:700;color:#9a9aa0;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.lbl sub{display:block;margin-top:4px;font-size:10.5px;font-weight:400;color:#5e6066;text-transform:none;letter-spacing:0}
+.dc{display:block;width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.024);text-decoration:none;color:inherit;transition:.15s}
+.dc:hover{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.045);transform:translateY(-1px)}
+.dc-head{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.dc-ava{position:relative;flex:0 0 38px;width:38px;height:38px;border-radius:12px;background:linear-gradient(145deg,#67dbff 2%,#268df1 58%,#174a7c);overflow:hidden;display:grid;place-items:center;font-weight:600;font-size:14px;color:#fff}
+.dc-ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dc-info{min-width:0;flex:1}
+.dc-name{font-size:14px;font-weight:600;color:var(--name);line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc-id{font-size:10.5px;color:#5d5e64;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc-arrow{color:#6a6c73;flex:0 0 auto;transition:color .15s}
+.dc:hover .dc-arrow{color:#cfcfd3}
+.pill{font-size:10px;font-weight:600;letter-spacing:.02em;padding:4px 8px;border-radius:7px}
+.pill.ok{background:rgba(52,211,153,.12);color:#34D399}
+.pill.warn{background:rgba(245,158,11,.15);color:#f59e0b}
+.pill.bad{background:rgba(239,68,68,.15);color:#ef4444}
+.chip{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.05);font-size:10px;font-weight:600;color:#b8b9be}
+.chip b{color:#cfcfd3;font-weight:600;margin-right:4px}
+.mg{display:grid;gap:6px}
+.mg.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mg.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mc{padding:9px 10px;border:1px solid rgba(255,255,255,.045);border-radius:10px;background:rgba(255,255,255,.018)}
+.mc-l{font-size:8.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+.mc-v{font-size:13px;font-weight:700;color:#cfcfd3;line-height:1.1;letter-spacing:-.005em}
+.mc-v small{font-size:9px;font-weight:500;color:var(--mut);margin-left:2px}
+.mc-b{height:3px;margin-top:7px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.mc-b i{display:block;height:100%;border-radius:99px}
+.vA .pty{display:flex;align-items:baseline;justify-content:space-between;padding:8px 11px;border-radius:11px;background:linear-gradient(90deg,rgba(83,120,255,.09),rgba(83,120,255,.02));border:1px solid rgba(83,120,255,.13)}
+.vA .pty-l{font-size:13px;font-weight:700;color:#cfd2ff;letter-spacing:.03em;text-transform:uppercase}
+.vA .pty-r{font-size:11px;font-weight:600;color:#8E9DFF}
+.vA .pb{margin-top:10px;display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.vA .pb b{font-weight:600;color:#cfcfd3}
+.vA .chips{margin-top:10px;display:flex;flex-wrap:wrap;gap:5px}
+.vB .big{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.vB .bn{text-align:center;padding:11px 6px;border:1px solid rgba(255,255,255,.045);border-radius:11px;background:rgba(255,255,255,.018)}
+.vB .n{font-size:22px;font-weight:700;color:#ebebed;letter-spacing:-.02em;line-height:1}
+.vB .nl{font-size:9.5px;font-weight:500;color:var(--mut);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+.vB .tl{margin-top:10px;padding:9px 11px;border:1px solid rgba(255,255,255,.045);border-radius:11px;background:rgba(255,255,255,.018);font-size:10.5px;color:var(--mut)}
+.vB .tl b{font-weight:600}
+.vB .pk{margin-top:9px;display:flex;align-items:center;gap:7px}
+.vB .ppill{display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:7px;background:rgba(83,120,255,.16);font-size:11px;font-weight:700;color:#9fb1ff}
+.vB .tf{margin-top:9px;font-size:11px;color:var(--mut)}
+.vB .tf b{color:#cfcfd3;font-weight:600}
+.vC .sl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.vC .sl-it{padding:8px 9px;border-radius:10px;border:1px solid;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600}
+.vC .sl-it .d{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.vC .sl-it.ok{border-color:rgba(52,211,153,.16);background:rgba(52,211,153,.05);color:#34D399}
+.vC .sl-it.warn{border-color:rgba(245,158,11,.16);background:rgba(245,158,11,.05);color:#f59e0b}
+.vC .sl-it.bad{border-color:rgba(239,68,68,.16);background:rgba(239,68,68,.05);color:#ef4444}
+.vC .us{margin-top:9px;padding:9px 11px;border-radius:11px;font-size:11px;line-height:1.4}
+.vC .us.ok{background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.1);color:#a9c5b8}
+.vC .us.bad{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.1);color:#c4a1a1}
+.vC .us b{font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+.vC .us.ok b{color:#34D399}
+.vC .us.bad b{color:#ef4444}
+/* SECTION CARDS */
+/* D - Психограф: manner + emotion bar + 3 metrics + empathy/mistakes */
+.vD .manner{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-size:12px;font-weight:600;color:#d8d8db}
+.vD .manner-r{font-size:10.5px;color:#78797f;font-weight:500}
+.vD .estr{display:flex;height:6px;margin-top:9px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.05)}
+.vD .estr i{height:100%}
+.vD .estr-l{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--mut)}
+.vD .estr-l i{font-style:normal}
+.vD .estr-l i em{color:#ef4444;font-weight:600;font-style:normal}
+.vD .estr-l i n{color:#34d399;font-weight:600}
+.vD .estr-l i s{color:#6a6c73;font-weight:600}
+.vD .mid3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.vD .m3{padding:9px 10px;border:1px solid rgba(255,255,255,.045);border-radius:10px;background:rgba(255,255,255,.018);text-align:left}
+.vD .m3-l{font-size:8.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.vD .m3-v{font-size:14px;font-weight:700;color:#cfcfd3;letter-spacing:-.01em;line-height:1}
+.vD .m3-v small{font-size:9px;font-weight:500;color:var(--mut);margin-left:2px}
+.vD .m3-b{height:3px;margin-top:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.vD .m3-b i{display:block;height:100%;border-radius:99px}
+.vD .em-line{margin-top:10px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--mut)}
+.vD .em-line b{font-weight:600;color:#cfcfd3}
+.vD .em-line .pill{margin-left:auto}
+.vD .verts{margin-top:9px;display:grid;grid-template-columns:1fr;gap:5px}
+.vD .vert-row{display:flex;justify-content:space-between;align-items:baseline;font-size:10.5px;color:#a4a6ac;font-style:italic;padding:5px 0;border-top:1px dashed rgba(255,255,255,.05)}
+.vD .vert-row:first-child{border-top:0;padding-top:0}
+.vD .vert-row .lbl-mini{color:var(--mut);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-style:normal}
+.vD .share{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:11px;color:#9eb1a5}
+.vD .share.danger{color:#c4a1a1}
+/* E - Триггеры и срывы */
+.vE .rap{margin-top:10px;display:grid;grid-template-columns:repeat(24,1fr);gap:1px;height:32px;align-items:end;border-radius:8px;padding:4px 6px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.vE .rap i{display:block;background:#ef4444;opacity:.85;border-radius:1px;min-height:2px}
+.vE .rap-h{margin-top:6px;display:flex;justify-content:space-between;font-size:9px;color:var(--mut);font-weight:500}
+.vE .tot{margin-top:10px;display:flex;align-items:center;gap:9px;font-size:11px}
+.vE .tot .num{font-size:18px;font-weight:700;color:#ef4444;line-height:1;letter-spacing:-.01em}
+.vE .tot .txt{color:#a4a6ac;line-height:1.3}
+.vE .tot .txt b{color:#cfcfd3;font-weight:600}
+.vE .twords{margin-top:10px;display:flex;flex-wrap:wrap;gap:5px}
+.vE .tword{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:7px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.18);font-size:11px;font-weight:600;color:#ef4444}
+.vE .tword b{font-size:9.5px;color:#ef4444;opacity:.85}
+.vE .ttrig{margin-top:10px;display:flex;flex-direction:column;gap:5px}
+.vE .ttrig-it{padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.025);border:1px solid var(--line);font-size:10.5px;color:#a4a6ac;line-height:1.4}
+.vE .ttrig-it b{color:#cfcfd3;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.vE .newbies{margin-top:10px;display:flex;gap:8px}
+.vE .nb-it{flex:1;padding:7px 9px;border-radius:9px;border:1px solid;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600}
+.vE .nb-it.ok{border-color:rgba(52,211,153,.16);background:rgba(52,211,153,.05);color:#a9c5b8}
+.vE .nb-it.bad{border-color:rgba(239,68,68,.16);background:rgba(239,68,68,.05);color:#c4a1a1}
+.vE .nb-it.muted{border-color:rgba(255,255,255,.07);background:rgba(255,255,255,.025);color:#78797f}
+.vE .nb-it .d{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+
+/* F - Компас: useful/dangerous + interests + top forum + yearly */
+.vF .compass{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.vF .cmp{padding:9px 10px;border-radius:10px;font-size:10.5px;line-height:1.4}
+.vF .cmp.ok{background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.1);color:#a9c5b8}
+.vF .cmp.bad{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.1);color:#c4a1a1}
+.vF .cmp b{font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px}
+.vF .cmp.ok b{color:#34D399}
+.vF .cmp.bad b{color:#ef4444}
+.vF .sect{margin-top:10px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.vF .sect-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.vF .sect-head b{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#78797f}
+.vF .sect-head .count{font-size:9.5px;color:var(--mut)}
+.vF .kw{display:flex;flex-wrap:wrap;gap:4px}
+.vF .kw span{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:7px;background:rgba(83,120,255,.1);border:1px solid rgba(83,120,255,.18);font-size:10.5px;font-weight:600;color:#9fb1ff}
+.vF .kw span b{color:#cfd2ff;font-weight:700;margin-left:5px;font-size:9.5px;opacity:.75}
+.vF .topforum{margin-top:9px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.vF .topforum-row{display:flex;justify-content:space-between;align-items:baseline}
+.vF .topforum-row b{color:#e8e8ea;font-weight:600;font-size:12px}
+.vF .topforum-row .pct{font-size:11px;font-weight:700;color:#34D399}
+.vF .topforum-sub{font-size:10.5px;color:var(--mut);margin-top:3px}
+.vF .trend{margin-top:9px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.025);border:1px solid var(--line)}
+.vF .trend-head{display:flex;justify-content:space-between;align-items:baseline;font-size:10.5px;color:var(--mut);font-weight:500;margin-bottom:6px}
+.vF .trend-head b{color:#34D399;font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.vF .ybars{display:flex;align-items:end;gap:6px;height:50px}
+.vF .ybar{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.vF .ybar-i{width:100%;border-radius:4px 4px 1px 1px;min-height:3px;background:linear-gradient(180deg,#9fb1ff,#5378ff)}
+.vF .ybar-n{font-size:9.5px;color:#a4a6ac;font-weight:600}
+.vF .ybar small{font-size:9px;color:var(--mut);font-weight:500}
+/* J/K/L — варианты из фигмы */
+.fig{display:block;width:100%;padding:14px 16px 13px;border-radius:14px;text-decoration:none;color:inherit;transition:.15s;font-family:Inter,Arial,sans-serif;border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+.fig:hover{transform:translateY(-1px)}
+.fig-head{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.fig-ava{flex:0 0 36px;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase;position:relative;overflow:hidden}
+.fig-ava img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.fig-name{font-size:13.5px;font-weight:600;color:#f4f4f6;line-height:1.2;letter-spacing:-.005em;display:flex;align-items:center;gap:5px}
+.fig-name .vmd{width:13px;height:13px;color:#5378ff}
+.fig-ml{margin-left:auto;display:flex;align-items:center;gap:5px;flex:0 0 auto}
+.fig-rep{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:7px;font-size:10.5px;font-weight:600;color:#34D399;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2)}
+.fig-rep svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+.fig-type{font-size:10px;font-weight:600;color:#cbe9da;background:rgba(52,211,153,.16);border:1px solid rgba(52,211,153,.22);height:22px;padding:0 8px;border-radius:7px;display:inline-flex;align-items:center}
+.fig-grid3{display:grid;grid-template-columns:repeat(3,1fr);padding:10px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:11px}
+.fig-grid3 .col{text-align:center;padding:0;border-left:1px solid rgba(255,255,255,.05)}
+.fig-grid3 .col:first-child{border-left:0}
+.fig-grid3 .n{font-size:20px;font-weight:700;color:#ebebed;letter-spacing:-.02em;line-height:1}
+.fig-grid3 .lab{margin-top:4px;font-size:9px;font-weight:500;color:#707278;text-transform:uppercase;letter-spacing:.06em}
+.fig-m3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:11px}
+.fig-m3 .col{font-size:10px;color:var(--mut)}
+.fig-m3 .pct{font-size:11.5px;font-weight:700;line-height:1.1;color:#cfcfd3;display:block;margin-bottom:3px}
+.fig-m3 .pct em{font-style:normal;color:currentColor}
+.fig-m3 .bar{height:3px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin:5px 0 4px}
+.fig-m3 .bar i{display:block;height:100%;border-radius:99px}
+.fig-m3 .nname{font-size:9px;font-weight:500;color:#707278;text-transform:uppercase;letter-spacing:.06em}
+.fig-foot{display:flex;align-items:center;justify-content:space-between;font-size:10.5px;color:#78797f}
+.fig-foot .arr{color:#6a6c73;display:flex;align-items:center}
+
+/* J — grainy/glass left */
+.vJ{background:linear-gradient(180deg,#0e0e12 0%,#0a0a0d 100%);color:#e8e8eb}
+.vJ::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 25% 0%,rgba(100,120,255,.08),transparent 50%),radial-gradient(circle at 80% 60%,rgba(83,120,255,.05),transparent 40%);pointer-events:none}
+.vJ::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.012) 1px,transparent 1px);background-size:3px 3px;opacity:.7;pointer-events:none}
+.vJ>*{position:relative;z-index:1}
+
+/* K — warm orange gradient header middle */
+.vK{background:#0c0c0e;position:relative}
+.vK::before{content:'';position:absolute;left:0;right:0;top:0;height:60%;background:linear-gradient(180deg,rgba(255,140,70,.16) 0%,rgba(255,140,70,.04) 60%,transparent 100%);pointer-events:none}
+.vK>*{position:relative;z-index:1}
+
+/* L — clean with photo avatar */
+.vL{background:linear-gradient(180deg,#101012,#0b0b0d)}
+.vL .fig-ava{background:linear-gradient(145deg,#67dbff 2%,#268df1 58%,#174a7c)}
+
+
+.vG{font-size:11.5px}
+.vG .st1{margin-top:9px;line-height:1.55;color:#c4c5ca}
+.vG .st1 b{color:#ebebed;font-weight:600}
+.vG .st1 em{font-style:normal;color:#f59e0b;font-weight:600}
+.vG .st2{margin-top:6px;line-height:1.5;color:#a4a6ac;font-size:11px}
+.vG .st2 b{color:#cfcfd3;font-weight:600}
+.vG .st3{margin-top:10px;font-size:10.5px;color:#78797f;display:flex;flex-wrap:wrap;gap:5px 12px}
+.vG .st3 b{color:#cfcfd3;font-weight:600}
+.vG .st3 .ok{color:#34d399}
+.vG .st3 .em{color:#ef4444}
+.vG .chips{margin-top:9px;display:flex;flex-wrap:wrap;gap:4px}
+.vG .chip{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:5px;background:rgba(255,255,255,.04);font-size:9.5px;font-weight:600;color:#a4a6ac}
+
+.vH{font-size:11px}
+.vH .m1{margin-top:9px;font-size:11px;color:#a4a6ac}
+.vH .m1 b{color:#cfcfd3;font-weight:600}
+.vH .yr{display:flex;align-items:end;gap:4px;margin-top:9px;height:30px}
+.vH .yr i{display:block;flex:1;background:linear-gradient(180deg,#9fb1ff,#5378ff);opacity:.85;border-radius:2px 2px 0 0;min-height:3px;position:relative}
+.vH .yrs{display:flex;justify-content:space-between;font-size:9px;color:var(--mut);margin-top:4px}
+.vH .yrs span{display:flex;flex-direction:column;align-items:center;flex:1}
+.vH .yrs span b{font-size:10px;color:#cfcfd3;font-weight:600;margin-bottom:1px}
+.vH .yrs .gr{color:#34d399}
+.vH .peak-row{margin-top:9px;display:flex;align-items:center;gap:7px;font-size:11px;color:#a4a6ac}
+.vH .peak-row b{color:#cfcfd3;font-weight:600}
+.vH .ppill-sm{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:6px;background:rgba(83,120,255,.15);font-size:10.5px;font-weight:700;color:#9fb1ff}
+.vH .tword-tiny{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:4px;background:rgba(239,68,68,.07);font-size:9.5px;font-weight:600;color:#ef4444;margin-right:4px;margin-bottom:4px}
+.vH .twords-tiny{margin-top:9px;line-height:1.6}
+.vH .chips-tiny{margin-top:9px;display:flex;flex-wrap:wrap;gap:4px}
+.vH .chip-tiny{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:5px;background:rgba(255,255,255,.04);font-size:9.5px;font-weight:600;color:#a4a6ac}
+
+.vI{font-size:12.5px}
+.vI .sub-line{margin-top:9px;font-size:11.5px;color:var(--mut)}
+.vI .sub-line b{color:#cfcfd3;font-weight:600}
+.vI .dbl{height:1px;background:rgba(255,255,255,.06);margin:11px 0}
+.vI .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.vI .nums .col{padding:0;border-left:1px solid rgba(255,255,255,.05)}
+.vI .nums .col:first-child{border-left:0;padding-left:0}
+.vI .nums .col + .col{padding-left:14px}
+.vI .nums .n{font-size:20px;font-weight:700;color:#ebebed;letter-spacing:-.02em;line-height:1}
+.vI .nums .lab{font-size:9.5px;font-weight:500;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-top:5px}
+.vI .nums .sub{font-size:9.5px;color:#78797f;margin-top:2px}
+.vI .risk-line{font-size:11.5px;color:#a4a6ac;display:flex;align-items:center;gap:10px}
+.vI .risk-line .p{display:inline-flex;align-items:center;gap:5px}
+.vI .risk-line .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+.vI .risk-line b{font-weight:600;color:#cfcfd3}
+.vI .risk-line .nm{color:#cfcfd3;font-weight:600}
+.vI .risk-line .em{color:#ef4444}
+.vI .risk-line .wn{color:#f59e0b}
+.vI .reputation-line{font-size:11.5px;color:#a4a6ac;display:flex;align-items:center;gap:8px;margin-top:9px}
+.vI .reputation-line .b{display:inline-block;width:80px;height:3px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.vI .reputation-line .b i{position:absolute;left:0;top:0;height:100%;border-radius:99px}
+
+</style></head>
+<body>
+<h1>Карточка досье: 6 вариантов<small>одни и те же данные root_uck - шесть способов показать, какая инфа цепляет</small></h1>
+
+<div class="section-t">БАЗОВЫЕ ФОРМЫ</div>
+<div class="strip">
+  <div>
+    <div class="lbl">A Психометрический профиль<sub>паспорт психотипа - 4 мини-метрики</sub></div>
+    <a class="dc vA" href="#">
+      <div class="dc-head">
+        <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+        <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - 4 года 3 мес.</div></div>
+        <span class="pill ok">Готово</span>
+        <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+      </div>
+      <div class="pty"><div class="pty-l">Сомневающийся</div><div class="pty-r">27 совпадений</div></div>
+      <div class="mg c4" style="margin-top:10px">
+        <div class="mc"><div class="mc-l">Репутация</div><div class="mc-v" style="color:#F59E0B">35<small>/100</small></div><div class="mc-b"><i style="width:35%;background:#F59E0B"></i></div></div>
+        <div class="mc"><div class="mc-l">Конфликт</div><div class="mc-v" style="color:#34D399">1<small>/10</small></div><div class="mc-b"><i style="width:10%;background:#34D399"></i></div></div>
+        <div class="mc"><div class="mc-l">Токсичн.</div><div class="mc-v" style="color:#34D399">1<small>%</small></div><div class="mc-b"><i style="width:3%;background:#34D399"></i></div></div>
+        <div class="mc"><div class="mc-l">Уверен.</div><div class="mc-v" style="color:#8EA6FF">16<small>%</small></div><div class="mc-b"><i style="width:16%;background:#5378FF"></i></div></div>
+      </div>
+      <div class="pb"><span>Эмпатия: <b>4</b> - редко</span><span>Ошибки: <b>0</b> / 507</span></div>
+      <div class="chips"><span class="chip">Токсик</span><span class="chip">Шарит</span><span class="chip">Тролль</span><span class="chip">Душа</span></div>
+    </a>
+  </div>
+  <div>
+    <div class="lbl">B Активность и объем<sub>сколько когда где - 3 большие цифры</sub></div>
+    <a class="dc vB" href="#">
+      <div class="dc-head">
+        <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+        <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - Сомневающийся</div></div>
+        <span class="pill ok">Готово</span>
+        <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+      </div>
+      <div class="big">
+        <div class="bn"><div class="n">298</div><div class="nl">темы</div></div>
+        <div class="bn"><div class="n">507</div><div class="nl">сообщений</div></div>
+        <div class="bn"><div class="n">78</div><div class="nl">стена</div></div>
+      </div>
+      <div class="tl">2024 <b style="color:#8e8e93">26</b> - 2025 <b style="color:#b8b8bd">232</b> - 2026 <b style="color:#e5e5e8">625</b> &nbsp;<b style="color:#34D399">взлет в 2026</b></div>
+      <div class="pk"><span class="ppill">Пик 21:00</span><span style="font-size:10.5px;color:var(--mut)">Вечер <b style="color:#cfcfd3">47%</b> после 18:00</span></div>
+      <div class="tf">Топ-раздел: <b>Сова со скакалкой</b> - 76% всех топиков</div>
+    </a>
+  </div>
+  <div>
+    <div class="lbl">C Риск-индикатор<sub>тревожные сигналы - 3 светофора + вердикт AI</sub></div>
+    <a class="dc vC" href="#">
+      <div class="dc-head">
+        <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+        <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - Сомневающийся</div></div>
+        <span class="pill ok">Готово</span>
+        <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+      </div>
+      <div class="sl">
+        <div class="sl-it ok"><span class="d"></span>Чист</div>
+        <div class="sl-it bad"><span class="d"></span>8 претензий</div>
+        <div class="sl-it warn"><span class="d"></span>13 жалоб</div>
+      </div>
+      <div class="mg c3" style="margin-top:10px">
+        <div class="mc"><div class="mc-l">Репутация</div><div class="mc-v" style="color:#F59E0B">35<small>/100</small></div><div class="mc-b"><i style="width:35%;background:#F59E0B"></i></div></div>
+        <div class="mc"><div class="mc-l">Конфликт</div><div class="mc-v" style="color:#34D399">1<small>/10</small></div><div class="mc-b"><i style="width:10%;background:#34D399"></i></div></div>
+        <div class="mc"><div class="mc-l">Скам</div><div class="mc-v" style="color:#34D399">нет</div><div class="mc-b"><i style="width:0%;background:#34D399"></i></div></div>
+      </div>
+      <div class="us ok"><b>Полезен для</b>Технические ответы - шарит в теме</div>
+      <div class="us bad"><b>Опасен в</b>Спорах - переходит на мат и личности</div>
+      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px"><span class="chip">Токсик</span><span class="chip">Шарит</span><span class="chip">Тролль</span><span class="chip">Душа</span></div>
+    </a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-t">УГЛУБЛЕННЫЕ ВАРИАНТЫ (БЕРУТ ИНФУ ИЗ АНАЛИЗА / ПОВЕДЕНИЯ / ПСИХОЛОГИИ)</div>
+  <div class="strip">
+    <div>
+      <div class="lbl">D Психограф<sub>манера + эмо-фон + уверенность и эго</sub></div>
+      <a class="dc vD" href="#">
+        <div class="dc-head">
+          <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+          <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - 4 года 3 мес.</div></div>
+          <span class="pill ok">Готово</span>
+          <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="manner">Сомневающийся <span class="manner-r">27 характеристик</span></div>
+        <div class="estr"><i style="width:1%;background:#ef4444"></i><i style="width:96%;background:#6a6c73;opacity:.4"></i><i style="width:3%;background:#f59e0b"></i></div>
+        <div class="estr-l"><i><em>1% toxic</em></i><i><s>96% neutral</s></i><i><n>3% pos</n></i></div>
+        <div class="mid3">
+          <div class="m3"><div class="m3-l">Уверен.</div><div class="m3-v" style="color:#8EA6FF">16<small>%</small></div><div class="m3-b"><i style="width:16%;background:#5378FF"></i></div></div>
+          <div class="m3"><div class="m3-l">Эго</div><div class="m3-v" style="color:#FFB266">1.4<small>/100</small></div><div class="m3-b"><i style="width:6%;background:#FFB266"></i></div></div>
+          <div class="m3"><div class="m3-l">Конфликт</div><div class="m3-v" style="color:#34D399">1<small>/10</small></div><div class="m3-b"><i style="width:10%;background:#34D399"></i></div></div>
+        </div>
+        <div class="vert-row"><span class="lbl-mini">Эмпатия</span><span>4 поддержки - редко</span></div>
+        <div class="vert-row"><span class="lbl-mini">Ошибки</span><span>0 / 507 - ни разу не признал</span></div>
+        <div class="vert-row"><span class="lbl-mini">Безопасность</span><span class="pill ok" style="margin-left:auto">чист, не забанен</span></div>
+      </a>
+    </div>
+    <div>
+      <div class="lbl">E Триггеры и срывы<sub>когда взрывается - 24-часовая heatmap + слова</sub></div>
+      <a class="dc vE" href="#">
+        <div class="dc-head">
+          <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+          <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - 7 постов из 507</div></div>
+          <span class="pill ok">Готово</span>
+          <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="rap" id="rap"></div>
+        <div class="rap-h"><span>0</span><span>6</span><span>12</span><span>18</span><span>23</span></div>
+        <div class="tot"><div class="num">7</div><div class="txt">из <b>507</b> постов с матом <br><span style="color:var(--mut);font-size:10px">пик лёг на вечер (15-23 ч)</span></div></div>
+        <div class="twords"><span class="tword">ебать <b>2</b></span><span class="tword">блять <b>1</b></span><span class="tword">пиздец <b>1</b></span><span class="tword">охуенно <b>1</b></span></div>
+        <div class="ttrig">
+          <div class="ttrig-it"><b>Официально</b><br>ВНИМАНИЕ @casherqq ОФИЦИАЛЬНО ЗАЯВИЛ ЧТО ОФФТОПИК МЕРТВ</div>
+          <div class="ttrig-it"><b>Семейное фото оффтопа</b><br>как всегда охуенно :love2:</div>
+          <div class="ttrig-it"><b>Бывает</b><br>ебать чипсов захотелось</div>
+        </div>
+        <div class="newbies">
+          <div class="nb-it muted"><span class="d"></span>Не общается</div>
+          <div class="nb-it ok"><span class="d"></span>0 токсик</div>
+        </div>
+      </a>
+    </div>
+    <div>
+      <div class="lbl">F Компас и интересы<sub>тех-ключевые слова + куда полезен, куда нет</sub></div>
+      <a class="dc vF" href="#">
+        <div class="dc-head">
+          <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+          <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - 4 года 3 мес.</div></div>
+          <span class="pill ok">Готово</span>
+          <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="compass">
+          <div class="cmp ok"><b>Полезен для</b>Технические ответы - шарит в теме</div>
+          <div class="cmp bad"><b>Опасен в</b>Спорах - переходит на мат</div>
+        </div>
+        <div class="sect">
+          <div class="sect-head"><b>Шарит в</b><span class="count">9 ключевых слов</span></div>
+          <div class="kw"><span>тг<b>2</b></span><span>код<b>1</b></span><span>боты<b>1</b></span><span>танки<b>1</b></span><span>ютуб<b>1</b></span><span>прокси<b>1</b></span><span>telegram<b>1</b></span><span>vpn<b>1</b></span><span>аккаунт<b>1</b></span></div>
+        </div>
+        <div class="sect">
+          <div class="sect-head"><b>Топ-раздел</b><span class="count">76% всех топиков</span></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+            <div style="flex:1"><div class="topforum-row"><b>Сова со скакалкой</b><span class="pct">76%</span></div><div class="topforum-sub">745 постов из 298 топиков</div></div>
+          </div>
+        </div>
+        <div class="trend">
+          <div class="trend-head"><span>Динамика 2024-2026</span><b>растет</b></div>
+          <div class="ybars">
+            <div class="ybar"><div class="ybar-i" style="height:4%"></div><div class="ybar-n">26<small>2024</small></div></div>
+            <div class="ybar"><div class="ybar-i" style="height:37%;background:linear-gradient(180deg,#b8b8bd,#6a6c73)"></div><div class="ybar-n">232<small>2025</small></div></div>
+            <div class="ybar"><div class="ybar-i" style="height:100%"></div><div class="ybar-n">625<small>2026</small></div></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// D-E heatmap render
+const hours=[0,0,0,0,0,0,1,2,3,8,10,11,12,13,14,15,16,17,0,0,21,0,23,0];
+function renderRap(){
+  const el=document.getElementById('rap'); if(!el) return;
+  const max=Math.max(...hours,1);
+  el.innerHTML = hours.map((v,i)=>{const h=Math.max(2,Math.round((v/max)*100));return '<i style="height:'+h+'%;opacity:'+(0.35+0.6*(v/max)).toFixed(2)+'"></i>';}).join('');
+}
+renderRap();
+</script>
+
+<div class="section">
+  <div class="section-t">ПЛОТНЫЕ ВАРИАНТЫ ДЛЯ СПИСКОВ ИЗ 20+ КАРТОЧЕК</div>
+  <div class="strip">
+    <div>
+      <div class="lbl">G Психо-стрим<sub>только текст + инлайн метрики, ноль обводок</sub></div>
+      <a class="dc vG" href="#">
+        <div class="dc-head">
+          <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+          <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - 4 года 3 мес.</div></div>
+          <span class="pill ok">Готово</span>
+          <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="st1">Стиль: <b>сомневающийся</b>, на 27 характеристик он скорее «вроде бы / наверное» чем утверждает. Тональность 96% нейтрал и всего <em>1% токсик</em>, 3% поз.</div>
+        <div class="st2">Уверен <b>16%</b> · Эго <b>1.4</b>/100 слов · Конфликт <b>1/10</b> · Токсичн. <b>1%</b> постов</div>
+        <div class="st3">Эмпатия <b>4</b> поддержки · <span class="em">Ошибки 0</span> / 507 · <span class="ok">Чист · не забанен</span></div>
+        <div class="chips"><span class="chip">Токсик</span><span class="chip">Шарит</span><span class="chip">Тролль</span><span class="chip">Душа</span></div>
+      </a>
+    </div>
+    <div>
+      <div class="lbl">H Timeline-плотный<sub>годы + пик-час + срывы в одной строке</sub></div>
+      <a class="dc vH" href="#">
+        <div class="dc-head">
+          <div class="dc-ava">R<img src="https://nztcdn.com/avatar/m/1784364106/5254256.webp" alt="" onerror="this.remove()"></div>
+          <div class="dc-info"><div class="dc-name">root_duck</div><div class="dc-id">ID 5254256 - Сомневающийся</div></div>
+          <span class="pill ok">Готово</span>
+          <div class="dc-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div>
+        </div>
+        <div class="m1">298 тем · 507 сообщений · 78 стена · Сова со скакалкой (76%)</div>
+        <div class="yr"><i style="height:4%"></i><i style="height:37%;background:linear-gradient(180deg,#b8b8bd,#6a6c73)"></i><i style="height:100%"></i></div>
+        <div class="yrs"><span><b>26</b>2024</span><span><b>232</b>2025</span><span><b>625</b><span class="gr">2026</span></span></div>
+        <div class="peak-row"><span class="ppill-sm">21:00</span><b>вечер 47%</b> · 7 постов с матом из 507</div>
+        <div class="twords-tiny">слова-сорянки: <span class="tword-tiny">ебать 2</span><span class="tword-tiny">блять 1</span><span class="tword-tiny">пиздец 1</span><span class="tword-tiny">охуенно 1</span></div>
+<div class="chips-tiny"><span class="chip-tiny">Токсик</span><span class="chip-tiny">Шарит</span><span class="chip-tiny">Тролль</span><span class="chip-tiny">Душа</span></div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-t">ВАРИАНТЫ ИЗ ФИГМЫ (J/K/L) — на оценку</div>
+  <div class="strip">
+    <div>
+      <div class="lbl">J Glass-grain<sub>тёмная база + лёгкое радиальное свечение + пиксельная зернистость</sub></div>
+      <a class="fig vJ" href="#">
+        <div class="fig-head">
+          <div class="fig-ava">U</div>
+          <div class="fig-name">Udodov<svg class="vmd" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.6L4 14.1l5 5.2L20 8.3l-1.5-1.4z"/></svg></div>
+          <div class="fig-ml">
+            <span class="fig-rep"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V6z"/><path d="m9 12 2 2 4-4"/></svg>75/100</span>
+            <span class="fig-type">Полный AI</span>
+          </div>
+        </div>
+        <div class="fig-grid3">
+          <div class="col"><div class="n">298</div><div class="lab">Темы</div></div>
+          <div class="col"><div class="n">50 007</div><div class="lab">Сообщений</div></div>
+          <div class="col"><div class="n">78</div><div class="lab">Стена</div></div>
+        </div>
+        <div class="fig-m3">
+          <div class="col"><span class="pct" style="color:#34D399"><em>56%</em></span><div class="bar"><i style="width:56%;background:#34D399"></i></div><span class="nname">Уверенность</span></div>
+          <div class="col"><span class="pct" style="color:#FFB266"><em>2%</em></span><div class="bar"><i style="width:2%;background:#FFB266"></i></div><span class="nname">Эго</span></div>
+          <div class="col"><span class="pct" style="color:#ef4444"><em>39%</em></span><div class="bar"><i style="width:39%;background:#ef4444"></i></div><span class="nname">Конфликт</span></div>
+        </div>
+        <div class="fig-foot"><span>8 авг. 2026 г.</span><div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div></div>
+      </a>
+    </div>
+    <div>
+      <div class="lbl">K Warm-gradient<sub>тёплый оранжевый градиент на верхней половине карточки</sub></div>
+      <a class="fig vK" href="#">
+        <div class="fig-head">
+          <div class="fig-ava" style="background:linear-gradient(145deg,#ff8e53,#d54e1e)">U</div>
+          <div class="fig-name">Udodov<svg class="vmd" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.6L4 14.1l5 5.2L20 8.3l-1.5-1.4z"/></svg></div>
+          <div class="fig-ml">
+            <span class="fig-rep"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V6z"/><path d="m9 12 2 2 4-4"/></svg>75/100</span>
+            <span class="fig-type">Полный AI</span>
+          </div>
+        </div>
+        <div class="fig-grid3">
+          <div class="col"><div class="n">298</div><div class="lab">Темы</div></div>
+          <div class="col"><div class="n">50 007</div><div class="lab">Сообщений</div></div>
+          <div class="col"><div class="n">78</div><div class="lab">Стена</div></div>
+        </div>
+        <div class="fig-m3">
+          <div class="col"><span class="pct" style="color:#34D399"><em>56%</em></span><div class="bar"><i style="width:56%;background:#34D399"></i></div><span class="nname">Уверенность</span></div>
+          <div class="col"><span class="pct" style="color:#FFB266"><em>2%</em></span><div class="bar"><i style="width:2%;background:#FFB266"></i></div><span class="nname">Эго</span></div>
+          <div class="col"><span class="pct" style="color:#ef4444"><em>39%</em></span><div class="bar"><i style="width:39%;background:#ef4444"></i></div><span class="nname">Конфликт</span></div>
+        </div>
+        <div class="fig-foot"><span>8 авг. 2026 г.</span><div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div></div>
+      </a>
+    </div>
+    <div>
+      <div class="lbl">L Clean + photo avatar<sub>минималистичный тёмный фон с реальной аватаркой</sub></div>
+      <a class="fig vL" href="#">
+        <div class="fig-head">
+          <div class="fig-ava">U<img src="https://nztcdn.com/avatar/m/1782902205/638074.webp" alt="" onerror="this.remove()"></div>
+          <div class="fig-name">Udodov<svg class="vmd" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2l-3.5-3.6L4 14.1l5 5.2L20 8.3l-1.5-1.4z"/></svg></div>
+          <div class="fig-ml">
+            <span class="fig-rep"><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.5 9.5 8 10.5 4.5-1 8-5.5 8-10.5V6z"/><path d="m9 12 2 2 4-4"/></svg>75/100</span>
+            <span class="fig-type">Полный AI</span>
+          </div>
+        </div>
+        <div class="fig-grid3">
+          <div class="col"><div class="n">298</div><div class="lab">Темы</div></div>
+          <div class="col"><div class="n">50 007</div><div class="lab">Сообщений</div></div>
+          <div class="col"><div class="n">78</div><div class="lab">Стена</div></div>
+        </div>
+        <div class="fig-m3">
+          <div class="col"><span class="pct" style="color:#34D399"><em>56%</em></span><div class="bar"><i style="width:56%;background:#34D399"></i></div><span class="nname">Уверенность</span></div>
+          <div class="col"><span class="pct" style="color:#FFB266"><em>2%</em></span><div class="bar"><i style="width:2%;background:#FFB266"></i></div><span class="nname">Эго</span></div>
+          <div class="col"><span class="pct" style="color:#ef4444"><em>39%</em></span><div class="bar"><i style="width:39%;background:#ef4444"></i></div><span class="nname">Конфликт</span></div>
+        </div>
+        <div class="fig-foot"><span>8 авг. 2026 г.</span><div class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></div></div>
+      </a>
+    </div>
+  </div>
+</div>
+
+</body></html>

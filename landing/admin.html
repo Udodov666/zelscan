@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Zelscan Control Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/admin.css?v=12">
+<link rel="stylesheet" href="assets/css/zs-notice.css">
+</head>
+<body>
+<!-- GATE / LOGIN SCREEN -->
+<section id="gate" class="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="gate-bg"></div>
+  <div class="gate-card">
+    <div class="gate-icon">Z</div>
+    <div class="gate-eyebrow"><i></i> PRIVATE CONTROL CENTER</div>
+    <h1 id="gateTitle">Проверяем доступ</h1>
+    <p id="gateText">Подтверждаем аккаунт Lolzteam…</p>
+    <form id="loginForm" hidden>
+      <label for="adminPassword">Код администратора</label>
+      <div class="pass-row">
+        <input id="adminPassword" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="4" pattern="[0-9]{4}" value="7579" placeholder="7579" aria-label="Код администратора">
+      </div>
+      <button class="btn btn-primary btn-full" type="submit">Войти в панель <b>→</b></button>
+    </form>
+    <div id="gateError" class="gate-error" aria-live="polite"></div>
+    <footer>◆ Аккаунт #638074 · Scrypt · HttpOnly · Anti-brute-force</footer>
+  </div>
+</section>
+
+<!-- MAIN SHELL (hidden until auth) -->
+<div id="shell" class="shell" hidden>
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar" aria-label="Основная навигация">
+    <a class="sidebar-logo" href="zelscan_dashboard.html" aria-label="Zelscan Dashboard">
+      <span class="logo-mark">Z</span>
+      <span class="logo-text">Zelscan</span>
+    </a>
+    <nav class="sidebar-nav">
+      <section class="nav-section">
+        <span class="nav-section-title">УПРАВЛЕНИЕ</span>
+        <button class="nav-item active" data-page="overview" data-icon="●" aria-current="page">
+          <span class="nav-icon">●</span>
+          <span class="nav-label">Обзор</span>
+        </button>
+        <button class="nav-item" data-page="users" data-icon="♙">
+          <span class="nav-icon">♙</span>
+          <span class="nav-label">Пользователи</span>
+        </button>
+        <button class="nav-item" data-page="orders" data-icon="▤">
+          <span class="nav-icon">▤</span>
+          <span class="nav-label">Заказы и отчёты</span>
+        </button>
+        <button class="nav-item" data-page="promos" data-icon="◈">
+          <span class="nav-icon">◈</span>
+          <span class="nav-label">Промокоды</span>
+        </button>
+      </section>
+      <section class="nav-section">
+        <span class="nav-section-title">СИСТЕМА</span>
+        <button class="nav-item" data-page="ai" data-icon="✦">
+          <span class="nav-icon">✦</span>
+          <span class="nav-label">ИИ и расходы</span>
+        </button>
+        <button class="nav-item" data-page="finance" data-icon="₽">
+          <span class="nav-icon">₽</span>
+          <span class="nav-label">Финансы</span>
+        </button>
+        <button class="nav-item" data-page="analytics" data-icon="▦">
+          <span class="nav-icon">▦</span>
+          <span class="nav-label">Аналитика</span>
+        </button>
+        <button class="nav-item" data-page="traffic" data-icon="⌁">
+          <span class="nav-icon">⌁</span>
+          <span class="nav-label">Трафик</span>
+        </button>
+        <button class="nav-item" data-page="audit" data-icon="⌾">
+          <span class="nav-icon">⌾</span>
+          <span class="nav-label">Аудит</span>
+        </button>
+        <button class="nav-item" data-page="settings" data-icon="⚙">
+          <span class="nav-icon">⚙</span>
+          <span class="nav-label">Настройки</span>
+        </button>
+      </section>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="health-indicator" id="healthIndicator">
+        <span class="health-dot" aria-hidden="true"></span>
+        <div class="health-text">
+          <b>Система работает</b>
+          <small id="healthDetail">Проверка...</small>
+        </div>
+      </div>
+      <div class="admin-profile">
+        <div class="admin-avatar" aria-hidden="true">D</div>
+        <div class="admin-info">
+          <b>Администратор</b>
+          <small>ID 638074</small>
+        </div>
+        <button id="logout" class="btn btn-ghost btn-sm" aria-label="Выйти">↗</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" role="main">
+    <header class="topbar">
+      <button id="menuToggle" class="btn btn-ghost btn-icon" aria-label="Меню" aria-expanded="false">☰</button>
+      <div class="breadcrumb">
+        <span>Control Center</span>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <b id="pageTitle">Обзор</b>
+      </div>
+      <div class="topbar-actions">
+        <span class="live-badge" id="liveBadge" aria-live="polite"><i aria-hidden="true"></i> LIVE</span>
+        <button id="refreshAll" class="btn btn-ghost btn-icon" aria-label="Обновить данные">↻</button>
+        <div class="admin-initial">D</div>
+      </div>
+    </header>
+
+    <div id="content" class="content-area"></div>
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-bg" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-window">
+    <header class="modal-header">
+      <h2 id="modalTitle">Модальное окно</h2>
+      <button class="btn btn-ghost btn-icon modal-close" data-close aria-label="Закрыть">×</button>
+    </header>
+    <div id="modalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<!-- SKELETON TEMPLATE (cloned by JS) -->
+<template id="tpl-skeleton-card">
+  <article class="card skeleton">
+    <div class="skel-row"><div class="skel skel-title"></div><div class="skel skel-sub"></div></div>
+    <div class="skel-row"><div class="skel skel-text"></div><div class="skel skel-text short"></div></div>
+    <div class="skel-row"><div class="skel skel-text"></div></div>
+  </article>
+</template>
+
+<template id="tpl-skeleton-row">
+  <div class="table-row skeleton">
+    <div class="skel skel-cell"></div>
+    <div class="skel skel-cell"></div>
+    <div class="skel skel-cell"></div>
+    <div class="skel skel-cell"></div>
+    <div class="skel skel-cell"></div>
+  </div>
+</template>
+
+<script src="assets/js/zs-notice.js"></script>
+<script src="assets/js/admin.js?v=13"></script>
+</body>
+</html>

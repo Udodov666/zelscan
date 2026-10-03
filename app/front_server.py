@@ -114,7 +114,10 @@ def _safe_return_to(value: str | None) -> str:
 
 
 def _local_setup_done() -> bool:
-    """Локальная версия: пока нет маркера первичной настройки — всё на /setup."""
+    """Гейт сетапа работает только в локальной сборке (маркер .zelscan_local
+    в корне проекта; на проде файла нет — гейт выключен)."""
+    if not (_PRODUCTION_LENDOS.parent.parent / ".zelscan_local").exists():
+        return True
     return (_PRODUCTION_LENDOS.parent.parent / ".local_setup_done").exists()
 
 

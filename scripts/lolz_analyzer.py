@@ -732,16 +732,20 @@ class UserPost:
         # ВАЖНО: в POST /search/posts НЕТ forum_title, но есть node_title.
         # Используем node_title как приоритет если forum_title пустой.
         forum_title = forum.get("forum_title", "") or thread.get("node_title", "") or ""
+        # API v2 переименовал поля: post_body → message, post_create_date →
+        # post_date, post_like_count → likes, post_comment_count → comment_count.
+        # Поддерживаем оба формата, чтобы работали старые и новые ответы.
+        body_raw = str(p.get("post_body") or p.get("message") or "")
         return cls(
             post_id=int(p.get("post_id", 0) or 0),
-            body=strip_bbcode(p.get("post_body", "") or ""),
-            body_raw=p.get("post_body", "") or "",
-            create_date=int(p.get("post_create_date", 0) or 0),
+            body=strip_bbcode(body_raw),
+            body_raw=body_raw,
+            create_date=int(p.get("post_create_date") or p.get("post_date") or 0),
             thread_id=int(p.get("thread_id", 0) or 0),
             thread_title=strip_bbcode(thread.get("thread_title", "") or ""),
-            like_count=int(p.get("post_like_count", 0) or 0),
-            comment_count=int(p.get("post_comment_count", 0) or 0),
-            is_first_post=bool(p.get("post_is_first_post", False)),
+            like_count=int(p.get("post_like_count") or p.get("likes") or 0),
+            comment_count=int(p.get("post_comment_count") or p.get("comment_count") or 0),
+            is_first_post=bool(p.get("post_is_first_post") or p.get("is_first_post") or False),
             forum_title=forum_title,
         )
 
@@ -2506,7 +2510,7 @@ class LolzAnalyzer:
         return None
 
     def fetch_timeline(self, user_id: int, max_pages: int = 60,
-                       per_page: int = 20, *, accelerated: bool = False,
+                       per_page: int = 100, *, accelerated: bool = False,
                        target_posts: int = 700,
                        rate_limit_reserve: int = 2,
                        max_elapsed_seconds: Optional[float] = None,
@@ -2523,6 +2527,8 @@ class LolzAnalyzer:
         target_posts = max(1, int(target_posts))
         rate_limit_reserve = max(1, int(rate_limit_reserve))
         all_posts: list[UserPost] = []
+        drop_stats = {"content_type": 0, "wrong_user": 0, "duplicate": 0}
+        page_log = []
         seen_ids: set[int] = set()
         before: Optional[int] = None
         windows_scanned = 0
@@ -2625,13 +2631,17 @@ class LolzAnalyzer:
             "source_exhausted": False,
             "target_reached": False,
             "error": None,
+            "drop_stats": drop_stats,
+            "page_log": page_log,
         }
 
         def add_posts(batch: object) -> None:
             if not isinstance(batch, list):
                 return
+            added_here = 0
             for item in batch:
                 if not isinstance(item, dict) or str(item.get("content_type", "")).lower() != "post":
+                    drop_stats["content_type"] += 1
                     continue
                 # Lolzteam /search/posts возвращает поле `user_id` (не
                 # `poster_user_id` как раньше). Проверяем оба варианта, чтобы
@@ -2642,23 +2652,31 @@ class LolzAnalyzer:
                     poster_id = item.get("user_id")
                 try:
                     if int(poster_id) != int(user_id):
+                        drop_stats["wrong_user"] += 1
                         continue
                 except (TypeError, ValueError):
+                    drop_stats["wrong_user"] += 1
                     continue
                 post = UserPost.from_api(item)
                 if post.post_id in seen_ids:
+                    drop_stats["duplicate"] += 1
                     continue
                 seen_ids.add(post.post_id)
                 all_posts.append(post)
+                added_here += 1
                 if len(all_posts) >= target_posts:
+                    page_log.append({"added": added_here, "stop": "target"})
+                    refresh_meta()
                     return
+            page_log.append({"added": added_here, "ct_dropped": drop_stats["content_type"]})
+            refresh_meta()
 
         def item_timestamp(item: object) -> Optional[int]:
             if not isinstance(item, dict):
                 return None
             for field in (
-                "post_create_date", "thread_create_date", "content_create_date",
-                "profile_post_date", "create_date",
+                "post_create_date", "post_date", "thread_create_date",
+                "content_create_date", "profile_post_date", "create_date",
             ):
                 try:
                     value = int(item.get(field) or 0)
@@ -2937,6 +2955,8 @@ class LolzAnalyzer:
             "post_requests_by_token": dict(token_post_used),
             "post_budgets_by_token": dict(token_post_budgets),
             "rate_limit_observations": rate_limit_observations,
+            "drop_stats": dict(drop_stats),
+            "page_log": list(page_log),
             "error": error_reason,
         }
         refresh_meta()

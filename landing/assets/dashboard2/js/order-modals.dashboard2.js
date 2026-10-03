@@ -634,6 +634,9 @@ const ZSModals = (function () {
       : `<div class="line"></div>`;
     return `<div class="zs-modal-top">
       <div class="zs-group">
+        ${srcPills()}
+      </div>
+      <div class="zs-group">
         <div class="zs-lab-row"><span class="zs-label">Промокод</span></div>
         <div class="zs-promo-row">
           <input class="zs-promo-inp" id="promoInp" type="text" placeholder="Введите промокод" autocomplete="off" value="${promoVal}">

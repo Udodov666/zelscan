@@ -273,7 +273,7 @@ const ZSModals = (function () {
         ${t.idx === 1 ? `<span class="zs-pill green">${solo ? 'Текущее' : 'Хит'}</span>` : ''}
       </div>
       <div class="zs-t-name">${t.name}</div>
-      <div class="zs-t-price"><s style="opacity:.45;font-size:13px;margin-right:6px">${number(t.oldPrice)} ₽</s><span class="n">${number(t.price)}</span><span class="c">₽</span></div>
+      <div class="zs-t-price"><span class="n">${number(t.price)}</span><span class="c">₽</span><s style="color:rgba(255,255,255,.38);font-size:14px;margin-left:8px">${number(t.oldPrice)} ₽</s></div>
       <div class="zs-t-sep"></div>
       <div class="zs-t-list-wrap">
         ${hasExtra ? `<div class="zs-t-list-coll"><div class="zs-t-list">${features}</div></div>` : `<div class="zs-t-list">${features}</div>`}
@@ -361,12 +361,12 @@ const ZSModals = (function () {
       </div>
     </div>`;
   }
+  /* фон активного источника — как у переключателей приложения */
   function _escLocal(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function renderManualForm(user) {
     const u = user || {};
     return `<div class="zs-modal-top">
       <div class="zs-group">
-        <div class="zs-lab-row"><span class="zs-label">Источник данных</span></div>
         ${srcPills()}
         <div style="font-size:12.5px;color:var(--fg-muted);margin-top:8px">Вы вводите данные сами — форум не запрашивается ни разу. По одному сообщению в строке.</div>
       </div>

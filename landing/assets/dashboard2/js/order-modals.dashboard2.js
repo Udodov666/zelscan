@@ -1582,6 +1582,13 @@ fetch(API + '/api/my/redeem-promo', {
     .then(function (res) {
       if (!res.ok) {
         const code = res.data.code || (res.data.error && res.data.error.code);
+        if (res.status === 409 && code === 'active_order_exists') {
+          // заказ уже создаётся предыдущим нажатием — просто следим за ним
+          const oid = res.data.active_order_id;
+          if (oid) { _markOrderInitiator(oid); pollOrder(API, token, oid, user); }
+          if (window.ZSNotice) ZSNotice.show({ type: 'info', title: 'Заказ уже в работе', message: 'Досье собирается — откроется автоматически.' });
+          return null;
+        }
         if (res.status === 409 && code === 'existing_report_choice_required') {
           _showExistingChoice(res.data, {
             payload: payload,

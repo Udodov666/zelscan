@@ -531,7 +531,7 @@
 /* ── ручной ввод (шаг 2): капсулы как у промо-поля ── */
 #tokenFields{width:100%}
 .zs-man-row{display:flex;align-items:center;width:100%;height:56px;border-radius:16px;background:rgba(255,255,255,.03);padding:0 16px}
-.zs-man-inp{flex:1;height:100%;border:none;background:transparent;color:#F3F3F5;font:400 14px/17px Inter;padding:0;outline:none;min-width:0}
+.zs-man-inp{flex:1;min-width:0;height:100%;border:none;background:transparent;color:#F3F3F5;font:400 14px/17px Inter;padding:0;outline:none;min-width:0}
 .zs-man-inp::placeholder{color:#424242}
 textarea.zs-man-inp{height:auto;min-height:100px;padding:8px 0;font:400 13px/1.55 'JetBrains Mono',Consolas,monospace;resize:vertical}
-.zs-man-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+.zs-man-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}

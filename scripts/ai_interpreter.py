@@ -790,6 +790,14 @@ class AIInterpreter:
 Ноль ставь только когда сигналов действительно нет. Для красных флагов
 (red_flags) используй конкретные наблюдения из постов, без страха перед
 ярлыками — это диагноз поведения, а не оскорбление пользователя.
+Все значения шкал — ЦЕЛЫЕ ЧИСЛА от 0 до 10 (НЕ проценты!). Запрещены
+шаблонные крайности: нули или десятки по всем шкалам сразу — признак
+ошибки, а не анализа. dark_triad: у активного автора форума обычно 1-5 по
+нарциссизму и макиавеллизму (самопрезентация и торг — это уже они); нули
+допустимы, только если ты можешь в note указать конкретные посты,
+доказывающие отсутствие черты. big_five: выше 8 — только с прямыми
+доказательствами в постах. В note каждого блока — 1-2 конкретных примера
+из постов.
 
 Не выдумывай фактов. Если данных мало — скажи прямо."""
 
@@ -1080,9 +1088,33 @@ class AIInterpreter:
 
     @classmethod
     def _sanitize_red_flags(cls, parsed: Optional[dict]) -> Optional[dict]:
-        """Постобработка red_flags в распарсенном JSON. Пустые флаги отбрасываем."""
+        """Постобработка распарсенного JSON: red_flags чистим, шкалы нормализуем."""
         if not isinstance(parsed, dict):
             return parsed
+
+        def _norm10(v):
+            # модели часто возвращают проценты 0-100 вместо 0-10
+            try:
+                v = float(v)
+            except (TypeError, ValueError):
+                return v
+            if v > 10:
+                v = round(v / 10.0, 1)
+            return max(0, min(10, v))
+
+        scales = (
+            ("big_five", ("openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism")),
+            ("dark_triad", ("narcissism", "machiavellianism", "psychopathy")),
+            ("emotional_intelligence", ("self_awareness", "self_regulation", "empathy", "social_skills")),
+        )
+        for section, keys in scales:
+            block = parsed.get(section)
+            if not isinstance(block, dict):
+                continue
+            for k in keys:
+                if k in block:
+                    block[k] = _norm10(block[k])
+
         triad = parsed.get("dark_triad")
         if isinstance(triad, dict) and isinstance(triad.get("red_flags"), list):
             cleaned = []

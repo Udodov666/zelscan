@@ -1995,15 +1995,38 @@ def _strip_full_only_sections(doc):
 
 
 def _order_report_summary(user_id, report_type):
-    """Краткая сводка готового отчёта для карточки досье, либо None."""
+    """Краткая сводка готового отчёта для карточки досье, либо None.
+
+    Источники по приоритету: кэш досье (v2 → легаси) → файл готового отчёта
+    последнего выполненного заказа (важно для локальной версии, где кэш-сводок нет).
+    """
+    rep = None
     try:
         v2, legacy = config.dossier_cache_candidates(user_id, report_type)
         path = v2 if v2.exists() else legacy
-        if not path.exists():
-            return None
-        rep = json.loads(path.read_text(encoding='utf-8'))
+        if path.exists():
+            rep = json.loads(path.read_text(encoding='utf-8'))
     except Exception:
-        return None
+        rep = None
+    if rep is None:
+        try:
+            import sqlite3
+            con = sqlite3.connect(str(config.PROJECT_ROOT / 'zelscan.db'))
+            row = con.execute(
+                "SELECT result_path FROM orders WHERE user_id=? AND report_type=? AND status='done'"
+                ' ORDER BY created_at DESC LIMIT 1',
+                (user_id, report_type or 'basic')).fetchone()
+            con.close()
+            if row and row[0]:
+                # result_path хранит абсолютный путь исходного сервера —
+                # берём только имя файла и ищем в локальном cache/results
+                local = config.RESULTS_DIR / Path(row[0]).name
+                if local.exists():
+                    rep = json.loads(local.read_text(encoding='utf-8'))
+        except Exception:
+            return None
+        if rep is None:
+            return None
     try:
         raw = rep.get('raw_stats') or {}
         act = rep.get('activity') or {}
@@ -2050,15 +2073,36 @@ def _clamp(v, lo, hi):
 
 
 def _order_report_summary(user_id, report_type):
-    """Краткая сводка готового отчёта для карточки досье, либо None."""
+    """Краткая сводка готового отчёта для карточки досье, либо None.
+
+    Источники по приоритету: кэш досье (v2 → легаси) → файл готового отчёта
+    последнего выполненного заказа (важно для локальной версии, где кэш-сводок нет).
+    """
+    rep = None
     try:
         v2, legacy = config.dossier_cache_candidates(user_id, report_type)
         path = v2 if v2.exists() else legacy
-        if not path.exists():
-            return None
-        rep = json.loads(path.read_text(encoding='utf-8'))
+        if path.exists():
+            rep = json.loads(path.read_text(encoding='utf-8'))
     except Exception:
-        return None
+        rep = None
+    if rep is None:
+        try:
+            import sqlite3
+            con = sqlite3.connect(str(config.PROJECT_ROOT / 'zelscan.db'))
+            row = con.execute(
+                "SELECT result_path FROM orders WHERE user_id=? AND report_type=? AND status='done'"
+                ' ORDER BY created_at DESC LIMIT 1',
+                (user_id, report_type or 'basic')).fetchone()
+            con.close()
+            if row and row[0]:
+                local = config.RESULTS_DIR / Path(row[0]).name
+                if local.exists():
+                    rep = json.loads(local.read_text(encoding='utf-8'))
+        except Exception:
+            return None
+        if rep is None:
+            return None
     try:
         raw = rep.get('raw_stats') or {}
         act = rep.get('activity') or {}

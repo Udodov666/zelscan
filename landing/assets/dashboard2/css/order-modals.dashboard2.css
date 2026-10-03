@@ -524,3 +524,6 @@
 .zs-account-promo-input:focus{border-color:rgba(43,173,114,.55);box-shadow:0 0 0 3px rgba(43,173,114,.12)}
 .zs-account-promo-message{height:auto;min-height:20px;justify-content:flex-start;text-align:left}
 .zs-account-promo .zs-btn:disabled{opacity:.55;cursor:default}
+
+/* фон активного источника данных (автосбор/ручной) */
+#srcPills button.on{background:rgba(255,255,255,.08);border-radius:12px;color:#EBEBEB}

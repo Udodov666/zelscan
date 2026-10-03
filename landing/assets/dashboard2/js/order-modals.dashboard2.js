@@ -367,8 +367,6 @@ const ZSModals = (function () {
       </div>
     </div>`;
   }
-  /* фон активного источника — как у переключателей приложения */
-  #srcPills button.on{background:rgba(255,255,255,.08);border-radius:12px;color:#EBEBEB}
   function _escLocal(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function renderManualForm(user) {
     const u = user || {};

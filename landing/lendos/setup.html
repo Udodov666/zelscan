@@ -52,6 +52,17 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 .zs-sub{font:400 13px/1.5 Inter;color:#707177}
 .hidden{display:none}
 .zs-sep{height:1px;width:100%;background:rgba(255,255,255,.06)}
+.zs-link{display:inline-flex;align-items:center;gap:5px;font:400 13.5px/1 Inter;color:#74757B;text-decoration:none;transition:color .15s}
+.zs-link:hover{color:#ACADB3}
+.zs-link svg{width:14px;height:14px;display:block;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tk-row{display:flex;align-items:center;gap:10px;font:400 14px/1.4 Inter;color:#EBEBEB}
+.tk-check{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.tk-check.ok{background:rgba(43,173,114,.14)}
+.tk-check.bad{background:rgba(248,113,113,.12)}
+.tk-check svg{width:11px;height:11px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tk-check.ok svg{stroke:#2BAD72}
+.tk-check.bad svg{stroke:#F87171}
+.tk-row small{color:#59595E;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -78,9 +89,8 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 
     <!-- ── Токены LZT (только авто) ── -->
     <div class="zs-group hidden" id="lztBlock">
-      <div class="zs-lab-row"><span class="zs-label">LZT API-токен(ы) — по одному в строке</span></div>
-      <textarea class="zs-input" id="lzt" placeholder="eyJhbGciOi..."></textarea>
-      <div class="zs-hint">Где взять: <a href="https://lolz.team/account/api-settings" target="_blank" rel="noopener">lolz.team → Настройки → API</a> → создать токен с правами на чтение профиля и поиска. Лучше всего минимум 3 ключа. Вы отвечаете за соблюдение правил форума (2.28).</div>
+      <div class="zs-lab-row"><span class="zs-label">LZT API-токены</span><a class="zs-link" href="https://lolz.team/account/api" target="_blank" rel="noopener">Настройки API<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
+      <textarea class="zs-input" id="lzt" placeholder="По одному токену в строке"></textarea>
       <button class="zs-btn" id="testTokens" type="button">Проверить токены</button>
       <div class="zs-sub hidden" id="tokenTestResult"></div>
     </div>
@@ -140,6 +150,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
   var mode='manual', ai='default', tokensValidated=false, oauthValidated=false;
 
   function $(id){return document.getElementById(id)}
+  function _esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function pills(id, cb){
     var box=$(id);
     box.addEventListener('click',function(e){
@@ -160,8 +171,8 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     mode=d.mode;
     $('lztBlock').classList.toggle('hidden', mode!=='auto');
     $('modeHint').textContent = mode==='auto'
-      ? 'Досье собираются через официальный API по вашим токенам. Вы сами отвечаете за соблюдение правил форума (2.28). Лучше всего сделать минимум 3 ключа.'
-      : 'Вы вводите данные и сообщения сами — форум не запрашивается ни разу, токены не нужны.';
+      ? 'Сбор через официальный API по вашим токенам. Рекомендуется минимум 3 токена.'
+      : 'Без запросов к форуму — все данные вводите вы.';
     if(mode!=='auto') $('tokenTestResult').classList.add('hidden');
   });
 
@@ -169,8 +180,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     ai=d.ai;
     $('ownKeys').classList.toggle('hidden', ai!=='own');
     $('aiHint').textContent =
-      ai==='default' ? 'Используются ключи автора проекта — ничего вводить не нужно.' :
-      'Вставьте свои ключи AKI.IO / OpenRouter — они сохранятся только на вашем компьютере.';
+      ai==='default' ? 'Встроены в проект.' : 'AKI.IO и OpenRouter.';
   });
 
   // ── тест LZT-токенов ──
@@ -183,9 +193,15 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
       .then(r=>r.json()).then(function(d){
         var res=(d.results||[]);
         var good=res.filter(function(x){return x.ok}).length;
-        var lines=res.map(function(x,i){return (x.ok?'✓':'✕')+' токен '+(i+1)+(x.ok?(x.username?' — '+x.username:''):' — '+(x.reason||'не работает'))});
+        var okSvg='<span class="tk-check ok"><svg viewBox="0 0 16 16"><path d="M4 8.5l2.5 2.5L12 5"/></svg></span>';
+        var badSvg='<span class="tk-check bad"><svg viewBox="0 0 16 16"><path d="M5.5 5.5l5 5M10.5 5.5l-5 5"/></svg></span>';
+        var lines=res.map(function(x,i){
+          return '<div class="tk-row">'+(x.ok?okSvg:badSvg)+'<span>Токен '+(i+1)+'</span><small>'+_esc(x.ok?(x.username||'рабочий'):(x.reason||'не работает'))+'</small></div>';
+        });
         tokensValidated = good>0;
-        err.innerHTML = lines.join('<br>') + (good ? '<br><span style="color:#2BAD72">Готово: рабочих токенов '+good+' из '+res.length+(good<3?' (лучше минимум 3)':'')+'</span>' : '');
+        err.innerHTML = lines.join('') + (good
+          ? '<div class="tk-row" style="color:#2BAD72;margin-top:2px">Рабочих токенов: '+good+' из '+res.length+(good<3?' · лучше минимум 3':'')+'</div>'
+          : '');
         err.style.color = good ? '#EBEBEB' : '#F87171';
       })
       .catch(function(){err.textContent='Сервер недоступен';err.style.color='#F87171'});

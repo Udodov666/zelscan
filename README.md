@@ -36,7 +36,7 @@ Zelscan анализирует публичную активность проф�
 Нужен только [Python 3.10+](https://www.python.org/downloads/).
 
 ```bash
-git clone https://github.com/koteika8d7-design/zelscan.git
+git clone https://github.com/Udodov666/zelscan.git
 cd zelscan
 pip install -r requirements.txt
 

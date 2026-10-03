@@ -52,6 +52,12 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 .zs-sub{font:400 13px/1.5 Inter;color:#707177}
 .hidden{display:none}
 .zs-sep{height:1px;width:100%;background:rgba(255,255,255,.06)}
+.oauth-row{position:relative;width:100%}
+.oauth-row .zs-input{padding-right:170px}
+.oauth-check{position:absolute;right:6px;top:6px;height:44px;padding:0 16px;border:0;border-radius:13px;background:#F1F1F3;color:#0A0A0B;font:500 13px/1 Inter;cursor:pointer;transition:background .15s}
+.oauth-check:hover{background:#FFF}
+.oauth-check.ok{background:rgba(43,173,114,.15);color:#2BAD72}
+.oauth-check.bad{background:rgba(248,113,113,.12);color:#F87171}
 .api-shimmer{position:relative;display:inline-block}
 .api-shimmer::after{content:attr(data-text);position:absolute;inset:0;color:transparent;background-image:linear-gradient(102deg,rgba(152,255,202,0) 0%,rgba(152,255,202,0) 30%,rgba(196,255,223,.9) 44%,rgba(152,255,202,1) 50%,rgba(196,255,223,.9) 56%,rgba(152,255,202,0) 70%,rgba(152,255,202,0) 100%);background-size:260% 100%;background-repeat:no-repeat;background-position:180% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:apiShimmer 3.2s linear infinite;will-change:background-position;pointer-events:none}
 @keyframes apiShimmer{0%{background-position:180% 50%}60%,100%{background-position:-110% 50%}}
@@ -136,7 +142,6 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 
   <div class="zs-modal-body hidden" id="step2">
     <div class="zs-group">
-      <div class="zs-step-title">Вход через форум (OAuth)</div>
       <div class="zs-hint">
         Создай своё приложение: <a href="https://lolz.team/account/developer" target="_blank" rel="noopener">lolz.team → Настройки → Разработчикам → Создать приложение</a>
         <ol>
@@ -146,13 +151,15 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
           <li>Вставь сюда полученный <code>Client ID</code></li>
         </ol>
       </div>
-      <input class="zs-input" id="oauth" type="text" placeholder="Client ID приложения">
+      <div class="oauth-row">
+        <input class="zs-input" id="oauth" type="text" placeholder="Client ID приложения">
+        <button class="oauth-check" id="testOauth" type="button">Проверить</button>
+      </div>
       <div class="zs-err" id="oauthErr"></div>
-      <button class="zs-btn" id="testOauth" type="button">Проверить приложение</button>
     </div>
 
     <div class="zs-err" id="err"></div>
-    <div class="zs-actions">
+    <div class="zs-actions-row">
       <button class="zs-btn" id="backStep" type="button">Назад</button>
       <button class="zs-btn green" id="go">Завершить настройку</button>
     </div>
@@ -253,12 +260,16 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
   $('testOauth').addEventListener('click',function(){
     var err=$('oauthErr'); err.textContent='Проверяем приложение...'; err.style.color='#707177';
     var cid=$('oauth').value.trim();
+    var btn=$('testOauth'); btn.classList.remove('ok','bad'); btn.textContent='Проверить';
     if(!cid){err.textContent='Вставьте Client ID';err.style.color='#F87171';return}
     fetch('/api/local/setup/test-oauth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid})})
       .then(r=>r.json()).then(function(d){
         oauthValidated = !!d.ok;
-        err.textContent = d.ok ? '✓ Приложение найдено на форуме' : '✕ '+(d.reason||('форум ответил '+(d.status||'?')));
-        err.style.color = d.ok ? '#2BAD72' : '#F87171';
+        btn.classList.toggle('ok', !!d.ok);
+        btn.classList.toggle('bad', !d.ok);
+        btn.textContent = d.ok ? '✓ Найдено' : 'Ошибка';
+        err.textContent = d.ok ? '' : (d.reason||('форум ответил '+(d.status||'?')));
+        err.style.color = '#F87171';
       })
       .catch(function(){err.textContent='Сервер недоступен';err.style.color='#F87171'});
   });

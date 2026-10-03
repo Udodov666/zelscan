@@ -125,6 +125,10 @@ def install_local_setup(app, store, require_auth):
         (config.PROJECT_ROOT / ".lolz_oauth_client_id").write_text(oauth_id, encoding="utf-8")
         redirect_uri = str(body.get("oauth_redirect_uri") or "").strip() or "http://localhost:8080/oauth/callback"
         (config.PROJECT_ROOT / ".lolz_oauth_redirect_uri").write_text(redirect_uri, encoding="utf-8")
+        # конфиг прочитал файлы при старте процесса — обновляем на лету,
+        # чтобы OAuth заработал сразу после визарда, без рестарта
+        config.LOLZ_OAUTH_CLIENT_ID = oauth_id
+        config.LOLZ_OAUTH_REDIRECT_URI = redirect_uri
 
         SETUP_MARKER.write_text(json.dumps({"mode": mode, "ts": int(time.time())}), encoding="utf-8")
         return jsonify({"ok": True, "mode": mode})

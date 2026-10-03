@@ -526,4 +526,4 @@
 .zs-account-promo .zs-btn:disabled{opacity:.55;cursor:default}
 
 /* фон активного источника данных (автосбор/ручной) */
-#srcPills button.on{background:rgba(255,255,255,.08);border-radius:12px;color:#EBEBEB}
+#srcPills button.on{background:rgba(255,255,255,.16);border-radius:12px;color:#FFFFFF}

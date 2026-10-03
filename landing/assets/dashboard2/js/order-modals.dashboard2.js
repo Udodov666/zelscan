@@ -347,6 +347,15 @@ const ZSModals = (function () {
 
   /* ─── order screen (шаг 1: пользователь + доступ + тариф) ─── */
   let srcMode = 'auto';
+  function _setSource(m) {
+    srcMode = m;
+    const user2 = window.selectedUser || window._lastSelectedUser;
+    if (!cur) return;
+    const bodyEl = qs(cur, '.zs-modal-body');
+    if (!bodyEl) return;
+    bodyEl.innerHTML = renderSigScreen(user2);
+    _visInd(true);
+  }
   function srcPills() {
     return `<div class="zs-group">
       <div class="zs-lab-row"><span class="zs-label">Источник данных</span></div>

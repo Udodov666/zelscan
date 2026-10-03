@@ -410,8 +410,7 @@ const ZSModals = (function () {
       message_count: Number((qs(cur, '#manMsgs') || {}).value) || 0,
       like_count: Number((qs(cur, '#manLikes') || {}).value) || 0,
       threads: Number((qs(cur, '#manThreads') || {}).value) || 0,
-      texts: (((qs(cur, '#manTexts') || {}).value || '').split('
-') || []).map(function (s) { return s.trim(); }).filter(Boolean),
+      texts: (((qs(cur, '#manTexts') || {}).value || '').split('\n') || []).map(function (s) { return s.trim(); }).filter(Boolean),
       report_type: selTid === 'pro' ? 'full' : 'basic',
       visibility: visSel,
       ai: true,

@@ -638,17 +638,17 @@ const ZSModals = (function () {
   /* ─── ручной ввод (шаг 2): поля внутри экрана подписи ─── */
   function renderManualFields() {
     const u = window.selectedUser || window._lastSelectedUser || {};
-    return `<div class="zs-group" style="padding:0;border:0">
+    return `<div class="zs-group">
       <div class="zs-lab-row"><span class="zs-label">Пользователь</span></div>
-      <input class="zs-man-inp" id="manNick" type="text" placeholder="Ник" value="${_escLocal(u.username || '')}">
-      <input class="zs-man-inp" id="manAvatar" type="text" placeholder="Ссылка на аватарку (необязательно)" value="${_escLocal(u.avatar || '')}">
+      <div class="zs-man-row"><input class="zs-man-inp" id="manNick" type="text" placeholder="Ник" value="${_escLocal(u.username || '')}"></div>
+      <div class="zs-man-row"><input class="zs-man-inp" id="manAvatar" type="text" placeholder="Ссылка на аватарку (необязательно)" value="${_escLocal(u.avatar || '')}"></div>
       <div class="zs-man-grid">
-        <input class="zs-man-inp" id="manMsgs" type="number" placeholder="Сообщений" value="${_escLocal(u.message_count || '')}">
-        <input class="zs-man-inp" id="manLikes" type="number" placeholder="Лайков" value="${_escLocal(u.like_count || '')}">
-        <input class="zs-man-inp" id="manThreads" type="number" placeholder="Тем" value="${_escLocal(u.threads || '')}">
+        <div class="zs-man-row"><input class="zs-man-inp" id="manMsgs" type="number" placeholder="Сообщений" value="${_escLocal(u.message_count || '')}"></div>
+        <div class="zs-man-row"><input class="zs-man-inp" id="manLikes" type="number" placeholder="Лайков" value="${_escLocal(u.like_count || '')}"></div>
+        <div class="zs-man-row"><input class="zs-man-inp" id="manThreads" type="number" placeholder="Тем" value="${_escLocal(u.threads || '')}"></div>
       </div>
-      <div class="zs-lab-row" style="margin-top:4px"><span class="zs-label">Сообщения (по одному в строке)</span></div>
-      <textarea class="zs-man-inp" id="manTexts" rows="6" placeholder="Первое сообщение&#10;Второе сообщение&#10;..."></textarea>
+      <div class="zs-lab-row" style="margin-top:6px"><span class="zs-label">Сообщения (по одному в строке)</span></div>
+      <div class="zs-man-row" style="height:auto;padding:10px 16px"><textarea class="zs-man-inp" id="manTexts" rows="6" placeholder="Первое сообщение&#10;Второе сообщение&#10;..."></textarea></div>
       <div class="zs-err" id="manErr"></div>
     </div>`;
   }

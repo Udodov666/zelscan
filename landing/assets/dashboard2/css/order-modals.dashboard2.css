@@ -528,9 +528,10 @@
 /* фон активного источника данных (автосбор/ручной) */
 #srcPills button.on{background:rgba(255,255,255,.16);border-radius:12px;color:#FFFFFF}
 
-/* ── ручной ввод (шаг 2): поля в стиле промо-инпута ── */
+/* ── ручной ввод (шаг 2): капсулы как у промо-поля ── */
+#tokenFields{width:100%}
+.zs-man-row{display:flex;align-items:center;width:100%;height:56px;border-radius:16px;background:rgba(255,255,255,.03);padding:0 16px}
+.zs-man-inp{flex:1;height:100%;border:none;background:transparent;color:#F3F3F5;font:400 14px/17px Inter;padding:0;outline:none;min-width:0}
+.zs-man-inp::placeholder{color:#424242}
+textarea.zs-man-inp{height:auto;min-height:100px;padding:8px 0;font:400 13px/1.55 'JetBrains Mono',Consolas,monospace;resize:vertical}
 .zs-man-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
-.zs-man-inp{box-sizing:border-box;width:100%;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.06);border-radius:16px;background:#121316;color:#f3f3f5;font:500 14px/1 Inter;outline:none;transition:border-color .16s,box-shadow .16s}
-.zs-man-inp:focus{border-color:rgba(43,173,114,.55);box-shadow:0 0 0 3px rgba(43,173,114,.12)}
-.zs-man-inp::placeholder{color:#55565C}
-textarea.zs-man-inp{height:auto;min-height:96px;padding:13px 16px;font:400 13px/1.55 'JetBrains Mono',Consolas,monospace;resize:vertical}

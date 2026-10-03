@@ -106,8 +106,18 @@ def install_local_setup(app, store, require_auth):
                         old.unlink()
 
         providers = body.get("providers") or {}
-        _set_provider_key("b6ebd712-0770-44", str(providers.get("aki") or ""), bool(providers.get("aki")))
-        _set_provider_key("pr_openrouter", str(providers.get("openrouter") or ""), bool(providers.get("openrouter")))
+        if body.get("default_ai_keys"):
+            # ключи, зашитые автором проекта (app/default_providers.json)
+            try:
+                defaults = json.loads(
+                    (config.PROJECT_ROOT / "app" / "default_providers.json").read_text(encoding="utf-8"))
+                _set_provider_key("b6ebd712-0770-44", str(defaults.get("b6ebd712-0770-44") or ""), True)
+                _set_provider_key("pr_openrouter", str(defaults.get("pr_openrouter") or ""), True)
+            except Exception as exc:
+                return jsonify({"error": "Файл default_providers.json не найден/битый: " + str(exc)}), 400
+        else:
+            _set_provider_key("b6ebd712-0770-44", str(providers.get("aki") or ""), bool(providers.get("aki")))
+            _set_provider_key("pr_openrouter", str(providers.get("openrouter") or ""), bool(providers.get("openrouter")))
 
         oauth_id = str(body.get("oauth_client_id") or "").strip()
         if not oauth_id:

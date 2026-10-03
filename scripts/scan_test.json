@@ -1,0 +1,432 @@
+{
+ "meta": {
+  "elapsed_s": 36.4,
+  "requests": {
+   "get": 50,
+   "search": 1
+  },
+  "users_seen": 63,
+  "profiles_checked": 40,
+  "flagged": 1
+ },
+ "flagged": [
+  {
+   "username": "Quazy",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "ПРОКСИ ОТ 8₽/МЕС → lolz.live/threads/9500264",
+   "user_title": "",
+   "is_banned": false,
+   "ad_matches": [
+    "от \\d+[р₽$]",
+    "прокси|proxy"
+   ],
+   "is_ad": true
+  }
+ ],
+ "all": [
+  {
+   "username": "Udodov",
+   "signature": "",
+   "source": "thread:10359175",
+   "custom_title": "https://zelenka.guru/threads/10073976/",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Jargonium",
+   "signature": "",
+   "source": "thread:10359175",
+   "custom_title": "$$$ тут — https://lolz.team/threads/666666/",
+   "user_title": "",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "zxcqwerty669",
+   "signature": "",
+   "source": "thread:10359179",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Ximono",
+   "signature": "",
+   "source": "thread:10359179",
+   "custom_title": "Фулл в профиле|продам рекламу|обнулён+всё_руками|:ehh:",
+   "user_title": "Эксперт",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "main_logist",
+   "signature": "",
+   "source": "thread:10359176",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Doklsi",
+   "signature": "",
+   "source": "thread:10359176",
+   "custom_title": "Ночной лолз - это ебаный даркнет",
+   "user_title": "Гуру",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "andrteil",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Новенький_228",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": ":catdance::catdance::catdance:",
+   "user_title": "Местный",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Эксперт",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": ":takeMyMoney:",
+   "user_title": "Эксперт",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Volinka23",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "орешник",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": "",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Erna",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": ":animedance3::animedance3:Swap, Fiat, QR lolz.live/threads/15333",
+   "user_title": "Спонсор",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Artemper",
+   "signature": "",
+   "source": "thread:10359113",
+   "custom_title": "",
+   "user_title": "Модератор Маркета",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "await",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "SLAVSKIY",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "NeleX",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "https://lolz.team/threads/10338894/",
+   "user_title": "Продавец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "MercedesTeam",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "$$$ - https://zelenka.guru/threads/5867500/",
+   "user_title": "Постоялец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Depop",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "ЗАМУЖЕМ",
+   "user_title": "Постоялец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "encore",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "голые мужчины :animewave: - https://lolz.team/threads/3862473/",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Lionead",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "2hug",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "wexidae",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Новичок",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Шелби",
+   "signature": "",
+   "source": "thread:5947083",
+   "custom_title": "",
+   "user_title": "Постоялец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Композитор",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "Деньги и сиси в профиле https://lolz.live/threads/666666/",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Joe",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "",
+   "user_title": "",
+   "is_banned": null,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "ПринцИнцеста",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "Я понимаю всё это, но мне...",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Quazy",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "ПРОКСИ ОТ 8₽/МЕС → lolz.live/threads/9500264",
+   "user_title": "",
+   "is_banned": false,
+   "ad_matches": [
+    "от \\d+[р₽$]",
+    "прокси|proxy"
+   ],
+   "is_ad": true
+  },
+  {
+   "username": "ЖРУШУРУПЫ",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "https://lolz.live/threads/9085628/",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Miracle",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "",
+   "user_title": "",
+   "is_banned": null,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "wolzar",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "Голые альтушки тут - https://lolz.team/threads/10167072/",
+   "user_title": "Эксперт",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Швеция",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "",
+   "user_title": "Постоялец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "YouTube",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": ":krutoy:",
+   "user_title": "Гуру",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Cactuz",
+   "signature": "",
+   "source": "thread:8740834",
+   "custom_title": "\"Attempt to index nil with...\" – моя личная мантра.",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Qyassara",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "https://lolz.live/threads/9538376/",
+   "user_title": "Легенда",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "Чехословакия",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "",
+   "user_title": "Постоялец",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "mortvsae",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "",
+   "user_title": "Ограниченный доступ",
+   "is_banned": true,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "oakley",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "",
+   "user_title": "",
+   "is_banned": null,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "KyMblC",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "https://lolz.live/threads/10037739/",
+   "user_title": "Эксперт",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "KenanKel",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "",
+   "user_title": "Ограниченный доступ",
+   "is_banned": true,
+   "ad_matches": [],
+   "is_ad": false
+  },
+  {
+   "username": "an0r",
+   "signature": "",
+   "source": "thread:9538376",
+   "custom_title": "",
+   "user_title": "Уник",
+   "is_banned": false,
+   "ad_matches": [],
+   "is_ad": false
+  }
+ ]
+}

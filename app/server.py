@@ -445,7 +445,7 @@ def create_app() -> Flask:
     # ── mandatory server-side auth gate ──────────────────────────────────────
     # /api/search — публичный: это поиск на лендинге, вход в воронку.
     # Расход LZT-квоты прикрывает собственный рейт-лимит роута (30/мин на IP).
-    _PUBLIC_API_PATHS = frozenset({"/api/oauth/config", "/api/auth/session", "/api/auth/logout", "/api/captcha/config", "/api/health", "/api/search", "/api/local/setup"})
+    _PUBLIC_API_PATHS = frozenset({"/api/oauth/config", "/api/auth/session", "/api/auth/logout", "/api/captcha/config", "/api/health", "/api/search", "/api/local/setup", "/api/local/setup/test-tokens", "/api/local/setup/test-oauth"})
 
     @app.before_request
     def _mandatory_auth_gate():

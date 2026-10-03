@@ -129,6 +129,72 @@ def install_local_setup(app, store, require_auth):
         SETUP_MARKER.write_text(json.dumps({"mode": mode, "ts": int(time.time())}), encoding="utf-8")
         return jsonify({"ok": True, "mode": mode})
 
+    @app.post("/api/local/setup/test-tokens")
+    def local_test_tokens():
+        """Проверка LZT-токенов: живой запрос к официальному API с каждым токеном."""
+        import urllib.request, urllib.error, base64
+        body = request.get_json(silent=True) or {}
+        tokens = [str(t).strip() for t in (body.get("tokens") or []) if str(t).strip()]
+        if not tokens:
+            return jsonify({"error": "Нет токенов для проверки"}), 400
+        results = []
+        for t in tokens[:10]:
+            ok, name, reason = False, "", ""
+            try:
+                uid = None
+                parts = t.split(".")
+                if len(parts) >= 2:
+                    try:
+                        pad = parts[1] + "=" * (-len(parts[1]) % 4)
+                        payload = json.loads(base64.urlsafe_b64decode(pad))
+                        uid = payload.get("user_id") or payload.get("sub")
+                        exp = payload.get("exp")
+                        if exp and float(exp) < time.time():
+                            results.append({"ok": False, "reason": "токен истёк"})
+                            continue
+                    except Exception:
+                        pass
+                req = urllib.request.Request(
+                    f"https://api.lolz.team/users/{uid or 1}",
+                    headers={"Authorization": "Bearer " + t})
+                with urllib.request.urlopen(req, timeout=15) as r:
+                    if r.status == 200:
+                        ok = True
+                        try:
+                            name = (json.load(r).get("user") or {}).get("username", "")
+                        except Exception:
+                            pass
+            except urllib.error.HTTPError as e:
+                reason = f"API ответил {e.code}" + (" (неверный токен)" if e.code == 401 else "")
+            except Exception as exc:
+                reason = "нет связи с API: " + str(exc)[:80]
+            results.append({"ok": ok, "username": name, "reason": reason})
+        return jsonify({"results": results})
+
+    @app.post("/api/local/setup/test-oauth")
+    def local_test_oauth():
+        """Смоук-тест OAuth-приложения: сервер запрашивает страницу авторизации."""
+        import urllib.request, urllib.error, urllib.parse
+        body = request.get_json(silent=True) or {}
+        cid = str(body.get("client_id") or "").strip()
+        if not cid:
+            return jsonify({"ok": False, "reason": "Пустой Client ID"})
+        url = ("https://lolz.team/account/authorize/?client_id=" + urllib.parse.quote(cid)
+               + "&redirect_uri=" + urllib.parse.quote("http://localhost:8080/oauth/callback")
+               + "&response_type=code")
+        status = 0
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                status = r.status
+        except urllib.error.HTTPError as e:
+            status = e.code
+        except Exception as exc:
+            return jsonify({"ok": False, "reason": "нет связи с форумом: " + str(exc)[:80]})
+        # страница автораизации отдаёт 200; у несуществующего клиента форум отвечает ошибкой
+        return jsonify({"ok": status == 200, "status": status,
+                        "reason": None if status == 200 else f"форум ответил {status} — проверь Client ID"})
+
     @app.post("/api/orders/manual")
     def manual_order():
         uid, _token = require_auth()

@@ -10,7 +10,7 @@
 <style>
 /* ── 1:1 со стилями модалок приложения (order-modals.dashboard2.css) ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
 .zs-modal{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;margin:auto;
   padding:28px 32px 32px;gap:10px;width:498px;max-width:calc(100vw - 24px);
   background:rgba(10,11,13,.8);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
@@ -25,6 +25,8 @@ body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-hei
 .zs-group{display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:100%;align-self:stretch}
 .zs-lab-row{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%}
 .zs-label{font:400 14px/17px Inter;color:#707177}
+.zs-step-title{font:500 18px/22px Inter;color:#F3F3F5}
+.zs-step-tag{font:400 12.5px/1 Inter;color:#707177;padding:5px 11px;border-radius:100px;background:rgba(255,255,255,.06)}
 .zs-hint{font:400 13px/1.5 Inter;color:#59595E}
 .zs-hint code{background:rgba(255,255,255,.06);padding:1px 6px;border-radius:6px;font-size:12px}
 .zs-hint a{color:#2BAD72;text-decoration:none}
@@ -53,16 +55,17 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 </style>
 </head>
 <body>
+<div class="zs-brand" style="margin-bottom:18px">
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16.9854.0756C15.8488-.0892 14.7326.0107 13.6714.4234 11.7918 1.1544 10.9008 2.7606 11.3014 4.6085c.681 3.1418 3.8771 5.4931 7.2245 5.2688 1.121-.0751 2.1131-.4953 2.9276-1.282 1.4575-1.408 1.3888-3.7734.5544-5.2452C20.9374 1.4619 19.2428.4269 16.9854.0756Z" fill="#F0F0F0"/><path d="M7.9543 2.8994c-.6947-.512-1.4959-.6762-2.34-.5706C2.1556 2.762.0273 5.9032.397 8.9811c.1074.8944.5648 1.6415 1.4601 2.0406.9717.4332 1.9792.3776 2.952.0323 2.514-.8927 3.9027-2.6771 4.2101-5.2003.1318-1.0819-.0907-2.1345-1.0649-2.9543Z" fill="#F0F0F0"/><path d="M20.3538 12.0455c-1.2682-.3371-2.4751-.0776-3.5973.5485-2.6549 1.4814-3.8887 4.5774-3.2352 7.3743.2981 1.2769.9933 2.3159 2.2408 2.9189 1.5169.7334 2.9939.4629 4.3626-.3635 1.7617-1.0635 2.6679-2.6868 3.0892-4.6684.151-1.017.1551-2.0274-.1518-3.0236-.4191-1.3598-1.2312-2.3942-2.7083-2.7862Z" fill="#F0F0F0"/><path d="M11.2852 18.6781c-.4579-3.3602-4.059-5.8798-7.5144-5.2287C.1701 14.1281-.8421 17.7901.6922 20.2977c.9628 1.5732 2.4623 2.416 4.3334 2.8442.8849.1769 1.7708.2113 2.6696.08 2.5457-.3716 3.922-2.1038 3.5897-4.5438Z" fill="#F0F0F0"/></svg>
+  <span>zelscan</span>
+</div>
 <div class="zs-modal">
   <div class="zs-modal-head">
-    <div class="zs-modal-title">Настройка проекта</div>
-    <div class="zs-brand">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16.9854.0756C15.8488-.0892 14.7326.0107 13.6714.4234 11.7918 1.1544 10.9008 2.7606 11.3014 4.6085c.681 3.1418 3.8771 5.4931 7.2245 5.2688 1.121-.0751 2.1131-.4953 2.9276-1.282 1.4575-1.408 1.3888-3.7734.5544-5.2452C20.9374 1.4619 19.2428.4269 16.9854.0756Z" fill="#F0F0F0"/><path d="M7.9543 2.8994c-.6947-.512-1.4959-.6762-2.34-.5706C2.1556 2.762.0273 5.9032.397 8.9811c.1074.8944.5648 1.6415 1.4601 2.0406.9717.4332 1.9792.3776 2.952.0323 2.514-.8927 3.9027-2.6771 4.2101-5.2003.1318-1.0819-.0907-2.1345-1.0649-2.9543Z" fill="#F0F0F0"/><path d="M20.3538 12.0455c-1.2682-.3371-2.4751-.0776-3.5973.5485-2.6549 1.4814-3.8887 4.5774-3.2352 7.3743.2981 1.2769.9933 2.3159 2.2408 2.9189 1.5169.7334 2.9939.4629 4.3626-.3635 1.7617-1.0635 2.6679-2.6868 3.0892-4.6684.151-1.017.1551-2.0274-.1518-3.0236-.4191-1.3598-1.2312-2.3942-2.7083-2.7862Z" fill="#F0F0F0"/><path d="M11.2852 18.6781c-.4579-3.3602-4.059-5.8798-7.5144-5.2287C.1701 14.1281-.8421 17.7901.6922 20.2977c.9628 1.5732 2.4623 2.416 4.3334 2.8442.8849.1769 1.7708.2113 2.6696.08 2.5457-.3716 3.922-2.1038 3.5897-4.5438Z" fill="#F0F0F0"/></svg>
-      <span>zelscan</span>
-    </div>
+    <div class="zs-modal-title" id="stepTitle">Настройка проекта</div>
+    <span class="zs-step-tag" id="stepTag">Шаг 1 из 2</span>
   </div>
 
-  <div class="zs-modal-body">
+  <div class="zs-modal-body" id="step1">
     <!-- ── Режим ── -->
     <div class="zs-group">
       <div class="zs-lab-row"><span class="zs-label">Режим работы</span></div>
@@ -77,7 +80,9 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     <div class="zs-group hidden" id="lztBlock">
       <div class="zs-lab-row"><span class="zs-label">LZT API-токен(ы) — по одному в строке</span></div>
       <textarea class="zs-input" id="lzt" placeholder="eyJhbGciOi..."></textarea>
-      <div class="zs-hint">Где взять: <a href="https://lolz.team/account/api-settings" target="_blank" rel="noopener">lolz.team → Настройки → API</a> → создать токен с правами на чтение профиля и поиска. Рекомендуется 1–3 токена. Вы отвечаете за соблюдение правил форума (2.28).</div>
+      <div class="zs-hint">Где взять: <a href="https://lolz.team/account/api-settings" target="_blank" rel="noopener">lolz.team → Настройки → API</a> → создать токен с правами на чтение профиля и поиска. Лучше всего минимум 3 ключа. Вы отвечаете за соблюдение правил форума (2.28).</div>
+      <button class="zs-btn" id="testTokens" type="button">Проверить токены</button>
+      <div class="zs-sub hidden" id="tokenTestResult"></div>
     </div>
 
     <div class="zs-sep"></div>
@@ -88,7 +93,6 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
       <div class="zs-vis" id="aiPills">
         <button type="button" class="on" data-ai="default">Ключи проекта</button>
         <button type="button" data-ai="own">Свои ключи</button>
-        <button type="button" data-ai="off">Без AI</button>
       </div>
       <div class="zs-sub" id="aiHint">Используются ключи автора проекта — ничего вводить не нужно.</div>
       <div class="hidden" id="ownKeys" style="width:100%">
@@ -96,28 +100,35 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
         <input class="zs-input" id="openrouter" type="password" placeholder="Ключ OpenRouter (sk-or-v1-...)">
         <div class="zs-hint" style="margin-top:8px">AKI.IO — aki.io · OpenRouter — openrouter.ai → Keys</div>
       </div>
+
+      <div class="zs-err" id="err"></div>
+      <div class="zs-actions">
+        <button class="zs-btn green" id="nextStep">Далее</button>
+      </div>
     </div>
 
-    <div class="zs-sep"></div>
+  </div>
 
-    <!-- ── OAuth ── -->
+  <div class="zs-modal-body hidden" id="step2">
     <div class="zs-group">
-      <div class="zs-lab-row"><span class="zs-label">Вход через форум (OAuth) — обязательно</span></div>
+      <div class="zs-step-title">Вход через форум (OAuth)</div>
       <div class="zs-hint">
         Создай своё приложение: <a href="https://lolz.team/account/developer" target="_blank" rel="noopener">lolz.team → Настройки → Разработчикам → Создать приложение</a>
         <ol>
           <li>Название — любое, например <code>Zelscan Local</code></li>
-          <li>Redirect URI — <code>http://localhost:8080/oauth/callback</code> (скопируй точно)</li>
+          <li>Redirect URI — <code>http://localhost:8080/oauth/callback</code></li>
           <li>Разрешённые домены — <code>*</code> (звёздочка)</li>
           <li>Вставь сюда полученный <code>Client ID</code></li>
         </ol>
       </div>
       <input class="zs-input" id="oauth" type="text" placeholder="Client ID приложения">
-      <input class="zs-input" id="redirect" type="text" value="http://localhost:8080/oauth/callback">
+      <div class="zs-err" id="oauthErr"></div>
+      <button class="zs-btn" id="testOauth" type="button">Проверить приложение</button>
     </div>
 
     <div class="zs-err" id="err"></div>
     <div class="zs-actions">
+      <button class="zs-btn" id="backStep" type="button">Назад</button>
       <button class="zs-btn green" id="go">Завершить настройку</button>
     </div>
   </div>
@@ -125,69 +136,123 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 
 <script>
 (function(){
-  var mode='manual', ai='default';
+  window.__ZS_SETUP_LOADED = true;
+  var mode='manual', ai='default', tokensValidated=false, oauthValidated=false;
 
+  function $(id){return document.getElementById(id)}
   function pills(id, cb){
-    var box=document.getElementById(id);
+    var box=$(id);
     box.addEventListener('click',function(e){
       var b=e.target.closest('button'); if(!b) return;
       box.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
       b.classList.add('on'); cb(b.dataset);
     });
   }
+  function showStep(n){
+    $('step1').classList.toggle('hidden', n!==1);
+    $('step2').classList.toggle('hidden', n!==2);
+    $('stepTag').textContent = 'Шаг '+n+' из 2';
+    $('stepTitle').textContent = n===1 ? 'Настройка проекта' : 'Вход через форум';
+    scrollTo({top:0, behavior:'smooth'});
+  }
 
   pills('modePills', function(d){
     mode=d.mode;
-    document.getElementById('lztBlock').classList.toggle('hidden', mode!=='auto');
-    document.getElementById('modeHint').textContent = mode==='auto'
-      ? 'Досье собирается через официальный API по вашему токену. Вы сами отвечаете за соблюдение правил форума (2.28).'
+    $('lztBlock').classList.toggle('hidden', mode!=='auto');
+    $('modeHint').textContent = mode==='auto'
+      ? 'Досье собираются через официальный API по вашим токенам. Вы сами отвечаете за соблюдение правил форума (2.28). Лучше всего сделать минимум 3 ключа.'
       : 'Вы вводите данные и сообщения сами — форум не запрашивается ни разу, токены не нужны.';
+    if(mode!=='auto') $('tokenTestResult').classList.add('hidden');
   });
 
   pills('aiPills', function(d){
     ai=d.ai;
-    document.getElementById('ownKeys').classList.toggle('hidden', ai!=='own');
-    document.getElementById('aiHint').textContent =
+    $('ownKeys').classList.toggle('hidden', ai!=='own');
+    $('aiHint').textContent =
       ai==='default' ? 'Используются ключи автора проекта — ничего вводить не нужно.' :
-      ai==='own' ? 'Вставьте свои ключи — они сохранятся только на вашем компьютере.' :
-      'Досье будут собираться без AI-разбора личности.';
+      'Вставьте свои ключи AKI.IO / OpenRouter — они сохранятся только на вашем компьютере.';
   });
 
-  fetch('/api/local/setup').then(r=>r.json()).then(function(st){
-    if(st.configured){
-      document.body.innerHTML='<div class="zs-modal"><div class="zs-modal-head"><div class="zs-modal-title">Уже настроено</div></div>'+
-        '<div class="zs-modal-body"><div class="zs-sub">Режим: '+(st.mode||'?')+
-        '. Чтобы пройти настройку заново, удалите файл <code>.local_setup_done</code> из папки проекта.</div>'+
-        '<div class="zs-actions"><a href="/app"><button class="zs-btn green">Открыть Zelscan</button></a></div></div></div>';
-    }
-  }).catch(function(){});
+  // ── тест LZT-токенов ──
+  $('testTokens').addEventListener('click',function(){
+    var err=$('tokenTestResult'); err.classList.remove('hidden');
+    err.textContent='Проверяем токены...'; err.style.color='#707177';
+    var tokens=$('lzt').value.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+    if(!tokens.length){err.textContent='Вставьте хотя бы один токен';err.style.color='#F87171';return}
+    fetch('/api/local/setup/test-tokens',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tokens:tokens})})
+      .then(r=>r.json()).then(function(d){
+        var res=(d.results||[]);
+        var good=res.filter(function(x){return x.ok}).length;
+        var lines=res.map(function(x,i){return (x.ok?'✓':'✕')+' токен '+(i+1)+(x.ok?(x.username?' — '+x.username:''):' — '+(x.reason||'не работает'))});
+        tokensValidated = good>0;
+        err.innerHTML = lines.join('<br>') + (good ? '<br><span style="color:#2BAD72">Готово: рабочих токенов '+good+' из '+res.length+(good<3?' (лучше минимум 3)':'')+'</span>' : '');
+        err.style.color = good ? '#EBEBEB' : '#F87171';
+      })
+      .catch(function(){err.textContent='Сервер недоступен';err.style.color='#F87171'});
+  });
 
-  document.getElementById('go').addEventListener('click',function(){
-    var err=document.getElementById('err'); err.textContent='';
+  // ── тест OAuth ──
+  $('testOauth').addEventListener('click',function(){
+    var err=$('oauthErr'); err.textContent='Проверяем приложение...'; err.style.color='#707177';
+    var cid=$('oauth').value.trim();
+    if(!cid){err.textContent='Вставьте Client ID';err.style.color='#F87171';return}
+    fetch('/api/local/setup/test-oauth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:cid})})
+      .then(r=>r.json()).then(function(d){
+        oauthValidated = !!d.ok;
+        err.textContent = d.ok ? '✓ Приложение найдено на форуме' : '✕ '+(d.reason||('форум ответил '+(d.status||'?')));
+        err.style.color = d.ok ? '#2BAD72' : '#F87171';
+      })
+      .catch(function(){err.textContent='Сервер недоступен';err.style.color='#F87171'});
+  });
+
+  $('backStep').addEventListener('click',function(){showStep(1)});
+
+  // ── далее с шага 1 ──
+  $('nextStep').addEventListener('click',function(){
+    var err=$('err'); err.textContent='';
+    if(mode==='auto'){
+      if(!tokensValidated){err.textContent='Сначала проверьте токены кнопкой «Проверить токены»';return}
+    }
+    if(ai==='own' && !$('aki').value.trim() && !$('openrouter').value.trim()){err.textContent='Выбраны «свои ключи», но поля пустые';return}
+    showStep(2);
+  });
+
+  // ── завершение ──
+  $('go').addEventListener('click',function(){
+    var err=$('err'); err.textContent='';
+    var cid=$('oauth').value.trim();
+    if(!cid){err.textContent='Вставьте Client ID OAuth-приложения';return}
+    if(!oauthValidated){err.textContent='Сначала проверьте приложение кнопкой «Проверить приложение»';return}
     var body={
       mode:mode,
-      lzt_tokens:document.getElementById('lzt').value,
+      lzt_tokens:$('lzt').value,
       default_ai_keys: ai==='default',
-      ai_enabled: ai!=='off',
       providers:{
-        aki:document.getElementById('aki').value.trim(),
-        openrouter:document.getElementById('openrouter').value.trim()
+        aki:$('aki').value.trim(),
+        openrouter:$('openrouter').value.trim()
       },
-      oauth_client_id:document.getElementById('oauth').value.trim(),
-      oauth_redirect_uri:document.getElementById('redirect').value.trim()
+      oauth_client_id:cid,
+      oauth_redirect_uri:'http://localhost:8080/oauth/callback'
     };
-    if(!body.oauth_client_id){err.textContent='Вставьте Client ID OAuth-приложения — без него вход не заработает';return}
-    if(mode==='auto' && !body.lzt_tokens.trim()){err.textContent='Для авто-режима вставьте хотя бы один LZT API-токен';return}
-    if(ai==='own' && !body.providers.aki && !body.providers.openrouter){err.textContent='Выбраны «свои ключи», но поля пустые';return}
     fetch('/api/local/setup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
       .then(r=>r.json().then(d=>({ok:r.ok,d})))
       .then(function(res){
         if(res.ok) location.href='/app';
         else err.textContent=res.d.error||'Не удалось сохранить';
       })
-      .catch(function(){err.textContent='Сервер недоступен — запущен ли backend?'});
+      .catch(function(){err.textContent='Сервер недоступен'});
   });
+
+  fetch('/api/local/setup').then(r=>r.json()).then(function(st){
+    if(st.configured){
+      document.body.innerHTML='<div class="zs-brand" style="margin-bottom:18px"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16.9854.0756C15.8488-.0892 14.7326.0107 13.6714.4234 11.7918 1.1544 10.9008 2.7606 11.3014 4.6085c.681 3.1418 3.8771 5.4931 7.2245 5.2688 1.121-.0751 2.1131-.4953 2.9276-1.282 1.4575-1.408 1.3888-3.7734.5544-5.2452C20.9374 1.4619 19.2428.4269 16.9854.0756Z" fill="#F0F0F0"/><path d="M7.9543 2.8994c-.6947-.512-1.4959-.6762-2.34-.5706C2.1556 2.762.0273 5.9032.397 8.9811c.1074.8944.5648 1.6415 1.4601 2.0406.9717.4332 1.9792.3776 2.952.0323 2.514-.8927 3.9027-2.6771 4.2101-5.2003.1318-1.0819-.0907-2.1345-1.0649-2.9543Z" fill="#F0F0F0"/><path d="M20.3538 12.0455c-1.2682-.3371-2.4751-.0776-3.5973.5485-2.6549 1.4814-3.8887 4.5774-3.2352 7.3743.2981 1.2769.9933 2.3159 2.2408 2.9189 1.5169.7334 2.9939.4629 4.3626-.3635 1.7617-1.0635 2.6679-2.6868 3.0892-4.6684.151-1.017.1551-2.0274-.1518-3.0236-.4191-1.3598-1.2312-2.3942-2.7083-2.7862Z" fill="#F0F0F0"/><path d="M11.2852 18.6781c-.4579-3.3602-4.059-5.8798-7.5144-5.2287C.1701 14.1281-.8421 17.7901.6922 20.2977c.9628 1.5732 2.4623 2.416 4.3334 2.8442.8849.1769 1.7708.2113 2.6696.08 2.5457-.3716 3.922-2.1038 3.5897-4.5438Z" fill="#F0F0F0"/></svg><span>zelscan</span></div>'+
+        '<div class="zs-modal"><div class="zs-modal-head"><div class="zs-modal-title">Уже настроено</div></div>'+
+        '<div class="zs-modal-body"><div class="zs-sub">Режим: '+(st.mode||'?')+
+        '. Чтобы пройти настройку заново, удалите файл <code>.local_setup_done</code> из папки проекта.</div>'+
+        '<div class="zs-actions"><a href="/app"><button class="zs-btn green">Открыть Zelscan</button></a></div></div></div>';
+    }
+  }).catch(function(){});
 })();
-</script>
+</script></script>
 </body>
 </html>

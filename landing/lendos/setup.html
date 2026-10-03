@@ -11,6 +11,11 @@
 /* ── 1:1 со стилями модалок приложения (order-modals.dashboard2.css) ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
 body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.zs-author{display:flex;align-items:center;gap:10px;margin-top:18px}
+.zs-author-label{font:400 13px/1 Inter;color:#707177}
+.zs-author-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;background:rgba(255,255,255,.06);border-radius:14px}
+.zs-author-badge img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.zs-author-badge span{font:500 13.5px/1 Inter;color:#EBEBEB}
 .zs-modal{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;margin:auto;
   padding:28px 32px 32px;gap:24px;width:498px;max-width:calc(100vw - 24px);
   background:rgba(10,11,13,.8);
@@ -20,7 +25,7 @@ body{background:#020202;color:#EBEBEB;-webkit-font-smoothing:antialiased;min-hei
 .zs-modal-title{font:500 24px/29px Inter;color:#F3F3F5}
 .zs-brand{display:flex;align-items:center;gap:7px}
 .zs-brand svg{width:23px;height:23px}
-.zs-brand span{font:600 17px/1 Inter;color:#EBEBEB;letter-spacing:-.02em}
+.zs-brand img{width:96px;height:21px;display:block}
 .zs-modal-body{display:flex;flex-direction:column;align-items:flex-start;gap:24px;width:100%;align-self:stretch}
 .zs-group{display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:100%;align-self:stretch}
 .zs-lab-row{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%}
@@ -87,7 +92,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 <body>
 <div class="zs-brand" style="margin-bottom:18px">
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16.9854.0756C15.8488-.0892 14.7326.0107 13.6714.4234 11.7918 1.1544 10.9008 2.7606 11.3014 4.6085c.681 3.1418 3.8771 5.4931 7.2245 5.2688 1.121-.0751 2.1131-.4953 2.9276-1.282 1.4575-1.408 1.3888-3.7734.5544-5.2452C20.9374 1.4619 19.2428.4269 16.9854.0756Z" fill="#F0F0F0"/><path d="M7.9543 2.8994c-.6947-.512-1.4959-.6762-2.34-.5706C2.1556 2.762.0273 5.9032.397 8.9811c.1074.8944.5648 1.6415 1.4601 2.0406.9717.4332 1.9792.3776 2.952.0323 2.514-.8927 3.9027-2.6771 4.2101-5.2003.1318-1.0819-.0907-2.1345-1.0649-2.9543Z" fill="#F0F0F0"/><path d="M20.3538 12.0455c-1.2682-.3371-2.4751-.0776-3.5973.5485-2.6549 1.4814-3.8887 4.5774-3.2352 7.3743.2981 1.2769.9933 2.3159 2.2408 2.9189 1.5169.7334 2.9939.4629 4.3626-.3635 1.7617-1.0635 2.6679-2.6868 3.0892-4.6684.151-1.017.1551-2.0274-.1518-3.0236-.4191-1.3598-1.2312-2.3942-2.7083-2.7862Z" fill="#F0F0F0"/><path d="M11.2852 18.6781c-.4579-3.3602-4.059-5.8798-7.5144-5.2287C.1701 14.1281-.8421 17.7901.6922 20.2977c.9628 1.5732 2.4623 2.416 4.3334 2.8442.8849.1769 1.7708.2113 2.6696.08 2.5457-.3716 3.922-2.1038 3.5897-4.5438Z" fill="#F0F0F0"/></svg>
-  <span>zelscan</span>
+  <img src="/images/text.svg" alt="zelscan">
 </div>
 <div class="zs-modal">
   <div class="zs-modal-head">
@@ -324,5 +329,6 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
   }).catch(function(){});
 })();
 </script></script>
+<div class="zs-author"><span class="zs-author-label">Создал</span><div class="zs-author-badge"><img src="/images/avava.png" alt=""><span>Дмитрий Удодов</span></div></div>
 </body>
 </html>

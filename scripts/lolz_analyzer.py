@@ -2633,8 +2633,15 @@ class LolzAnalyzer:
             for item in batch:
                 if not isinstance(item, dict) or str(item.get("content_type", "")).lower() != "post":
                     continue
+                # Lolzteam /search/posts возвращает поле `user_id` (не
+                # `poster_user_id` как раньше). Проверяем оба варианта, чтобы
+                # не отбрасывать чужие посты из смешанных лент и одновременно
+                # не терять ВСЕ посты, если поле называется иначе.
+                poster_id = item.get("poster_user_id")
+                if poster_id is None:
+                    poster_id = item.get("user_id")
                 try:
-                    if int(item.get("poster_user_id")) != int(user_id):
+                    if int(poster_id) != int(user_id):
                         continue
                 except (TypeError, ValueError):
                     continue

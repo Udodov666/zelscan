@@ -124,8 +124,8 @@ def _local_setup_done() -> bool:
 @app.route("/")
 def index():
     if not _local_setup_done():
-        return send_from_directory(str(_PRODUCTION_LENDOS), "setup.html")
-    return _production_send_from_directory(str(_PRODUCTION_LENDOS), "index.html")
+        return redirect("/setup", code=302)
+    return redirect("/app", code=302)
 
 @app.route("/setup")
 def local_setup_page():

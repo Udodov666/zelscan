@@ -350,12 +350,14 @@ const ZSModals = (function () {
   function _setSource(m) {
     srcMode = m;
     const user2 = window.selectedUser || window._lastSelectedUser;
-    if (cur) {
-      const bodyEl = qs(cur, '.zs-modal-body');
-      if (bodyEl) {
-        bodyEl.innerHTML = m === 'manual' ? renderManualForm(user2) : renderOrder(user2);
-        _visInd(true); // вернуть индикатор «Доступ к досье» после перерисовки
-      }
+    if (!cur) return;
+    const bodyEl = qs(cur, '.zs-modal-body');
+    if (!bodyEl) return;
+    if (m === 'manual') {
+      bodyEl.innerHTML = renderManualStep2(user2);
+    } else {
+      bodyEl.innerHTML = renderSigScreen(user2);
+      _visInd(true);
     }
   }
   function srcPills() {
@@ -368,7 +370,7 @@ const ZSModals = (function () {
     </div>`;
   }
   function _escLocal(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function renderManualForm(user) {
+  function renderManualStep2(user) {
     const u = user || {};
     return `<div class="zs-modal-top">
       <div class="zs-group">
@@ -392,22 +394,24 @@ const ZSModals = (function () {
       </div>
       <div class="zs-group">
         <div class="zs-lab-row"><span class="zs-label">Сообщения (по одному в строке)</span></div>
-        <textarea id="manTexts" rows="8" placeholder="Первое сообщение&#10;Второе сообщение&#10;..." 
+        <textarea id="manTexts" rows="8" placeholder="Первое сообщение&#10;Второе сообщение&#10;..."
           style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:13px 'JetBrains Mono',monospace;outline:0;resize:vertical"></textarea>
       </div>
-      <div class="zs-group">
-        <div class="zs-lab-row"><span class="zs-label">Тариф</span></div>
-        <div class="zs-tariffs">
-          ${Object.keys(TARIFFS).map(function (k) { return tariffCard(k, TARIFFS[k], k === selTid, false); }).join('')}
-        </div>
-      </div>
-      ${visBlock()}
     </div>
-    <div class="zs-actions" id="orderActions">
-      <button class="zs-btn light" data-zs-call="ZSModals._submitManual()">Создать досье · 0 ₽</button>
+    <div class="zs-err" id="manErr"></div>
+    <div class="zs-actions-row">
+      <button class="zs-btn" id="backStep" type="button" data-zs-call="ZSModals._setSource('auto')">Назад</button>
+      <button class="zs-btn green" id="goManual" type="button" data-zs-call="ZSModals._submitManual()">Создать досье · 0 ₽</button>
     </div>`;
   }
+  function _backToSig() {
+    srcMode = 'auto';
+    const user2 = window.selectedUser || window._lastSelectedUser;
+    if (cur) { const bodyEl = qs(cur, '.zs-modal-body'); if (bodyEl) { bodyEl.innerHTML = renderSigScreen(user2); _visInd(true); } }
+  }
+
   function _submitManual() {
+
     const API = window.__ZS_API__ || '';
     const body = {
       username: (qs(cur, '#manNick') || {}).value || '',
@@ -420,8 +424,9 @@ const ZSModals = (function () {
       visibility: visSel,
       ai: true,
     };
-    if (!body.username.trim()) { if (window.ZSNotice) ZSNotice.show({ type: 'error', title: 'Введите ник' }); return; }
-    if (!body.texts.length) { if (window.ZSNotice) ZSNotice.show({ type: 'error', title: 'Вставьте хотя бы одно сообщение' }); return; }
+    const manErr = qs(cur, '#manErr');
+    if (!body.username.trim()) { if (manErr) manErr.textContent = 'Введите ник'; return; }
+    if (!body.texts.length) { if (manErr) manErr.textContent = 'Вставьте хотя бы одно сообщение'; return; }
     const headers = { 'Content-Type': 'application/json' };
     try { const t = localStorage.getItem('lzt_token') || ''; if (t) headers.Authorization = 'Bearer ' + t; } catch (e) {}
     fetch(API + '/api/orders/manual', { method: 'POST', headers: headers, body: JSON.stringify(body) })
@@ -440,7 +445,6 @@ const ZSModals = (function () {
     const tarr = ids.map(function (k) { return tariffCard(k, TARIFFS[k], k === selTid, solo); }).join('');
     return `<div class="zs-modal-top">
       ${lowMessageWarning(user)}
-      ${srcPills()}
       <div class="zs-group">
         <div class="zs-lab-row"><span class="zs-label">Пользователь</span></div>
         ${userRow(user)}
@@ -2282,6 +2286,7 @@ fetch(API + '/api/my/redeem-promo', {
     _topupDone: _topupDone,
     _nextStep: _nextStep,
     _setSource: _setSource,
+    _backToSig: _backToSig,
     _submitManual: _submitManual,
     _backStep: _backStep,
     _applyPromo: _applyPromo,

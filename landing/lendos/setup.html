@@ -91,8 +91,8 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     <div class="zs-group hidden" id="lztBlock">
       <div class="zs-lab-row"><span class="zs-label">LZT API-токены</span><a class="zs-link" href="https://lolz.team/account/api" target="_blank" rel="noopener">Настройки API<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
       <textarea class="zs-input" id="lzt" placeholder="По одному токену в строке"></textarea>
+      <div class="zs-sub hidden" id="tokenTestResult" style="width:100%"></div>
       <button class="zs-btn" id="testTokens" type="button">Проверить токены</button>
-      <div class="zs-sub hidden" id="tokenTestResult"></div>
     </div>
 
     <div class="zs-sep"></div>
@@ -171,7 +171,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     mode=d.mode;
     $('lztBlock').classList.toggle('hidden', mode!=='auto');
     $('modeHint').textContent = mode==='auto'
-      ? 'Сбор через официальный API по вашим токенам. Рекомендуется минимум 3 токена.'
+      ? 'Сбор через официальный API по вашим токенам. Правило 2.28 запрещает парсинг без разрешения администрации — вы сами отвечаете за соблюдение. Рекомендуется минимум 3 токена.'
       : 'Без запросов к форуму — все данные вводите вы.';
     if(mode!=='auto') $('tokenTestResult').classList.add('hidden');
   });
@@ -199,9 +199,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
           return '<div class="tk-row">'+(x.ok?okSvg:badSvg)+'<span>Токен '+(i+1)+'</span><small>'+_esc(x.ok?(x.username||'рабочий'):(x.reason||'не работает'))+'</small></div>';
         });
         tokensValidated = good>0;
-        err.innerHTML = lines.join('') + (good
-          ? '<div class="tk-row" style="color:#2BAD72;margin-top:2px">Рабочих токенов: '+good+' из '+res.length+(good<3?' · лучше минимум 3':'')+'</div>'
-          : '');
+        err.innerHTML = lines.join('');
         err.style.color = good ? '#EBEBEB' : '#F87171';
       })
       .catch(function(){err.textContent='Сервер недоступен';err.style.color='#F87171'});

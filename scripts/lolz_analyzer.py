@@ -732,16 +732,20 @@ class UserPost:
         # ВАЖНО: в POST /search/posts НЕТ forum_title, но есть node_title.
         # Используем node_title как приоритет если forum_title пустой.
         forum_title = forum.get("forum_title", "") or thread.get("node_title", "") or ""
+        # API v2 переименовал поля: post_body → message, post_create_date →
+        # post_date, post_like_count → likes, post_comment_count → comment_count.
+        # Поддерживаем оба формата, чтобы работали старые и новые ответы.
+        body_raw = str(p.get("post_body") or p.get("message") or "")
         return cls(
             post_id=int(p.get("post_id", 0) or 0),
-            body=strip_bbcode(p.get("post_body", "") or ""),
-            body_raw=p.get("post_body", "") or "",
-            create_date=int(p.get("post_create_date", 0) or 0),
+            body=strip_bbcode(body_raw),
+            body_raw=body_raw,
+            create_date=int(p.get("post_create_date") or p.get("post_date") or 0),
             thread_id=int(p.get("thread_id", 0) or 0),
             thread_title=strip_bbcode(thread.get("thread_title", "") or ""),
-            like_count=int(p.get("post_like_count", 0) or 0),
-            comment_count=int(p.get("post_comment_count", 0) or 0),
-            is_first_post=bool(p.get("post_is_first_post", False)),
+            like_count=int(p.get("post_like_count") or p.get("likes") or 0),
+            comment_count=int(p.get("post_comment_count") or p.get("comment_count") or 0),
+            is_first_post=bool(p.get("post_is_first_post") or p.get("is_first_post") or False),
             forum_title=forum_title,
         )
 
@@ -765,20 +769,26 @@ class Thread:
     def from_api(cls, t: dict) -> "Thread":
         first = t.get("first_post", {}) or {}
         forum = t.get("forum", {}) or {}
+        # API v2: thread_create_date → post_date, thread_view_count →
+        # view_count, thread_post_count → post_count, thread_is_sticky →
+        # sticky, тело первого поста — first_post.message. Поддерживаем
+        # оба формата.
+        discussion_open = t.get("discussion_open")
         return cls(
             thread_id=int(t.get("thread_id", 0) or 0),
-            title=strip_bbcode(t.get("thread_title", "") or ""),
-            body=strip_bbcode(first.get("post_body", "") or ""),
-            body_raw=first.get("post_body", "") or "",
-            forum_id=int(forum.get("forum_id", 0) or 0),
+            title=strip_bbcode(t.get("thread_title") or t.get("title") or ""),
+            body=strip_bbcode(str(first.get("post_body") or first.get("message") or "")),
+            body_raw=str(first.get("post_body") or first.get("message") or ""),
+            forum_id=int(forum.get("forum_id") or t.get("node_id") or 0),
             forum_title=forum.get("forum_title", "") or
                         t.get("node_title", "") or "",
-            create_date=int(t.get("thread_create_date", 0) or 0),
-            view_count=int(t.get("thread_view_count", 0) or 0),
-            reply_count=int(t.get("thread_post_count", 0) or 0),
-            like_count=int(first.get("post_like_count", 0) or 0),
-            is_sticky=bool(t.get("thread_is_sticky", False)),
-            is_closed=bool(t.get("thread_is_closed", False)),
+            create_date=int(t.get("thread_create_date") or t.get("post_date") or 0),
+            view_count=int(t.get("thread_view_count") or t.get("view_count") or 0),
+            reply_count=int(t.get("thread_post_count") or t.get("post_count") or 0),
+            like_count=int(first.get("post_like_count") or t.get("first_post_likes") or first.get("likes") or 0),
+            is_sticky=bool(t.get("thread_is_sticky") or t.get("sticky") or False),
+            is_closed=bool(t.get("thread_is_closed") or
+                           (discussion_open is False if discussion_open is not None else False)),
         )
 
 
@@ -793,13 +803,17 @@ class WallPost:
 
     @classmethod
     def from_api(cls, p: dict) -> "WallPost":
+        # API v2: poster_user_id → user_id, poster_username → username,
+        # post_body → message, post_create_date → post_date (wall_date?)
+        body_raw = str(p.get("post_body") or p.get("message") or "")
         return cls(
             post_id=int(p.get("profile_post_id", 0) or 0),
-            poster_id=int(p.get("poster_user_id", 0) or 0),
-            poster_name=p.get("poster_username", "") or "",
-            body=strip_bbcode(p.get("post_body", "") or ""),
-            body_raw=p.get("post_body", "") or "",
-            create_date=int(p.get("post_create_date", 0) or 0),
+            poster_id=int(p.get("poster_user_id") or p.get("user_id") or 0),
+            poster_name=p.get("poster_username") or p.get("username") or "",
+            body=strip_bbcode(body_raw),
+            body_raw=body_raw,
+            create_date=int(p.get("post_create_date") or p.get("post_date")
+                            or p.get("wall_post_date") or 0),
         )
 
 
@@ -2506,7 +2520,7 @@ class LolzAnalyzer:
         return None
 
     def fetch_timeline(self, user_id: int, max_pages: int = 60,
-                       per_page: int = 20, *, accelerated: bool = False,
+                       per_page: int = 100, *, accelerated: bool = False,
                        target_posts: int = 700,
                        rate_limit_reserve: int = 2,
                        max_elapsed_seconds: Optional[float] = None,
@@ -2523,6 +2537,8 @@ class LolzAnalyzer:
         target_posts = max(1, int(target_posts))
         rate_limit_reserve = max(1, int(rate_limit_reserve))
         all_posts: list[UserPost] = []
+        drop_stats = {"content_type": 0, "wrong_user": 0, "duplicate": 0}
+        page_log = []
         seen_ids: set[int] = set()
         before: Optional[int] = None
         windows_scanned = 0
@@ -2625,13 +2641,17 @@ class LolzAnalyzer:
             "source_exhausted": False,
             "target_reached": False,
             "error": None,
+            "drop_stats": drop_stats,
+            "page_log": page_log,
         }
 
         def add_posts(batch: object) -> None:
             if not isinstance(batch, list):
                 return
+            added_here = 0
             for item in batch:
                 if not isinstance(item, dict) or str(item.get("content_type", "")).lower() != "post":
+                    drop_stats["content_type"] += 1
                     continue
                 # Lolzteam /search/posts возвращает поле `user_id` (не
                 # `poster_user_id` как раньше). Проверяем оба варианта, чтобы
@@ -2642,23 +2662,31 @@ class LolzAnalyzer:
                     poster_id = item.get("user_id")
                 try:
                     if int(poster_id) != int(user_id):
+                        drop_stats["wrong_user"] += 1
                         continue
                 except (TypeError, ValueError):
+                    drop_stats["wrong_user"] += 1
                     continue
                 post = UserPost.from_api(item)
                 if post.post_id in seen_ids:
+                    drop_stats["duplicate"] += 1
                     continue
                 seen_ids.add(post.post_id)
                 all_posts.append(post)
+                added_here += 1
                 if len(all_posts) >= target_posts:
+                    page_log.append({"added": added_here, "stop": "target"})
+                    refresh_meta()
                     return
+            page_log.append({"added": added_here, "ct_dropped": drop_stats["content_type"]})
+            refresh_meta()
 
         def item_timestamp(item: object) -> Optional[int]:
             if not isinstance(item, dict):
                 return None
             for field in (
-                "post_create_date", "thread_create_date", "content_create_date",
-                "profile_post_date", "create_date",
+                "post_create_date", "post_date", "thread_create_date",
+                "content_create_date", "profile_post_date", "create_date",
             ):
                 try:
                     value = int(item.get(field) or 0)
@@ -2937,6 +2965,8 @@ class LolzAnalyzer:
             "post_requests_by_token": dict(token_post_used),
             "post_budgets_by_token": dict(token_post_budgets),
             "rate_limit_observations": rate_limit_observations,
+            "drop_stats": dict(drop_stats),
+            "page_log": list(page_log),
             "error": error_reason,
         }
         refresh_meta()

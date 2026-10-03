@@ -23,6 +23,7 @@ import uuid
 import threading
 import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from string import Template
 from pathlib import Path
 from typing import Optional
 
@@ -764,12 +765,16 @@ class AIInterpreter:
         """Промпт для психолога — полные факты + 5-6 постов + просьба о психологическом портрете."""
         facts = self._facts_to_compact_str(dossier)
         posts_str = self._posts_to_str(posts, with_labels=True)
-        
-        return f"""ПАКЕТ ФАКТОВ О ПОЛЬЗОВАТЕЛЕ:
-{facts}
 
-ПОКАЗАТЕЛЬНЫЕ ПОСТЫ ({len(posts)} шт):
-{posts_str}
+        # Используем string.Template вместо f-string, потому что в шаблоне ниже
+        # есть JSON-схема с фигурными скобками {"summary_one_line": ...} —
+        # f-string пытался бы их интерпретировать как format-выражения и падал
+        # с KeyError/Invalid format specifier. Template подставляет только $name.
+        template = Template("""ПАКЕТ ФАКТОВ О ПОЛЬЗОВАТЕЛЕ:
+$facts
+
+ПОКАЗАТЕЛЬНЫЕ ПОСТЫ ($n шт):
+$posts_str
 
 Сделай развёрнутый психологический портрет. Оцени Big Five, тёмную триаду,
 эмоциональный интеллект, защиты, тип привязанности, когнитивные искажения.
@@ -822,7 +827,8 @@ status_relation — как юзер обращается с каждой ста�
 peer — равные ему по статусу; newbie — новички; mod — модерация и «власть»;
 weak — те, кто слабее него. Оцени строго по постам, где видно отношение.
 
-Не выдумывай фактов. Если данных мало — скажи прямо."""
+Не выдумывай фактов. Если данных мало — скажи прямо.""")
+        return template.substitute(facts=facts, posts_str=posts_str, n=len(posts))
 
     def _facts_to_compact_str(self, dossier: dict) -> str:
         """Компактное строковое представление фактов."""
@@ -878,8 +884,8 @@ weak — те, кто слабее него. Оцени строго по пос
         lines.append(f"ДИНАМИКА: {activity.get('yearly_dynamics',{}).get('verdict','?')}")
         lines.append(f"РЕАКЦИИ: {activity.get('reactions',{}).get('verdict','?')}")
         
-        return "\n".join(lines)
-    
+        return "\n".join(lines).replace("{", "{{").replace("}", "}}")
+
     def _posts_to_str(self, posts: list[dict], with_labels: bool = False) -> str:
         """Превращает посты в строку для промпта."""
         if not posts:
@@ -901,7 +907,7 @@ weak — те, кто слабее него. Оцени строго по пос
             lines.append(f"{header}")
             lines.append(f"«{p.get('body','')}»")
             lines.append("")
-        return "\n".join(lines)
+        return "\n".join(lines).replace("{", "{{").replace("}", "}}")
     
     # Детерминированная постобработка текста: не меняет JSON-ключи и типы,
     # не делает дополнительных LLM-вызовов и применяется только к новым ответам.

@@ -527,3 +527,10 @@
 
 /* фон активного источника данных (автосбор/ручной) */
 #srcPills button.on{background:rgba(255,255,255,.16);border-radius:12px;color:#FFFFFF}
+
+/* ── ручной ввод (шаг 2): поля в стиле промо-инпута ── */
+.zs-man-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+.zs-man-inp{box-sizing:border-box;width:100%;height:48px;padding:0 16px;border:1px solid rgba(255,255,255,.06);border-radius:16px;background:#121316;color:#f3f3f5;font:500 14px/1 Inter;outline:none;transition:border-color .16s,box-shadow .16s}
+.zs-man-inp:focus{border-color:rgba(43,173,114,.55);box-shadow:0 0 0 3px rgba(43,173,114,.12)}
+.zs-man-inp::placeholder{color:#55565C}
+textarea.zs-man-inp{height:auto;min-height:96px;padding:13px 16px;font:400 13px/1.55 'JetBrains Mono',Consolas,monospace;resize:vertical}

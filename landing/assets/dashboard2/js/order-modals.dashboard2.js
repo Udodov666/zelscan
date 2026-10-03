@@ -347,19 +347,6 @@ const ZSModals = (function () {
 
   /* ─── order screen (шаг 1: пользователь + доступ + тариф) ─── */
   let srcMode = 'auto';
-  function _setSource(m) {
-    srcMode = m;
-    const user2 = window.selectedUser || window._lastSelectedUser;
-    if (!cur) return;
-    const bodyEl = qs(cur, '.zs-modal-body');
-    if (!bodyEl) return;
-    if (m === 'manual') {
-      bodyEl.innerHTML = renderManualStep2(user2);
-    } else {
-      bodyEl.innerHTML = renderSigScreen(user2);
-      _visInd(true);
-    }
-  }
   function srcPills() {
     return `<div class="zs-group">
       <div class="zs-lab-row"><span class="zs-label">Источник данных</span></div>
@@ -370,46 +357,6 @@ const ZSModals = (function () {
     </div>`;
   }
   function _escLocal(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function renderManualStep2(user) {
-    const u = user || {};
-    return `<div class="zs-modal-top">
-      <div class="zs-group">
-        ${srcPills()}
-        <div style="font-size:12.5px;color:var(--fg-muted);margin-top:8px">Вы вводите данные сами — форум не запрашивается ни разу. По одному сообщению в строке.</div>
-      </div>
-      <div class="zs-group">
-        <div class="zs-lab-row"><span class="zs-label">Пользователь</span></div>
-        <input id="manNick" type="text" placeholder="Ник" value="${_escLocal(u.username || '')}"
-          style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:inherit;outline:0">
-        <input id="manAvatar" type="text" placeholder="Ссылка на аватарку (необязательно)" value="${_escLocal(u.avatar || '')}"
-          style="width:100%;margin-top:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:inherit;outline:0">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
-          <input id="manMsgs" type="number" placeholder="Сообщений" value="${_escLocal(u.message_count || '')}"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:inherit;outline:0">
-          <input id="manLikes" type="number" placeholder="Лайков" value="${_escLocal(u.like_count || '')}"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:inherit;outline:0">
-          <input id="manThreads" type="number" placeholder="Тем" value="${_escLocal(u.threads || '')}"
-            style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:inherit;outline:0">
-        </div>
-      </div>
-      <div class="zs-group">
-        <div class="zs-lab-row"><span class="zs-label">Сообщения (по одному в строке)</span></div>
-        <textarea id="manTexts" rows="8" placeholder="Первое сообщение&#10;Второе сообщение&#10;..."
-          style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;color:var(--fg);padding:11px 13px;font:13px 'JetBrains Mono',monospace;outline:0;resize:vertical"></textarea>
-      </div>
-    </div>
-    <div class="zs-err" id="manErr"></div>
-    <div class="zs-actions-row">
-      <button class="zs-btn" id="backStep" type="button" data-zs-call="ZSModals._setSource('auto')">Назад</button>
-      <button class="zs-btn green" id="goManual" type="button" data-zs-call="ZSModals._submitManual()">Создать досье · 0 ₽</button>
-    </div>`;
-  }
-  function _backToSig() {
-    srcMode = 'auto';
-    const user2 = window.selectedUser || window._lastSelectedUser;
-    if (cur) { const bodyEl = qs(cur, '.zs-modal-body'); if (bodyEl) { bodyEl.innerHTML = renderSigScreen(user2); _visInd(true); } }
-  }
-
   function _submitManual() {
 
     const API = window.__ZS_API__ || '';
@@ -635,6 +582,7 @@ const ZSModals = (function () {
     return `<div class="zs-modal-top">
       <div class="zs-group">
         ${srcPills()}
+        ${srcMode === 'manual' ? renderManualFields() : ''}
       </div>
       <div class="zs-group">
         <div class="zs-lab-row"><span class="zs-label">Промокод</span></div>
@@ -676,6 +624,65 @@ const ZSModals = (function () {
       ? `<div class="zs-err" id="balErr" style="margin-top:8px">${svg('warn')} <span>Недостаточно средств: не хватает ${number(deficit)} ₽</span></div>`
       : ''}
     <div class="zs-err hidden" id="sigErr" style="margin-top:8px">${svg('warn')} <span>Оставьте подпись и примите условия</span></div>`;
+  }
+
+  /* ─── ручной ввод (шаг 2): поля внутри экрана подписи ─── */
+  function renderManualFields() {
+    const u = window.selectedUser || window._lastSelectedUser || {};
+    return `<div class="zs-group" style="padding:0;border:0">
+      <div class="zs-lab-row"><span class="zs-label">Пользователь</span></div>
+      <input class="zs-man-inp" id="manNick" type="text" placeholder="Ник" value="${_escLocal(u.username || '')}">
+      <input class="zs-man-inp" id="manAvatar" type="text" placeholder="Ссылка на аватарку (необязательно)" value="${_escLocal(u.avatar || '')}">
+      <div class="zs-man-grid">
+        <input class="zs-man-inp" id="manMsgs" type="number" placeholder="Сообщений" value="${_escLocal(u.message_count || '')}">
+        <input class="zs-man-inp" id="manLikes" type="number" placeholder="Лайков" value="${_escLocal(u.like_count || '')}">
+        <input class="zs-man-inp" id="manThreads" type="number" placeholder="Тем" value="${_escLocal(u.threads || '')}">
+      </div>
+      <div class="zs-lab-row" style="margin-top:4px"><span class="zs-label">Сообщения (по одному в строке)</span></div>
+      <textarea class="zs-man-inp" id="manTexts" rows="6" placeholder="Первое сообщение&#10;Второе сообщение&#10;..."></textarea>
+      <div class="zs-err" id="manErr"></div>
+    </div>`;
+  }
+
+  function _submitManual() {
+    const API = window.__ZS_API__ || '';
+    const body = {
+      username: (qs(cur, '#manNick') || {}).value || '',
+      avatar: (qs(cur, '#manAvatar') || {}).value || '',
+      message_count: Number((qs(cur, '#manMsgs') || {}).value) || 0,
+      like_count: Number((qs(cur, '#manLikes') || {}).value) || 0,
+      threads: Number((qs(cur, '#manThreads') || {}).value) || 0,
+      texts: (((qs(cur, '#manTexts') || {}).value || '').split('\n') || []).map(function (s) { return s.trim(); }).filter(Boolean),
+      report_type: selTid === 'pro' ? 'full' : 'basic',
+      visibility: visSel,
+      ai: true,
+    };
+    const manErr = qs(cur, '#manErr');
+    if (manErr) manErr.textContent = '';
+    if (!body.username.trim()) { if (manErr) manErr.textContent = 'Введите ник'; return; }
+    if (!body.texts.length) { if (manErr) manErr.textContent = 'Вставьте хотя бы одно сообщение'; return; }
+    const headers = { 'Content-Type': 'application/json' };
+    try { const t = localStorage.getItem('lzt_token') || ''; if (t) headers.Authorization = 'Bearer ' + t; } catch (e) {}
+    fetch(API + '/api/orders/manual', { method: 'POST', headers: headers, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+      .then(function (res) {
+        if (!res.ok) { if (window.ZSNotice) ZSNotice.show({ type: 'error', title: res.d.error || 'Ошибка создания' }); return; }
+        ZSModals.close();
+        location.href = '/report?order=' + res.d.order_id;
+      })
+      .catch(function () { if (window.ZSNotice) ZSNotice.show({ type: 'error', title: 'Сервер недоступен' }); });
+  }
+
+  function _startManualDo() {
+    if (!cur) return;
+    const manErr = qs(cur, '#manErr');
+    if (!agreeOn) {
+      const agree = qs(cur, '#agreeBox');
+      if (agree) { agree.classList.add('shake'); setTimeout(function () { agree.classList.remove('shake'); }, 350); }
+      if (manErr) manErr.textContent = 'Примите условия сервиса';
+      return;
+    }
+    _submitManual();
   }
 
   /* ─── progress screen (sProg из order-modal-v4.html) ─── */
@@ -1528,6 +1535,7 @@ fetch(API + '/api/my/redeem-promo', {
 
   function _startOrder() {
     if (!cur) return;
+    if (srcMode === 'manual') { _captchaThenAction(_startManualDo); return; }
     _captchaThenAction(_startOrderDo);
   }
   function _startOrderDo(token) {
@@ -2289,7 +2297,6 @@ fetch(API + '/api/my/redeem-promo', {
     _topupDone: _topupDone,
     _nextStep: _nextStep,
     _setSource: _setSource,
-    _backToSig: _backToSig,
     _submitManual: _submitManual,
     _backStep: _backStep,
     _applyPromo: _applyPromo,

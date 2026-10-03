@@ -350,7 +350,13 @@ const ZSModals = (function () {
   function _setSource(m) {
     srcMode = m;
     const user2 = window.selectedUser || window._lastSelectedUser;
-    if (cur) { const bodyEl = qs(cur, '.zs-modal-body'); if (bodyEl) bodyEl.innerHTML = m === 'manual' ? renderManualForm(user2) : renderOrder(user2); }
+    if (cur) {
+      const bodyEl = qs(cur, '.zs-modal-body');
+      if (bodyEl) {
+        bodyEl.innerHTML = m === 'manual' ? renderManualForm(user2) : renderOrder(user2);
+        _visInd(true); // вернуть индикатор «Доступ к досье» после перерисовки
+      }
+    }
   }
   function srcPills() {
     return `<div class="zs-group">
@@ -362,6 +368,7 @@ const ZSModals = (function () {
     </div>`;
   }
   /* фон активного источника — как у переключателей приложения */
+  #srcPills button.on{background:rgba(255,255,255,.08);border-radius:12px;color:#EBEBEB}
   function _escLocal(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function renderManualForm(user) {
     const u = user || {};

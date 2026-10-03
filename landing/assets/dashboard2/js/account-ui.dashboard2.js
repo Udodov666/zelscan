@@ -265,7 +265,7 @@ function render(u){
   // V8 balance update — force=true: профиль подгрузился, обязательно переписать цифры
   // (иначе баланс залипал на 0 до ручного переключения таба).
   setTimeout(()=>zsSelectAccount(zsCurrentAccount,true),0);
-  if(+u.user_id===638074&&!menu.querySelector('.admin-link')){const a=document.createElement('a');a.className='menu-item admin-link';a.href='/admin/';a.innerHTML='<span class="mi"><i class="fa-solid fa-shield-halved"></i></span>Control Center';menu.querySelector('.acc-menu-list').insertBefore(a,menu.querySelector('.menu-sep'))}
+  if(!menu.querySelector('.admin-link')){fetch('/api/admin/access',{credentials:'include'}).then(r=>r.json()).then(acc=>{if(acc&&acc.eligible&&!menu.querySelector('.admin-link')){const a=document.createElement('a');a.className='menu-item admin-link';a.href='/admin/';a.innerHTML='<span class="mi"><i class="fa-solid fa-shield-halved"></i></span>Control Center';menu.querySelector('.acc-menu-list').insertBefore(a,menu.querySelector('.menu-sep'))}}).catch(()=>{})}
   fillPop(u);
   settleProfileSkeletons();
 }

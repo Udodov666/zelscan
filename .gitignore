@@ -30,3 +30,5 @@ __pycache__/
 .pytest_cache/
 node_modules/
 .srvcmp/
+_archive/
+_*.log

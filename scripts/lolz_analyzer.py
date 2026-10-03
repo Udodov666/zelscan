@@ -769,20 +769,26 @@ class Thread:
     def from_api(cls, t: dict) -> "Thread":
         first = t.get("first_post", {}) or {}
         forum = t.get("forum", {}) or {}
+        # API v2: thread_create_date → post_date, thread_view_count →
+        # view_count, thread_post_count → post_count, thread_is_sticky →
+        # sticky, тело первого поста — first_post.message. Поддерживаем
+        # оба формата.
+        discussion_open = t.get("discussion_open")
         return cls(
             thread_id=int(t.get("thread_id", 0) or 0),
-            title=strip_bbcode(t.get("thread_title", "") or ""),
-            body=strip_bbcode(first.get("post_body", "") or ""),
-            body_raw=first.get("post_body", "") or "",
-            forum_id=int(forum.get("forum_id", 0) or 0),
+            title=strip_bbcode(t.get("thread_title") or t.get("title") or ""),
+            body=strip_bbcode(str(first.get("post_body") or first.get("message") or "")),
+            body_raw=str(first.get("post_body") or first.get("message") or ""),
+            forum_id=int(forum.get("forum_id") or t.get("node_id") or 0),
             forum_title=forum.get("forum_title", "") or
                         t.get("node_title", "") or "",
-            create_date=int(t.get("thread_create_date", 0) or 0),
-            view_count=int(t.get("thread_view_count", 0) or 0),
-            reply_count=int(t.get("thread_post_count", 0) or 0),
-            like_count=int(first.get("post_like_count", 0) or 0),
-            is_sticky=bool(t.get("thread_is_sticky", False)),
-            is_closed=bool(t.get("thread_is_closed", False)),
+            create_date=int(t.get("thread_create_date") or t.get("post_date") or 0),
+            view_count=int(t.get("thread_view_count") or t.get("view_count") or 0),
+            reply_count=int(t.get("thread_post_count") or t.get("post_count") or 0),
+            like_count=int(first.get("post_like_count") or t.get("first_post_likes") or first.get("likes") or 0),
+            is_sticky=bool(t.get("thread_is_sticky") or t.get("sticky") or False),
+            is_closed=bool(t.get("thread_is_closed") or
+                           (discussion_open is False if discussion_open is not None else False)),
         )
 
 
@@ -797,13 +803,17 @@ class WallPost:
 
     @classmethod
     def from_api(cls, p: dict) -> "WallPost":
+        # API v2: poster_user_id → user_id, poster_username → username,
+        # post_body → message, post_create_date → post_date (wall_date?)
+        body_raw = str(p.get("post_body") or p.get("message") or "")
         return cls(
             post_id=int(p.get("profile_post_id", 0) or 0),
-            poster_id=int(p.get("poster_user_id", 0) or 0),
-            poster_name=p.get("poster_username", "") or "",
-            body=strip_bbcode(p.get("post_body", "") or ""),
-            body_raw=p.get("post_body", "") or "",
-            create_date=int(p.get("post_create_date", 0) or 0),
+            poster_id=int(p.get("poster_user_id") or p.get("user_id") or 0),
+            poster_name=p.get("poster_username") or p.get("username") or "",
+            body=strip_bbcode(body_raw),
+            body_raw=body_raw,
+            create_date=int(p.get("post_create_date") or p.get("post_date")
+                            or p.get("wall_post_date") or 0),
         )
 
 

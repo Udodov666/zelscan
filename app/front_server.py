@@ -74,7 +74,7 @@ _PUBLIC_FILES = frozenset({
     "logomove.webm", "logo_breath_preview.webm",
 })
 _PUBLIC_PREFIXES = ("assets/", "images/", "logo/", "logo-anim/", "_next/")
-_LENDOS_PUBLIC_PREFIXES = ("css/", "js/", "images/", "fonts/")
+_LENDOS_PUBLIC_PREFIXES = ("css/", "js/", "images/", "fonts/", "svg/")
 _CLEAN_ROUTES = {
     "/app": "zelscan_dashboard.html",
     "/dossiers": "my_dossiers.html",

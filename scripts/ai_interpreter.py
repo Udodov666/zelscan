@@ -811,6 +811,8 @@ class AIInterpreter:
   "defense_mechanisms": ["..."],
   "cognitive_distortions": ["..."],
   "attachment_style": "...",
+  "manner_description": "как юзер пишет — стиль, тон, лексика (1-2 предложения)",
+  "conflict_pattern": "как ведёт себя в спорах и конфликтах (1-2 предложения)",
   "status_relation": {"peer": 0-100, "newbie": 0-100, "mod": 0-100, "weak": 0-100},
   "relations_note": "..."
 }

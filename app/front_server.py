@@ -263,7 +263,10 @@ def landing_files(filename):
     # Страница «О проекте» — статичная папка внутри lendos. Резолвим её ДО
     # общего префикс-правила, иначе "zelscan-moderation-minimal/assets/..."
     # перехватится маркером "/assets/" и уйдёт в LANDING вместо lendos.
-    if normalized in ("about", "about/"):
+    if normalized == "about":
+        # без слэша относительные ссылки css/js резолвятся от корня — канонизируем
+        return redirect("/about/", code=301)
+    if normalized in ("about/",):
         return send_from_directory(str(_PRODUCTION_LENDOS / "about"), "index.html")
     if normalized.startswith("about/"):
         return send_from_directory(str(_PRODUCTION_LENDOS), normalized)

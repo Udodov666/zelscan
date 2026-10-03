@@ -1276,10 +1276,24 @@ def create_app() -> Flask:
             resp["promo_code"] = promo_code
         return jsonify(resp), 201
 
+    def _local_result_file(result_path):
+        """Локальная версия: result_path из БД — путь исходного сервера.
+        Резолвим по имени файла в cache/results (+ .json, если расширение другое)."""
+        p=Path(result_path)
+        if p.exists(): return p
+        cands=[config.RESULTS_DIR / p.name, config.RESULTS_DIR / (p.stem + ".json")]
+        for c in cands:
+            if c.exists(): return c
+        return None
+
     def _read_result(order):
         if order.get("status")==Status.DONE and order.get("result_path"):
             try:
-                doc=json.loads(Path(order["result_path"]).read_text(encoding="utf-8"))
+                rp=Path(order["result_path"])
+                if not rp.exists():
+                    rp=_local_result_file(order["result_path"])
+                    if rp is None: return None
+                doc=json.loads(rp.read_text(encoding="utf-8"))
                 # basic_tier_gate_v1: базовый тариф — только обзор, активность,
                 # поведение. Секции психологии и анализа (ИИ-слой) не отдаём.
                 if (order.get("report_type") or "basic")=="basic":
@@ -2019,8 +2033,11 @@ def _order_report_summary(user_id, report_type):
             con.close()
             if row and row[0]:
                 # result_path хранит абсолютный путь исходного сервера —
-                # берём только имя файла и ищем в локальном cache/results
+                # резолвим по имени файла в локальном cache/results
                 local = config.RESULTS_DIR / Path(row[0]).name
+                if not local.exists():
+                    alt = config.RESULTS_DIR / (Path(row[0]).stem + '.json')
+                    if alt.exists(): local = alt
                 if local.exists():
                     rep = json.loads(local.read_text(encoding='utf-8'))
         except Exception:

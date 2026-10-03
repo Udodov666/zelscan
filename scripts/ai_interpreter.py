@@ -799,6 +799,27 @@ class AIInterpreter:
 доказательствами в постах. В note каждого блока — 1-2 конкретных примера
 из постов.
 
+Верни СТРОГО JSON со всеми ключами:
+{
+  "summary_one_line": "...",
+  "portrait_headline": "...",
+  "personality_types": ["...", "..."],
+  "psychological_portrait": "...",
+  "big_five": {"openness": 0-10, "conscientiousness": 0-10, "extraversion": 0-10, "agreeableness": 0-10, "neuroticism": 0-10, "note": "..."},
+  "dark_triad": {"narcissism": 0-10, "machiavellianism": 0-10, "psychopathy": 0-10, "red_flags": ["..."]},
+  "emotional_intelligence": {"self_awareness": 0-10, "self_regulation": 0-10, "empathy": 0-10, "social_skills": 0-10},
+  "defense_mechanisms": ["..."],
+  "cognitive_distortions": ["..."],
+  "attachment_style": "...",
+  "status_relation": {"peer": 0-100, "newbie": 0-100, "mod": 0-100, "weak": 0-100},
+  "relations_note": "..."
+}
+
+status_relation — как юзер обращается с каждой статусной группой на форуме:
+0 — по-доброму/уважительно, 50 — нейтрально/игнорирует, 100 — троллит/агрессия.
+peer — равные ему по статусу; newbie — новички; mod — модерация и «власть»;
+weak — те, кто слабее него. Оцени строго по постам, где видно отношение.
+
 Не выдумывай фактов. Если данных мало — скажи прямо."""
 
     def _facts_to_compact_str(self, dossier: dict) -> str:

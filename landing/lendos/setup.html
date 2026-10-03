@@ -63,6 +63,14 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
 .tk-check.ok svg{stroke:#2BAD72}
 .tk-check.bad svg{stroke:#F87171}
 .tk-row small{color:#59595E;font-size:12.5px}
+.tk-field{display:flex;align-items:center;gap:8px;width:100%}
+.tk-n{color:#59595E;font:400 13px/1 Inter;width:12px;text-align:center;flex:none}
+.tk-field .zs-input{height:48px;font:400 13.5px/1.3 'JetBrains Mono',Consolas,monospace}
+.tk-x{display:flex;align-items:center;justify-content:center;width:38px;height:48px;flex:none;border:0;border-radius:12px;background:rgba(255,255,255,.04);color:#8a8a8e;cursor:pointer;transition:background .15s,color .15s}
+.tk-x:hover{background:rgba(248,113,113,.1);color:#F87171}
+.tk-x svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.zs-actions-row{display:flex;gap:8px;width:100%}
+.zs-actions-row .zs-btn{height:48px;padding:0 18px;font-size:14px;flex:1 1 0}
 </style>
 </head>
 <body>
@@ -90,9 +98,12 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     <!-- ── Токены LZT (только авто) ── -->
     <div class="zs-group hidden" id="lztBlock">
       <div class="zs-lab-row"><span class="zs-label">LZT API-токены</span><a class="zs-link" href="https://lolz.team/account/api" target="_blank" rel="noopener">Настройки API<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
-      <textarea class="zs-input" id="lzt" placeholder="По одному токену в строке"></textarea>
+      <div id="tokenFields"></div>
       <div class="zs-sub hidden" id="tokenTestResult" style="width:100%"></div>
-      <button class="zs-btn" id="testTokens" type="button">Проверить токены</button>
+      <div class="zs-actions-row">
+        <button class="zs-btn" id="addToken" type="button">+ Добавить токен</button>
+        <button class="zs-btn" id="testTokens" type="button">Проверить токены</button>
+      </div>
     </div>
 
     <div class="zs-sep"></div>
@@ -183,11 +194,40 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
       ai==='default' ? 'Встроены в проект.' : 'AKI.IO и OpenRouter.';
   });
 
+  // ── поля токенов ──
+  function tokenRow(n){
+    return '<div class="tk-field"><span class="tk-n">'+n+'</span>'+
+      '<input class="zs-input" type="password" placeholder="API-токен">'+
+      (n>1?'<button class="tk-x" type="button" title="Удалить"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>':'')+
+      '</div>';
+  }
+  function renumber(){
+    document.querySelectorAll('#tokenFields .tk-field').forEach(function(row,i){
+      row.querySelector('.tk-n').textContent=i+1;
+    });
+  }
+  function collectTokens(){
+    return Array.from(document.querySelectorAll('#tokenFields .tk-field input')).map(function(i){return i.value.trim()}).filter(Boolean);
+  }
+  $('addToken').addEventListener('click',function(){
+    var rows=document.querySelectorAll('#tokenFields .tk-field');
+    if(rows.length>=10) return;
+    rows[rows.length-1].insertAdjacentHTML('afterend', tokenRow(rows.length+1));
+    renumber();
+  });
+  document.getElementById('tokenFields').addEventListener('click',function(e){
+    var x=e.target.closest('.tk-x'); if(!x) return;
+    x.closest('.tk-field').remove();
+    if(!document.querySelector('#tokenFields .tk-field')) document.getElementById('tokenFields').innerHTML=tokenRow(1);
+    renumber();
+  });
+  document.getElementById('tokenFields').innerHTML=tokenRow(1);
+
   // ── тест LZT-токенов ──
   $('testTokens').addEventListener('click',function(){
     var err=$('tokenTestResult'); err.classList.remove('hidden');
     err.textContent='Проверяем токены...'; err.style.color='#707177';
-    var tokens=$('lzt').value.split('\n').map(function(s){return s.trim()}).filter(Boolean);
+    var tokens=collectTokens();
     if(!tokens.length){err.textContent='Вставьте хотя бы один токен';err.style.color='#F87171';return}
     fetch('/api/local/setup/test-tokens',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tokens:tokens})})
       .then(r=>r.json()).then(function(d){
@@ -239,7 +279,7 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
     if(!oauthValidated){err.textContent='Сначала проверьте приложение кнопкой «Проверить приложение»';return}
     var body={
       mode:mode,
-      lzt_tokens:$('lzt').value,
+      lzt_tokens:collectTokens().join('\n'),
       default_ai_keys: ai==='default',
       providers:{
         aki:$('aki').value.trim(),

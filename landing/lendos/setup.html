@@ -198,9 +198,13 @@ textarea.zs-input{height:auto;min-height:84px;padding:14px 18px;font:400 13.5px/
   pills('modePills', function(d){
     mode=d.mode;
     $('lztBlock').classList.toggle('hidden', mode!=='auto');
+    $('lztBlock').classList.remove('hidden');
     $('modeHint').textContent = mode==='auto'
       ? 'Сбор через официальный API по вашим токенам. Правило 2.28 запрещает парсинг без разрешения администрации — вы сами отвечаете за соблюдение. Рекомендуется минимум 3 токена.'
-      : 'Без запросов к форуму — все данные вводите вы.';
+      : 'Создание досье — без запросов к форуму. Токены (достаточно 1) нужны только для ПОИСКА по нику в приложении.';
+    $('lztLab').textContent = mode==='auto'
+      ? 'LZT API-токены — минимум 3, по одному в поле'
+      : 'LZT API-токен — опционально (для поиска по нику)';
     if(mode!=='auto') $('tokenTestResult').classList.add('hidden');
   });
 

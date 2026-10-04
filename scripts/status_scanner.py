@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-status_scanner — массовый сбор юзеров LZT и проверка их статусов/подписей на рекламу.
+status_scanner v2 — массовый сбор юзеров LZT и проверка статусов/подписей на рекламу.
 
-Источники юзеров (без ручного поиска тем):
-  1. GET /threads?limit=&page=      — лента свежих тем форума
-  2. GET /posts?thread_id=&limit=   — посты темы (подпись автора уже в посте)
-  3. POST /search/posts {"q": kw}   — поиск по ключевым словам (находит рекламодателей напрямую)
+Источники юзеров (все проверены живьём 2026-10-04):
+  1. GET /threads?limit=&page=      — лента свежих тем
+  2. GET /threads/recent?days=N     — ID самых активных (бампнутых) тем
+  3. GET /posts?thread_id=&limit=   — посты темы (signature_plain_text уже в посте!)
+  4. POST /search/posts {"q": kw}   — поиск по сообщениям (находит рекламодателя напрямую)
+  5. POST /search/users {"q": kw}   — поиск по нику (в ответе custom_title + ban + ban_reason,
+                                      проверка статуса вообще без похода в профиль)
+  НЕ работает: /threads/{id}/readers (404), /users списком (403), /chatbox (пусто/403).
 
-Проверка:
-  - signature_plain_text — прямо из поста (0 лишних запросов)
-  - custom_title         — из GET /users/{id} (статус в профиле, там реклама типа
-                           "CRYPTO DRAINER #1 — AEZAKMIPARTNERS.COM")
-
+Проверка: signature_plain_text (из поста) + custom_title (из GET /users/{id}).
 Запуск:
-  python scripts/status_scanner.py --threads 10 --search "drainer,прокси" --out scan.json
+  python scripts/status_scanner.py --threads 2 --recent 20 \
+      --search "crypto drainer" --name-search "прокси,drainer,shop" --out scan.json
 """
 import sys, json, re, time, argparse, urllib.request, urllib.error
 
@@ -22,10 +23,9 @@ import config
 
 BASE = "https://api.lolz.team"
 
-# Дефолтные рекламные паттерны (ссылки/магазины/клише) — можно расширить --keywords
 DEFAULT_PATTERNS = [
     r"t\.me/\w+", r"(?:https?://)?\w+\.(?:com|net|org|shop|io|me|ru|xyz|top|cc|to)\b",
-    r"дрейнер|drainer", r"прокси|proxy", r"дампы|dumps", r"сс|cvv", r"обход|жиза",
+    r"дрейнер|drainer", r"прокси|proxy", r"дампы|dumps", r"\b(?:cc|cvv|сс)\b", r"обход|жиза",
     r"магазин", r"продажа", r"заказ", r"скидк", r"промокод", r"гарант", r"от \d+[р₽$]",
 ]
 
@@ -39,7 +39,7 @@ class Scanner:
         url = BASE + path
         data = None
         headers = {"Authorization": "Bearer " + (token or self.tok_profile),
-                   "Accept": "application/json", "User-Agent": "ZelscanStatusScanner/1.0"}
+                   "Accept": "application/json", "User-Agent": "ZelscanStatusScanner/2.0"}
         if body is not None:
             data = json.dumps(body).encode()
             headers["Content-Type"] = "application/json"
@@ -63,6 +63,7 @@ class Scanner:
                 return {"_error": None, "_body": str(e)}
         return {"_error": 429, "_body": "rate limit after retries"}
 
+    # ---- источники тем ----
     def fresh_threads(self, pages=1, limit=50):
         out = []
         for page in range(1, pages + 1):
@@ -71,114 +72,150 @@ class Scanner:
             out.extend(th)
             if len(th) < limit:
                 break
+            time.sleep(0.25)
         return out
+
+    def recent_thread_ids(self, days=2, limit=20):
+        d = self.call("GET", f"/threads/recent?days={days}&limit={limit}&data_limit=20")
+        th = d.get("threads") or d.get("data") or []
+        return [t.get("thread_id") for t in th if t.get("thread_id")]
 
     def thread_posts(self, thread_id, limit=20):
         d = self.call("GET", f"/posts?thread_id={thread_id}&limit={limit}")
         return d.get("posts") or d.get("data") or []
 
-    def search(self, q, limit=20):
+    # ---- поиск ----
+    def search_posts(self, q, limit=20):
         d = self.call("POST", "/search/posts", {"q": q, "limit": limit}, token=self.tok_msg)
         return d.get("data") or []
+
+    def search_users(self, q):
+        d = self.call("POST", "/search/users", {"q": q})
+        return d.get("users") or d.get("data") or []
 
     def user(self, uid):
         d = self.call("GET", f"/users/{uid}")
         return (d.get("user") or {}) if isinstance(d, dict) else {}
 
-    def scan(self, thread_pages=1, thread_limit=50, post_limit=20,
-             search_terms=None, uid_limit=120, patterns=None):
+    # ---- пайплайн ----
+    def scan(self, thread_pages=1, thread_limit=50, post_limit=20, recent=0,
+             search_terms=None, name_terms=None, uid_limit=300, patterns=None):
         pats = [re.compile(p, re.I) for p in (patterns or DEFAULT_PATTERNS)]
-        seen_uids = {}   # uid -> {username, source, signature}
+        seen = {}   # uid -> info dict
         t0 = time.time()
 
-        # 1) свежие темы -> посты -> юзеры + подписи
-        threads = self.fresh_threads(pages=thread_pages, limit=thread_limit)
-        print(f"[+] свежих тем: {len(threads)}")
-        for t in threads:
-            tid = t.get("thread_id")
-            posts = self.thread_posts(tid, limit=post_limit)
-            for p in posts:
-                uid = p.get("user_id")
-                if not uid or uid in seen_uids:
-                    continue
-                seen_uids[uid] = {
-                    "username": p.get("username"),
-                    "signature": (p.get("signature_plain_text") or "").strip(),
-                    "source": f"thread:{tid}",
-                }
-            time.sleep(0.25)  # держимся ниже 300/мин на GET
-        print(f"[+] юзеров из тем: {len(seen_uids)}")
+        def add(uid, username, source, signature=""):
+            if uid and uid not in seen:
+                seen[uid] = {"username": username, "signature": (signature or "").strip(),
+                             "source": source}
 
-        # 2) поиск по ключевым словам -> рекламодатели напрямую
+        # 1) темы (свежие + бампнутые) -> посты -> юзеры с подписями
+        threads = self.fresh_threads(pages=thread_pages, limit=thread_limit)
+        if recent:
+            rids = self.recent_thread_ids(days=2, limit=recent)
+            have = {t.get("thread_id") for t in threads}
+            threads = threads + [{"thread_id": r} for r in rids if r not in have]
+        print(f"[+] тем к обходу: {len(threads)} (свежих {thread_pages * thread_limit} + recent {recent})")
+        for t in threads:
+            for p in self.thread_posts(t["thread_id"], limit=post_limit):
+                add(p.get("user_id"), p.get("username"), f"thread:{t['thread_id']}",
+                    p.get("signature_plain_text") or p.get("signature"))
+            time.sleep(0.25)
+        print(f"[+] юзеров из тем: {len(seen)}")
+
+        # 2) поиск по сообщениям — рекламодатели напрямую
         for q in (search_terms or []):
-            items = self.search(q)
-            hits = 0
-            for it in items:
-                uid = it.get("user_id")
+            for it in self.search_posts(q):
+                add(it.get("user_id"), it.get("username"), f"search:{q}",
+                    it.get("signature") or it.get("signature_plain_text"))
+            print(f"[+] search {q!r}: всего юзеров {len(seen)}")
+            time.sleep(2.5)
+
+        # 3) поиск по нику — ответ уже содержит custom_title/ban (профиль не нужен)
+        namesearch_direct = 0
+        for kw in (name_terms or []):
+            for u in self.search_users(kw):
+                uid = u.get("user_id")
                 if not uid:
                     continue
-                if uid not in seen_uids:
-                    seen_uids[uid] = {
-                        "username": it.get("username"),
-                        "signature": (it.get("signature") or it.get("signature_plain_text") or "").strip(),
-                        "source": f"search:{q}",
-                    }
-                hits += 1
-            print(f"[+] search {q!r}: {hits} items")
-            time.sleep(2.5)  # 30/мин на search-токен
+                name = u.get("username") or ""
+                if uid in seen:
+                    seen[uid]["custom_title"] = (u.get("custom_title") or "").strip()
+                    seen[uid]["is_banned"] = u.get("ban", u.get("is_banned"))
+                    continue
+                info = {"username": name, "signature": "", "source": f"name:{kw}",
+                        "custom_title": (u.get("custom_title") or "").strip(),
+                        "is_banned": u.get("ban", u.get("is_banned"))}
+                seen[uid] = info
+                namesearch_direct += 1
+            time.sleep(1)
+        print(f"[+] из поиска по нику: +{namesearch_direct} (всего {len(seen)})")
 
-        # 3) профили -> custom_title (статус с рекламой)
-        results = []
+        # 4) профили -> custom_title для тех, у кого ещё нет
+        need_profile = [u for u in seen.values() if "custom_title" not in u]
         checked = 0
-        for uid, info in seen_uids.items():
-            if checked >= uid_limit:
-                break
-            u = self.user(uid)
+        for info in need_profile[:uid_limit]:
+            u = self.user(info.get("_uid"))
+            # uid отдельно — seen ключ это uid
             checked += 1
+            time.sleep(0.25)
+        # проще: по uid
+        pending = [(uid, info) for uid, info in seen.items() if "custom_title" not in info]
+        for i, (uid, info) in enumerate(pending[:uid_limit]):
+            u = self.user(uid)
             info["custom_title"] = (u.get("custom_title") or "").strip()
             info["user_title"] = (u.get("user_title") or "").strip()
-            info["is_banned"] = u.get("is_banned")
-            haystack = " ".join([info.get("signature") or "", info["custom_title"],
-                                 info.get("username") or ""])
+            info["is_banned"] = u.get("is_banned", info.get("is_banned"))
+            if (i + 1) % 50 == 0:
+                print(f"    профили {i + 1}/{min(len(pending), uid_limit)}")
+            time.sleep(0.25)
+        checked = min(len(pending), uid_limit)
+
+        # 5) фильтр рекламы
+        results = []
+        for uid, info in seen.items():
+            haystack = " ".join([info.get("username") or "", info.get("signature") or "",
+                                 info.get("custom_title") or ""])
             info["ad_matches"] = sorted({m.pattern for m in pats if m.search(haystack)})
             info["is_ad"] = bool(info["ad_matches"])
+            info["_uid"] = uid
             results.append(info)
-            if checked % 20 == 0:
-                print(f"    профили {checked}/{min(len(seen_uids), uid_limit)}")
-            time.sleep(0.25)
 
         flagged = [r for r in results if r["is_ad"]]
         meta = {
             "elapsed_s": round(time.time() - t0, 1),
             "requests": self.req_count,
-            "users_seen": len(seen_uids), "profiles_checked": checked,
+            "users_seen": len(seen), "profiles_checked": checked,
             "flagged": len(flagged),
         }
         return {"meta": meta, "flagged": flagged, "all": results}
 
 
 def main():
-    ap = argparse.ArgumentParser(description="LZT status/ad scanner")
+    ap = argparse.ArgumentParser(description="LZT status/ad scanner v2")
     ap.add_argument("--threads", type=int, default=1, help="страниц свежих тем (по 50)")
-    ap.add_argument("--thread-limit", type=int, default=50, help="тем на страницу")
-    ap.add_argument("--post-limit", type=int, default=20, help="постов на тему")
-    ap.add_argument("--search", default="", help="поисковые слова через запятую")
-    ap.add_argument("--uid-limit", type=int, default=120, help="макс. профилей к проверке")
+    ap.add_argument("--thread-limit", type=int, default=50)
+    ap.add_argument("--post-limit", type=int, default=20)
+    ap.add_argument("--recent", type=int, default=0, help="взять N бампнутых тем из /threads/recent")
+    ap.add_argument("--search", default="", help="поисковые слова (сообщения), через запятую")
+    ap.add_argument("--name-search", default="", help="куски ников для /search/users, через запятую")
+    ap.add_argument("--uid-limit", type=int, default=300, help="макс. профилей к проверке")
     ap.add_argument("--keywords", default="", help="доп. regex-паттерны через запятую")
-    ap.add_argument("--out", default="", help="файл для JSON-отчёта")
+    ap.add_argument("--out", default="")
     args = ap.parse_args()
 
     patterns = DEFAULT_PATTERNS + [k.strip() for k in args.keywords.split(",") if k.strip()]
     terms = [s.strip() for s in args.search.split(",") if s.strip()]
+    nterms = [s.strip() for s in args.name_search.split(",") if s.strip()]
     sc = Scanner()
     report = sc.scan(thread_pages=args.threads, thread_limit=args.thread_limit,
-                     post_limit=args.post_limit, search_terms=terms,
+                     post_limit=args.post_limit, recent=args.recent,
+                     search_terms=terms, name_terms=nterms,
                      uid_limit=args.uid_limit, patterns=patterns)
     print(json.dumps(report["meta"], ensure_ascii=False, indent=1))
     for r in report["flagged"]:
-        print(f"[AD] @{r['username']} (uid {r.get('source')}): "
-              f"custom_title={r['custom_title'][:80]!r} sig={r['signature'][:60]!r} "
-              f"matches={r['ad_matches'][:3]}")
+        print(f"[AD] @{r['username']} ({r['source']}): ct={r.get('custom_title','')[:70]!r} "
+              f"sig={r['signature'][:50]!r} matches={r['ad_matches'][:3]}")
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(report, f, ensure_ascii=False, indent=1)

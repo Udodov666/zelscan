@@ -94,16 +94,10 @@ def install_local_setup(app, store, require_auth):
         if mode == "auto" and not tokens:
             return jsonify({"error": "Для авто-режима нужен хотя бы один LZT API-токен"}), 400
 
-        if mode == "auto" and tokens:
+        if tokens:
+            # токены сохраняются в обоих режимах: ручному они нужны для
+            # ПОИСКА по нику (без токенов поиск не работает вообще)
             _write_role_tokens(tokens)
-        else:
-            # ручной режим: чистим на всякий случай, токены не нужны
-            for role in ("messages", "profile", "search"):
-                role_dir = config.SECRETS_DIR / role
-                role_dir.mkdir(parents=True, exist_ok=True)
-                for old in role_dir.iterdir():
-                    if old.is_file() and not old.name.startswith("."):
-                        old.unlink()
 
         providers = body.get("providers") or {}
         if body.get("default_ai_keys"):

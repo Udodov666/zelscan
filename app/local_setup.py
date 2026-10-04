@@ -69,13 +69,51 @@ def install_local_setup(app, store, require_auth):
             for i, tok in enumerate(tokens):
                 (role_dir / f"{i + 1:02d}.txt").write_text(tok.strip(), encoding="utf-8")
 
-    def _set_provider_key(pid: str, key: str, enabled: bool = True) -> None:
+    def _set_provider_key(pid_default: str, name: str, base_url: str,
+                          key: str, models: list, enabled: bool = True) -> None:
+        """Upsert провайдера: на свежей БД строк может не быть — создаём
+        провайдера + модели + прописываем в ai_config (иначе ключи пишутся
+        в никуда и worker падает с 'Нет AI-ключей')."""
         import sqlite3
         con = sqlite3.connect(str(config.PROJECT_ROOT / "zelscan.db"))
+        now = int(time.time())
+        enc = encrypt_secret(key) if key else ""
+        row = con.execute("SELECT id FROM ai_providers WHERE name=?", (name,)).fetchone()
+        pid = row[0] if row else pid_default
         con.execute(
-            "UPDATE ai_providers SET encrypted_key=?, enabled=? WHERE id=?",
-            (encrypt_secret(key) if key else "", 1 if (key and enabled) else 0, pid),
+            """INSERT INTO ai_providers(id,name,kind,base_url,encrypted_key,enabled,created_at,updated_at)
+               VALUES(?,?,?,?,?,1,?,?)
+               ON CONFLICT(id) DO UPDATE SET
+                 base_url=excluded.base_url,
+                 encrypted_key=CASE WHEN excluded.encrypted_key='' THEN ai_providers.encrypted_key ELSE excluded.encrypted_key END,
+                 enabled=?,
+                 updated_at=excluded.updated_at""",
+            (pid, name, "openai", base_url, enc, now, now, 1 if (key and enabled) else 0),
         )
+        for mid, model, label in models:
+            con.execute(
+                """INSERT OR IGNORE INTO ai_models(id,provider_id,model,label,input_per_million,output_per_million,enabled,created_at)
+                   VALUES(?,?,?,?,0,0,1,?)""",
+                (mid, pid, model, label, now),
+            )
+        # ai_config: если не указывает на рабочую модель — ставим дефолт
+        mid_pref = None
+        for mid, model, label in models:
+            r = con.execute(
+                "SELECT m.id FROM ai_models m WHERE m.provider_id=? AND m.model=? AND m.enabled=1",
+                (pid, model)).fetchone()
+            if r:
+                mid_pref = r[0]
+                break
+        if mid_pref:
+            row2 = con.execute(
+                """SELECT c.id FROM ai_config c
+                   LEFT JOIN ai_models m ON m.id=c.psychologist_model_id
+                   WHERE c.id=1 AND (c.psychologist_model_id IS NULL OR m.id IS NULL)""").fetchone()
+            if row2:
+                con.execute(
+                    "UPDATE ai_config SET lite_model_id=?, max_model_id=?, psychologist_model_id=?, model_id=? WHERE id=1",
+                    (mid_pref, mid_pref, mid_pref, mid_pref))
         con.commit()
         con.close()
 
@@ -100,18 +138,26 @@ def install_local_setup(app, store, require_auth):
             _write_role_tokens(tokens)
 
         providers = body.get("providers") or {}
+        aki_key = str(providers.get("aki") or "")
+        or_key = str(providers.get("openrouter") or "")
         if body.get("default_ai_keys"):
             # ключи, зашитые автором проекта (app/default_providers.json)
             try:
                 defaults = json.loads(
                     (config.PROJECT_ROOT / "app" / "default_providers.json").read_text(encoding="utf-8"))
-                _set_provider_key("b6ebd712-0770-44", str(defaults.get("b6ebd712-0770-44") or ""), True)
-                _set_provider_key("pr_openrouter", str(defaults.get("pr_openrouter") or ""), True)
+                aki_key = defaults.get("b6ebd712-0770-44") or aki_key
+                or_key = defaults.get("pr_openrouter") or or_key
             except Exception as exc:
                 return jsonify({"error": "Файл default_providers.json не найден/битый: " + str(exc)}), 400
-        else:
-            _set_provider_key("b6ebd712-0770-44", str(providers.get("aki") or ""), bool(providers.get("aki")))
-            _set_provider_key("pr_openrouter", str(providers.get("openrouter") or ""), bool(providers.get("openrouter")))
+        _set_provider_key(
+            "pr_aki", "Aki.io", "https://aki.io/openai/v1", aki_key,
+            [("mo_aki_gptoss", "gpt-oss-120b", "GPT-OSS 120B")],
+            bool(aki_key))
+        _set_provider_key(
+            "pr_openrouter", "OpenRouter", "https://openrouter.ai/api/v1", or_key,
+            [("mo_or_glm52", "z-ai/glm-5.2:free", "GLM 5.2 Free"),
+             ("mo_or_nemotron", "nvidia/nemotron-3-super-120b-a12b:free", "Nemotron 3 Super Free")],
+            bool(or_key))
 
         oauth_id = str(body.get("oauth_client_id") or "").strip()
         if not oauth_id:
